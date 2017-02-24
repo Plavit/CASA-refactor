@@ -1,0 +1,1004 @@
+
+casa/algorithms/BinarySearch.C,88
+unsigned BinarySearch::operator ()(unsigned offset, unsigned size) {operator ()22,790
+
+casa/algorithms/BinarySearch.H,511
+#define BINARY_SEARCH_HBINARY_SEARCH_H20,757
+class Partitioner {Partitioner22,782
+  virtual ~Partitioner() {}~Partitioner24,810
+class ExpensiveUnaryPredicate {ExpensiveUnaryPredicate28,910
+  virtual ~ExpensiveUnaryPredicate() {}~ExpensiveUnaryPredicate30,950
+class BinarySearch {BinarySearch34,1048
+  const ExpensiveUnaryPredicate&	predicate;predicate36,1080
+  Partitioner&				partitioner;partitioner37,1124
+  BinarySearchBinarySearch39,1163
+  virtual ~BinarySearch() {}~BinarySearch43,1313
+
+casa/annealing/Anneal.C,36
+CoveringArray annealanneal38,1282
+
+casa/annealing/Anneal.H,33
+#define ANNEAL_HANNEAL_H19,749
+
+casa/annealing/AnnealingFilter.H,629
+#define ANNEALING_FILTER_HANNEALING_FILTER_H20,760
+template<class STATE, class COST>class AnnealingFilter :AnnealingFilter34,1118
+  typedef Heuristic<STATE,COST>		HeuristicT;HeuristicT38,1248
+  typedef Goal<STATE>			GoalT;GoalT39,1293
+  double				temperature;temperature41,1325
+  const double				decay;decay42,1350
+  AnnealingFilter(double temperature, double decay) :AnnealingFilter45,1384
+  virtual ~AnnealingFilter() {}~AnnealingFilter51,1539
+  void setTemperature(double temperature) {setTemperature53,1572
+  void signal(const SearchIteration&message) {signal60,1747
+  void operator()operator ()64,1825
+
+casa/annealing/AnnealingPartitioner.C,145
+unsigned AnnealingPartitioner::operator ()(unsigned offset, unsigned size) {operator ()24,822
+void AnnealingPartitioner::signalsignal31,1018
+
+casa/annealing/AnnealingPartitioner.H,254
+#define ANNEALING_PARTITIONER_HANNEALING_PARTITIONER_H20,765
+class AnnealingPartitioner :AnnealingPartitioner29,981
+  unsigned				guess;guess33,1106
+  unsigned				lastGuess;lastGuess34,1127
+  AnnealingPartitioner() :AnnealingPartitioner36,1160
+
+casa/annealing/AnnealingSuccess.C,77
+bool AnnealingSuccess::operator ()(unsigned rows) const {operator ()26,864
+
+casa/annealing/AnnealingSuccess.H,497
+#define ANNEALING_SUCCESS_HANNEALING_SUCCESS_H20,761
+class AnnealingSuccess : public ExpensiveUnaryPredicate {AnnealingSuccess28,938
+					NodeT;NodeT31,1051
+  Search<CoveringArray, CoverageCost>&	search;search33,1064
+  unsigned				iterations;iterations34,1111
+  mutable CoveringArray			solution;solution35,1137
+  AnnealingSuccessAnnealingSuccess38,1182
+  void setIterations(unsigned iterations) {setIterations48,1450
+  const CoveringArray&getSolution() const {getSolution52,1534
+
+casa/annealing/Bounds.C,263
+#define UPPER_BOUND_SCALING_FACTOR UPPER_BOUND_SCALING_FACTOR28,882
+unsigned computeLowerBound(unsigned strength, const Options&options) {computeLowerBound31,927
+unsigned computeUpperBound(unsigned strength, const Options&options) {computeUpperBound52,1482
+
+casa/annealing/Bounds.H,33
+#define BOUNDS_HBOUNDS_H20,750
+
+casa/covering/bookkeeping/Coverage.H,2787
+#define COVERAGE_HCOVERAGE_H20,752
+template<class T>class Coverage {Coverage29,900
+  unsigned				strength;strength31,945
+  Options				options;options32,969
+  Array<unsigned>			offsets;offsets36,1192
+  SubstitutionArray<T>			contents;contents37,1221
+  Coverage(unsigned strength, Options options) :Coverage40,1265
+  Coverage(const Coverage&copy) :Coverage59,1841
+  unsigned encodeencode74,2478
+  unsigned encodeencode94,3096
+  unsigned encode(Array<unsigned>sortedCombination) const {encode107,3405
+  Array<unsigned>decode(unsigned encoding) const {decode128,4183
+  unsigned getStrength() const {getStrength148,4872
+  const Options&getOptions() const {getOptions151,4930
+  class Entry{Entry155,4992
+    Coverage&				owner;owner157,5020
+    unsigned				index;index158,5044
+    Entry(const Coverage&owner,unsigned index) :Entry160,5077
+    operator T() const {operator T163,5191
+    Entry&operator =(const T&value) {operator =166,5258
+    Entry&operator --() {operator --170,5359
+    Entry&operator ++() {operator ++174,5442
+  const Entry operator[](Array<unsigned>sortedCombination) const {operator []180,5531
+  Entry operator [](Array<unsigned>sortedCombination) {operator []183,5654
+  const Entry hintGethintGet189,5860
+  Entry hintGethintGet201,6180
+  const Entry hintGethintGet213,6488
+  Entry hintGethintGet223,6762
+  class iterator {iterator233,7024
+    Coverage&				owner;owner235,7056
+    unsigned				index;index236,7080
+    iterator(Coverage&owner, unsigned index) :iterator238,7113
+    const Entry operator *() const {operator *241,7202
+    Entry operator *() {operator *244,7279
+    iterator&operator ++() {operator ++247,7344
+    bool operator ==(const iterator&other) const {operator ==251,7414
+    bool operator !=(const iterator&other) const {operator !=254,7532
+    Array<unsigned>getCombination() const {getCombination257,7650
+  class const_iterator {const_iterator262,7740
+    const Coverage&			owner;owner264,7778
+    unsigned				index;index265,7807
+    const_iterator(const Coverage&owner, unsigned index) :const_iterator267,7840
+    const_iterator(const iterator&copy) :const_iterator270,7941
+    const Entry operator *() const {operator *273,8035
+    const_iterator&operator ++() {operator ++276,8112
+    bool operator ==(const const_iterator&other) const {operator ==280,8188
+    bool operator  != (const const_iterator&other) const {operator !=283,8312
+    Array<unsigned>getCombination() const {getCombination286,8438
+  iterator begin() {begin291,8528
+  const_iterator begin() const {begin294,8584
+  iterator end() {end297,8658
+  const_iterator end() const {end300,8729
+  unsigned getSize() const {getSize304,8819
+  void fill(const T&filler) {fill308,8884
+
+casa/covering/bookkeeping/Options.C,847
+Options::Options() :Options21,776
+Options::Options(Array<unsigned>values) :Options25,848
+Options::Options(const Options&copy) :Options40,1319
+unsigned Options::getSize() const {getSize44,1451
+unsigned Options::getFirstSymbol(unsigned option) const {getFirstSymbol48,1532
+Array<unsigned>Options::getFirstSymbols() const {getFirstSymbols52,1650
+unsigned Options::getSymbolCount(unsigned option) const {getSymbolCount64,1927
+Array<unsigned>Options::getSymbolCounts() const {getSymbolCounts70,2110
+unsigned Options::getLastSymbol(unsigned option) const {getLastSymbol82,2437
+unsigned Options::getRandomSymbol(unsigned option) const {getRandomSymbol86,2541
+unsigned Options::getOtherRandomSymbol(unsigned option, unsigned exclude)getOtherRandomSymbol90,2670
+unsigned Options::getOption(unsigned symbol) const {getOption100,2980
+
+casa/covering/bookkeeping/Options.H,195
+#define OPTIONS_HOPTIONS_H20,751
+class Options {Options27,829
+  Array<unsigned>			cumulativeValueCounts;cumulativeValueCounts31,960
+  Array<unsigned>			owningOptions;owningOptions33,1078
+
+casa/covering/cost/CoverageCost.H,678
+#define COVERAGE_COST_HCOVERAGE_COST_H20,757
+class CoverageCost {CoverageCost24,802
+  unsigned				noncoverage;noncoverage26,834
+  unsigned				multipleCoverage;multipleCoverage27,861
+  CoverageCost(unsigned zero = 0) :CoverageCost31,959
+  CoverageCost(unsigned noncoverage, unsigned multipleCoverage) :CoverageCost36,1064
+  unsigned getNoncoverage() const {getNoncoverage40,1203
+  unsigned getMultipleCoverage() const {getMultipleCoverage43,1267
+  bool operator <(const CoverageCost&other) const {operator <47,1342
+  bool operator <=(const CoverageCost&other) const {operator <=56,1589
+  bool operator ==(const CoverageCost&other) const {operator ==65,1838
+
+casa/covering/filter/CoveringArrayAnnealingFilter.H,431
+#define COVERING_ARRAY_ANNEALING_FILTER_HCOVERING_ARRAY_ANNEALING_FILTER_H20,775
+#define MULTIPLE_COVERAGE_WEIGHT MULTIPLE_COVERAGE_WEIGHT28,974
+class CoveringArrayAnnealingFilter :CoveringArrayAnnealingFilter31,1020
+  CoveringArrayAnnealingFilter(double temperature, double decay) :CoveringArrayAnnealingFilter34,1121
+  double convertToDelta(CoverageCost childEstimate, CoverageCost parentEstimate)convertToDelta37,1261
+
+casa/covering/goal/CoverageGoal.H,348
+#define COVERAGE_GOAL_HCOVERAGE_GOAL_H20,757
+class CoverageGoal : public Goal<CoveringArray> {CoverageGoal26,851
+  unsigned				targetCoverage;targetCoverage28,912
+  CoverageGoal(unsigned targetCoverage) :CoverageGoal30,950
+  unsigned getTargetCoverage() {getTargetCoverage33,1031
+  bool isGoal(const CoveringArray&array) {isGoal37,1096
+
+casa/covering/heuristic/CoveringArrayHeuristic.H,218
+#define COVERING_ARRAY_HEURISTIC_HCOVERING_ARRAY_HEURISTIC_H20,768
+class CoveringArrayHeuristic : public Heuristic<CoveringArray, CoverageCost> {CoveringArrayHeuristic27,918
+  CoverageCost estimateestimate28,997
+
+casa/covering/report/IterationReport.H,312
+#define ITERATION_REPORT_HITERATION_REPORT_H20,760
+class IterationReport :IterationReport24,809
+  unsigned				total;total27,908
+  IterationReport() :IterationReport29,937
+  void signal(const SearchFinish<CoveringArray, CoverageCost>&finish) {signal31,975
+  unsigned getTotal() const {getTotal48,1810
+
+casa/covering/space/CoveringArraySpace.C,194
+CoveringArraySpace::CoveringArraySpace(unsigned strength, Options options) :CoveringArraySpace21,781
+unsigned CoveringArraySpace::computeTargetCoverage() const {computeTargetCoverage51,1684
+
+casa/covering/space/CoveringArraySpace.H,450
+#define COVERING_ARRAY_SPACE_HCOVERING_ARRAY_SPACE_H20,764
+class CoveringArraySpace : public StateSpace<CoveringArray, CoverageCost>{CoveringArraySpace34,1015
+  unsigned				strength;strength36,1101
+  Options				options;options37,1125
+  mutable SATSolver			solver;solver38,1147
+  virtual ~CoveringArraySpace() {}~CoveringArraySpace41,1243
+  SATSolver&getSolver() {getSolver43,1345
+  const SATSolver&getSolver() const {getSolver46,1394
+
+casa/covering/space/GraftSpace.C,740
+#define MAXIMUM_SUBROW_CHANGE_FAILED_ATTEMPTS MAXIMUM_SUBROW_CHANGE_FAILED_ATTEMPTS28,894
+Array<unsigned>GraftSpace::createRandomMatchingRow(InputKnown&known) const {createRandomMatchingRow31,951
+CoveringArray GraftSpace::createStartState(unsigned rows) const {createStartState57,1751
+CoverageCost GraftSpace::getTraveled(const CoveringArray&start) const {getTraveled78,2407
+CoverageCost GraftSpace::getTraveledgetTraveled82,2494
+set<CoveringArray>GraftSpace::getChildrengetChildren88,2633
+set<CoveringArray>GraftSpace::getChildrengetChildren94,2812
+void GraftSpace::signal(const SearchFinish<CoveringArray, CoverageCost>&finish) {signal153,4639
+void GraftSpace::clearResurrectionBuffer() {clearResurrectionBuffer185,5816
+
+casa/covering/space/GraftSpace.H,230
+#define GRAFT_SPACE_HGRAFT_SPACE_H20,755
+class GraftSpace :GraftSpace33,988
+  std::vector<Array<unsigned> >		resurrectionBuffer;resurrectionBuffer37,1111
+  GraftSpace(unsigned strength, Options options) :GraftSpace40,1173
+
+casa/covering/space/SingleChangeSpace.C,712
+#define MAXIMUM_SINGLE_CHANGE_FAILED_ATTEMPTS MAXIMUM_SINGLE_CHANGE_FAILED_ATTEMPTS29,921
+Array<unsigned>SingleChangeSpace::createRandomMatchingRowcreateRandomMatchingRow32,978
+CoveringArray SingleChangeSpace::createStartState(unsigned rows) const {createStartState59,1788
+CoverageCost SingleChangeSpace::getTraveled(const CoveringArray&start) const {getTraveled80,2452
+CoverageCost SingleChangeSpace::getTraveledgetTraveled84,2546
+set<CoveringArray>SingleChangeSpace::getChildrengetChildren90,2693
+set<CoveringArray>SingleChangeSpace::getChildrengetChildren96,2877
+void SingleChangeSpace::signalsignal140,4248
+void SingleChangeSpace::clearResurrectionBuffer() {clearResurrectionBuffer173,5416
+
+casa/covering/space/SingleChangeSpace.H,275
+#define SINGLE_CHANGE_SPACE_HSINGLE_CHANGE_SPACE_H20,763
+class SingleChangeSpace :SingleChangeSpace34,1022
+  std::vector<Array<unsigned> >		resurrectionBuffer;resurrectionBuffer38,1152
+  SingleChangeSpace(unsigned strength, Options options) :SingleChangeSpace41,1214
+
+casa/covering/state/CoveringArray.C,1667
+#define MAXIMUM_COVERING_ARRAY_SUBSTITUTION MAXIMUM_COVERING_ARRAY_SUBSTITUTION24,842
+CoveringArray::CoveringArrayCoveringArray27,899
+CoveringArray::CoveringArray(const CoveringArray&copy) :CoveringArray44,1438
+void CoveringArray::setBackingArrayEntrysetBackingArrayEntry57,1839
+void CoveringArray::setBackingArrayRow(unsigned row, Array<unsigned>value) {setBackingArrayRow63,1999
+unsigned CoveringArray::getCoverageCount() const {getCoverageCount68,2135
+unsigned CoveringArray::getMultipleCoverageCount() const {getMultipleCoverageCount72,2213
+Array<unsigned>CoveringArray::countDistinctCoverage() const {countDistinctCoverage76,2307
+bool CoveringArray::operator <(const CoveringArray&other) const {operator <102,3135
+bool CoveringArray::operator >(const CoveringArray&other) const {operator >105,3227
+bool CoveringArray::operator ==(const CoveringArray&other) const {operator ==108,3319
+bool CoveringArray::operator !=(const CoveringArray&other) const {operator !=111,3413
+void CoveringArray::finalizeSubstitutions() {finalizeSubstitutions115,3508
+void CoveringArray::autoFinalizeSubstitutions() {autoFinalizeSubstitutions137,4191
+bool CoveringArray::isTrackingCoverage() const {isTrackingCoverage143,4346
+void CoveringArray::setTrackingCoverage(bool trackingCoverage) {setTrackingCoverage147,4425
+bool CoveringArray::isTrackingNoncoverage() const {isTrackingNoncoverage208,6177
+void CoveringArray::setTrackingNoncoverage(bool trackingNoncoverage) {setTrackingNoncoverage212,6262
+  CoveringArray::getNoncoverage() const {getNoncoverage254,7314
+ostream&operator <<(ostream&out, const CoveringArray&array) {operator <<258,7382
+
+casa/covering/state/CoveringArrayEntry.C,249
+void CoveringArray::Entry::updateTracking(unsigned value) {updateTracking23,798
+CoveringArray::Entry::operator unsigned() const {operator unsigned86,2839
+CoveringArray::Entry&CoveringArray::Entry::operator =(unsigned value) {operator =96,3168
+
+casa/covering/state/CoveringArray.H,1721
+#define COVERING_ARRAY_HCOVERING_ARRAY_H20,758
+class CoveringArray {CoveringArray35,959
+  Array<Array<unsigned> >		array;array39,1092
+					substitutions;substitutions41,1185
+  SATSolver*				solver;solver43,1206
+  bool					trackingCoverage;trackingCoverage45,1231
+  bool					trackingNoncoverage;trackingNoncoverage46,1260
+  unsigned				coverageCount;coverageCount48,1293
+  unsigned				multipleCoverageCount;multipleCoverageCount49,1322
+  Coverage<unsigned>			coverage;coverage50,1359
+					noncoverage;noncoverage52,1455
+  unsigned getRows() const {getRows59,1617
+  unsigned getOptions() const {getOptions62,1678
+  class Entry {Entry69,1908
+    CoveringArray&			owner;owner71,1937
+    unsigned				row;row72,1965
+    unsigned				option;option73,1986
+    Entry(CoveringArray&owner, unsigned row, unsigned option) :Entry75,2020
+  class Row {Row87,2363
+    CoveringArray&			owner;owner89,2390
+    unsigned				row;row90,2418
+    Row(CoveringArray&owner, unsigned row) :Row92,2449
+  class SubRow {SubRow104,2790
+    CoveringArray&			owner;owner106,2820
+    unsigned				row;row107,2848
+    Array<unsigned>			columns;columns108,2869
+    SubRow(CoveringArray&owner, unsigned row, Array<unsigned>columns) :SubRow110,2910
+  Entry operator ()(unsigned row, unsigned option) {operator ()121,3217
+  const Entry operator ()(unsigned row, unsigned option) const {operator ()124,3312
+  Row operator ()(unsigned row) {operator ()128,3448
+  const Row operator ()(unsigned row) const {operator ()131,3514
+  SubRow operator ()(unsigned row, Array<unsigned>columns) {operator ()135,3621
+  const SubRow operator ()(unsigned row, Array<unsigned>columns) const {operator ()138,3726
+
+casa/covering/state/CoveringArrayRow.C,282
+void CoveringArray::Row::updateTracking(const Array<unsigned>values) {updateTracking23,798
+CoveringArray::Row::operator Array<unsigned>() const {operator Array<unsigned>91,3039
+CoveringArray::Row&CoveringArray::Row::operator =(const Array<unsigned>values) {operator =105,3550
+
+casa/covering/state/CoveringArraySubRow.C,264
+void CoveringArray::SubRow::updateTracking(const Array<unsigned>values) {updateTracking24,830
+CoveringArray::SubRow::operator Array<unsigned>() const {operator Array<unsigned>101,3497
+CoveringArray::SubRow&CoveringArray::SubRow::operator =operator =117,4051
+
+casa/events/EventSource.H,578
+#define EVENT_SOURCE_HEVENT_SOURCE_H20,756
+template<class MESSAGE>class EventSource {EventSource25,825
+  typedef Listener<MESSAGE>		ListenerT;ListenerT27,876
+  std::set<ListenerT*>			listeners;listeners30,926
+  virtual ~EventSource() {}~EventSource33,971
+  bool isListener(const ListenerT&listener) const {isListener34,999
+  void addListener(ListenerT&listener) {addListener37,1112
+  void removeListener(ListenerT&listener) {removeListener40,1190
+  void removeAllListeners() {removeAllListeners43,1270
+  void dispatch(const MESSAGE&message) {dispatch48,1339
+
+casa/events/Listener.H,135
+#define LISTENER_HLISTENER_H20,752
+template<class MESSAGE>class Listener {Listener22,772
+  virtual ~Listener() {}~Listener24,820
+
+casa/io/ConstraintFile.C,159
+ConstraintFile::ConstraintFile(const string&filename) {ConstraintFile23,787
+const Array<InputClause>&ConstraintFile::getClauses() const {getClauses48,1448
+
+casa/io/ConstraintFile.H,143
+#define CONSTRAINT_FILE_HCONSTRAINT_FILE_H20,759
+class ConstraintFile {ConstraintFile28,865
+  Array<InputClause>			clauses;clauses29,888
+
+casa/io/OutputFile.C,200
+OutputFile::OutputFile(const string&filename) :OutputFile23,783
+void OutputFile::setCoveringArray(const CoveringArray&array) {setCoveringArray26,856
+void OutputFile::write() const {write38,1225
+
+casa/io/OutputFile.H,170
+#define OUTPUT_FILE_HOUTPUT_FILE_H20,755
+class OutputFile {OutputFile28,878
+  std::string				filename;filename30,908
+  Array<Array<unsigned> >		array;array31,935
+
+casa/io/SpecificationFile.C,230
+SpecificationFile::SpecificationFile(const string&filename) {SpecificationFile23,790
+unsigned SpecificationFile::getStrength() const {getStrength34,1147
+const Options&SpecificationFile::getOptions() const {getOptions37,1218
+
+casa/io/SpecificationFile.H,185
+#define SPECIFICATION_FILE_HSPECIFICATION_FILE_H20,762
+class SpecificationFile {SpecificationFile28,892
+  unsigned				strength;strength29,918
+  Options				options;options30,942
+
+casa/io/Usage.C,1252
+const char*PROGRAM_NAME =PROGRAM_NAME27,844
+const char*PROGRAM_VERSION =PROGRAM_VERSION30,922
+const char*BUG_ADDRESS =BUG_ADDRESS33,962
+static const char*PROGRAM_DOC =PROGRAM_DOC36,1013
+static const char*USAGE_DOC =USAGE_DOC54,1823
+static const char*ARG_DOC =ARG_DOC57,1882
+static const char*shortOptions =shortOptions77,3054
+static struct option longOptions[] = {longOptions80,3118
+bool				verbose				= true;verbose96,3781
+const char*			modelFile			= NULL;modelFile97,3808
+const char*			constraintFile			= NULL;constraintFile98,3842
+const char*			outputFile			= NULL;outputFile99,3881
+bool				seeded				= false;seeded100,3916
+int				seed;seed101,3943
+double				startingTemperature		= 0.5L;startingTemperature102,3956
+double				decrement			= 0.99999L;decrement103,3995
+unsigned			iterations			= 256;iterations104,4029
+unsigned			retries				= 2;retries105,4060
+unsigned			lowerBound			= 0;lowerBound106,4087
+unsigned			upperBound			= 0;upperBound107,4116
+double				searchPartition			= 2.L/3.L;searchPartition108,4145
+static void version() {version110,4185
+static const char*name;name115,4281
+static void usage(int error) {usage116,4305
+void parseOptions(int argc, char*const*argv) {parseOptions123,4564
+
+casa/io/Usage.H,31
+#define USAGE_HUSAGE_H20,749
+
+casa/Main.C,46
+int main(int argc, char**argv) {main35,1020
+
+casa/sat/SAT.C,731
+InputClause::InputClause() :InputClause23,825
+InputClause::InputClause(Array<InputTerm>terms) :InputClause26,876
+InputClause::InputClause(Array<unsigned>symbols) :InputClause34,1050
+InputClause::~InputClause() {}~InputClause42,1247
+InputClause::operator vec<Lit>&() {operator vec<Lit>&44,1279
+InputClause::operator const vec<Lit>&() const {operator const vec<Lit>&47,1336
+void InputClause::clear(){clear51,1406
+void InputClause::append(InputTerm term) {append55,1456
+void InputClause::undoAppend() {undoAppend63,1671
+void SATSolver::reserve(int variables) {reserve67,1725
+void SATSolver::addClause(InputClause&clause) {addClause73,1834
+bool SATSolver::operator()(const InputKnown&known) {operator ()78,1949
+
+casa/sat/SAT.H,733
+#define SAT_HSAT_H22,817
+class InputTerm {InputTerm28,902
+  int					encoding;encoding30,931
+  InputTerm() :InputTerm32,959
+  InputTerm(int encoding) :InputTerm34,994
+  InputTerm(bool negated, int variable) :InputTerm36,1048
+  operator int() const {operator int39,1140
+  InputTerm&operator =(int encoding) {operator =42,1190
+  bool isNegated() const {isNegated47,1283
+  int getVariable() const {getVariable50,1339
+class InputClause {InputClause56,1418
+  int					maxVariable;maxVariable58,1449
+  vec<Lit>				literals;literals59,1472
+  int getMaxVariable() const {getMaxVariable69,1686
+typedef InputClause InputKnown;InputKnown79,1843
+class SATSolver {SATSolver82,1904
+  Solver				solver;solver85,1966
+
+casa/search/Filter.H,336
+#define FILTER_HFILTER_H20,750
+template<class STATE, class COST>class Filter {Filter34,1239
+  typedef Heuristic<STATE,COST>		HeuristicT;HeuristicT36,1295
+  typedef Goal<STATE>			GoalT;GoalT37,1340
+  virtual ~Filter() {}~Filter39,1372
+  virtual void operator()operator ()42,1474
+  virtual void operator()operator ()50,1884
+
+casa/search/Goal.H,109
+#define GOAL_HGOAL_H20,748
+template<class STATE>class Goal {Goal26,953
+  virtual ~Goal() {}~Goal28,995
+
+casa/search/GreedyFilter.H,267
+#define GREEDYFILTER_HGREEDYFILTER_H20,756
+template<class STATE, class COST>class GreedyFilter :GreedyFilter29,1086
+  typedef Heuristic<STATE, COST>	HeuristicT;HeuristicT31,1171
+  typedef Goal<STATE>			GoalT;GoalT32,1216
+  void operator()operator ()35,1256
+
+casa/search/Guide.H,129
+#define GUIDE_HGUIDE_H20,749
+template<class STATE, class COST>class Guide {Guide27,1068
+  virtual ~Guide() {}~Guide29,1123
+
+casa/search/Heuristic.H,151
+#define HEURISTIC_HHEURISTIC_H20,753
+template<class STATE, class COST>class Heuristic {Heuristic26,849
+  virtual ~Heuristic() {}~Heuristic28,908
+
+casa/search/Node.H,1077
+#define NODE_HNODE_H20,748
+template<class STATE, class COST>class Node {Node29,974
+  typedef Node<STATE,COST>*		Edge;Edge31,1031
+  Edge					parent;parent34,1128
+  const STATE				state;state36,1163
+  COST					traveled;traveled38,1247
+  COST					estimate;estimate40,1329
+  std::set<Edge>			children;children42,1407
+  Node(Edge parent, const STATE&state, COST traveled, COST estimate) :Node45,1445
+  virtual ~Node() {~Node55,1669
+  const STATE&getState() const {getState69,1955
+  COST getTraveled() const {getTraveled73,2011
+  void setTraveled(COST traveled) {setTraveled76,2065
+  COST getEstimate() const {getEstimate80,2137
+  void setEstimate(COST estimate) {setEstimate83,2191
+  Edge getParent() const {getParent87,2263
+  const std::set<Edge>&getChildren() const {getChildren91,2314
+  void addChild(Edge child) {addChild95,2385
+  void removeChild(Edge child) {removeChild107,2617
+#define COMP(COMP117,2823
+  COMP(==);COMP122,2946
+#undef COMPCOMP124,2970
+template<class STATE, class COST>std::ostream&operator <<operator <<127,2986
+
+casa/search/SearchConfiguration.H,577
+#define SEARCH_CONFIGURATION_HSEARCH_CONFIGURATION_H20,764
+struct SearchConfiguration {SearchConfiguration24,876
+  bool				useClosed;useClosed31,1158
+  bool				retryChildren;retryChildren40,1495
+  bool				proportionChildren;proportionChildren51,1976
+    float proportion;proportion56,2117
+    unsigned count;count57,2139
+  }					childrenAsk;childrenAsk58,2159
+  unsigned				prunePeriod;prunePeriod66,2527
+  SearchConfiguration() :SearchConfiguration68,2555
+  SearchConfigurationSearchConfiguration75,2715
+  SearchConfigurationSearchConfiguration86,3009
+
+casa/search/SearchFinish.H,448
+#define SEARCH_FINISH_HSEARCH_FINISH_H20,757
+template<class STATE, class COST>class SearchFinish {SearchFinish31,1010
+  typedef Search<STATE, COST>		SearchT;SearchT33,1072
+  typedef Node<STATE, COST>		NodeT;NodeT34,1112
+  const SearchT&			source;source36,1149
+  std::set<NodeT*>			results;results37,1176
+  unsigned				iterations;iterations38,1206
+  unsigned				maxIterations;maxIterations39,1232
+  SearchFinishSearchFinish41,1262
+
+casa/search/Search.H,1765
+#define SEARCH_HSEARCH_H20,750
+template<class STATE, class COST>class Search :Search60,1853
+  typedef Node<STATE, COST>		NodeT;NodeT64,1999
+					VisitSetT;VisitSetT68,2108
+					StateSpaceT;StateSpaceT70,2158
+					HeuristicT;HeuristicT72,2209
+					GuideT;GuideT74,2255
+  typedef Goal<STATE>			GoalT;GoalT75,2268
+  typedef Filter<STATE,COST>		FilterT;FilterT76,2299
+					SearchFinishT;SearchFinishT78,2374
+  SearchConfiguration			configuration;configuration80,2395
+  StateSpaceT*				space;space81,2434
+  HeuristicT*				heuristic;heuristic82,2459
+  GuideT*				guide;guide83,2487
+  GoalT*				goal;goal84,2507
+  FilterT*				filter;filter85,2525
+  bool					oneBest;oneBest86,2547
+  VisitSetT				open;open87,2567
+  VisitSetT				closed;closed88,2588
+  std::set<const NodeT*>		best;best89,2611
+  COST					bestRank;bestRank90,2643
+  SearchSearch97,2971
+  virtual ~Search() {~Search119,3422
+  void clearBest() {clearBest125,3526
+  void updateBest(const NodeT&node, COST rank) {updateBest143,3990
+  NodeT&popBestOpen() {popBestOpen158,4363
+  std::set<STATE>getChildren(const NodeT&parent) {getChildren172,4777
+  bool replaceInOpen(NodeT&parent, NodeT&node, COST traveled) {replaceInOpen185,5328
+  void updateTraveled(NodeT&parent, NodeT&visited) {updateTraveled213,6308
+  bool replaceInClosed(NodeT&parent, NodeT&node, COST traveled) {replaceInClosed268,8130
+  void addNew(NodeT*node) {addNew289,8877
+  void addStartState(const STATE&start) {addStartState297,9055
+  std::set<NodeT*>search(unsigned iterations, bool restartable) {search309,9389
+#define GET_SET(GET_SET421,12703
+#undef GET_SETGET_SET433,13113
+  const std::set<const NodeT*>getBest() const {getBest435,13129
+  void clear() {clear439,13199
+
+casa/search/SearchIteration.H,100
+#define SEARCH_ITERATION_HSEARCH_ITERATION_H20,760
+class SearchIteration {SearchIteration24,870
+
+casa/search/StateGuide.H,277
+#define STATE_GUIDE_HSTATE_GUIDE_H20,755
+template<class STATE, class COST>class StateGuide : public Guide<STATE, COST> {StateGuide24,858
+  COST rankStart(const Node<STATE, COST>&start) const {rankStart26,946
+  COST rank(const Node<STATE, COST>&node) const {rank29,1038
+
+casa/search/StateSpace.H,160
+#define STATE_SPACE_HSTATE_SPACE_H20,755
+template<class STATE, class COST>class StateSpace {StateSpace29,951
+  virtual ~StateSpace() {}~StateSpace31,1011
+
+common/posix/getopt.h,497
+# define _GETOPT_H _GETOPT_H24,953
+#  define __GNUC_PREREQ(__GNUC_PREREQ40,1589
+#  define __THROW	__THROW43,1683
+#  define __THROW__THROW45,1717
+struct optionoption106,3826
+  const char *name;name108,3842
+  int has_arg;has_arg111,3998
+  int *flag;flag112,4013
+  int val;val113,4026
+# define no_argument	no_argument118,4113
+# define required_argument	required_argument119,4137
+# define optional_argument	optional_argument120,4166
+#undef __need_getopt__need_getopt175,6085
+
+common/utility/Array.H,906
+#define ARRAY_HARRAY_H20,749
+template<class T>class Array {Array24,787
+  unsigned				size;size26,829
+  T*					array;array27,849
+  unsigned*				referenceCount;referenceCount28,865
+  void destroy() {destroy30,897
+  Array() :Array39,1054
+  Array(unsigned size) :Array43,1124
+  Array(const T*raw, unsigned size) :Array47,1228
+  Array(const Array&copy) :Array55,1419
+  Array&operator =(const Array&copy) {operator =64,1595
+  virtual ~Array() {~Array73,1783
+  unsigned getSize() const {getSize77,1824
+  operator const T*() const {operator const T*81,1875
+  operator T*() {operator T*84,1927
+  void fill(const T&filler) {fill88,1968
+template<class T>std::ostream&operator <<operator <<95,2073
+template<class T,class COMPARE = std::less<T> >class ArrayComparator {ArrayComparator104,2282
+  bool operator()(const Array<T>&left, const Array<T>&right) const {operator ()106,2361
+
+common/utility/Combinadic.C,738
+static double TWO_PI = 2 * M_PI;TWO_PI25,800
+static double INVERSE_E = 1 / M_E;INVERSE_E26,833
+unsigned Combinadic::guessLastMember(unsigned encoding, unsigned cardinality) {guessLastMember48,1932
+pair<unsigned, unsigned>Combinadic::getLastMemberAndContributiongetLastMemberAndContribution54,2225
+unsigned Combinadic::encode(Array<unsigned>sortedSubset) {encode73,2910
+Array<unsigned>Combinadic::decode(unsigned encoding, unsigned cardinality) {decode81,3126
+Array<unsigned>Combinadic::begin(unsigned size) const {begin92,3498
+void Combinadic::previous(Array<unsigned>sortedSubset) const {previous100,3660
+void Combinadic::next(Array<unsigned>sortedSubset) const {next114,3990
+Combinadic combinadic;combinadic129,4402
+
+common/utility/Combinadic.H,78
+#define COMBINADIC_HCOMBINADIC_H20,754
+class Combinadic {Combinadic27,843
+
+common/utility/CombinadicIterator.C,457
+CombinadicIterator::CombinadicIteratorCombinadicIterator26,829
+void CombinadicIterator::updateCombinationFromRelevant() {updateCombinationFromRelevant49,1668
+void CombinadicIterator::updateCombination() {updateCombination55,1842
+const Array<unsigned>CombinadicIterator::operator *() const {operator *65,2202
+CombinadicIterator::operator bool() const {operator bool74,2415
+CombinadicIterator&CombinadicIterator::operator ++() {operator ++78,2494
+
+common/utility/CombinadicIterator.H,638
+#define COMBINADIC_ITERATOR_HCOMBINADIC_ITERATOR_H20,763
+class CombinadicIterator {CombinadicIterator24,819
+  unsigned				populationSize;populationSize26,857
+  Array<unsigned>			relevant;relevant28,964
+  Array<unsigned>			notRelevant;notRelevant29,994
+  unsigned				minimumRelevance;minimumRelevance31,1028
+  unsigned				maximumRelevance;maximumRelevance32,1060
+  Array<unsigned>			choiceFromRelevant;choiceFromRelevant34,1093
+  Array<unsigned>			choiceFromNotRelevant;choiceFromNotRelevant35,1133
+  Array<unsigned>			relevantCombination;relevantCombination37,1177
+  Array<unsigned>			combination;combination38,1218
+
+common/utility/igreater.H,244
+#define IGREATER_HIGREATER_H20,752
+template<class T>class igreater {igreater25,933
+  const T*				array;array27,978
+  igreater(const T*array) :igreater29,1007
+  bool operator ()(unsigned left, unsigned right) const {operator ()31,1055
+
+common/utility/Lazy.H,642
+#define LAZY_HLAZY_H20,748
+template<class T>class Lazy {Lazy25,804
+  T*					implementation;implementation27,845
+  unsigned*				referenceCount;referenceCount28,870
+  void destroy() {destroy30,902
+  Lazy() :Lazy44,1159
+  Lazy(T*implementation) :Lazy47,1224
+  Lazy(const Lazy&copy) :Lazy50,1350
+  Lazy&operator =(T*implementation) {operator =61,1595
+  Lazy&operator =(const Lazy&copy) {operator =67,1781
+  virtual ~Lazy(){~Lazy81,2107
+  const T*operator ->() const {operator ->85,2146
+  T*operator ->() {operator ->88,2209
+  operator const T*() const {operator const T*102,2512
+  operator T*() {operator T*105,2572
+
+common/utility/PascalTriangle.C,234
+PascalTriangle::PascalTriangle() {PascalTriangle21,762
+void PascalTriangle::addRows(unsigned targetDepth) {addRows27,866
+unsigned PascalTriangle::nCr(unsigned n, unsigned r) {nCr42,1305
+PascalTriangle triangle;triangle52,1465
+
+common/utility/PascalTriangle.H,149
+#define PASCAL_TRIANGLE_HPASCAL_TRIANGLE_H20,759
+class PascalTriangle {PascalTriangle26,825
+  std::vector<Array<unsigned> >		table;table29,908
+
+common/utility/pless.H,150
+#define PLESS_HPLESS_H20,749
+template<class T>class pless {pless25,893
+  bool operator ()(const T*left, const T*right) const {operator ()27,932
+
+common/utility/relation.H,1691
+#define RELATION_HRELATION_H20,752
+	 class data_compare = std::less<data_type> >class relation {relation36,1251
+      relation_type;relation_type40,1421
+					by_key;by_key43,1493
+					by_data;by_data45,1557
+  typedef unsigned			size_type;size_type47,1579
+  typedef int				difference_type;difference_type48,1611
+#define KEY(KEY51,1669
+#undef KEYKEY58,1877
+#define DATA(DATA61,1913
+#undef DATADATA68,2128
+  relation() {}relation71,2172
+  relation(const key_compare&key_comp, const data_compare&data_comp) :relation72,2188
+  relation(const relation_type&copy) :relation75,2307
+  relation&operator =(const relation_type&copy) {operator =78,2400
+  void swap(relation_type&other) {swap82,2508
+  virtual ~relation() {}~relation86,2611
+  key_compare key_comp() const {key_comp89,2674
+#define KEY(KEY92,2741
+#undef KEYKEY103,3137
+#define KEY(KEY104,3148
+#undef KEYKEY115,3612
+  std::pair<key_iterator, bool>key_insertkey_insert117,3681
+  void key_erase(key_iterator pos) {key_erase130,4254
+  size_type key_erase(const key_type&key) {key_erase145,4725
+  data_compare data_comp() const {data_comp157,5030
+#define DATA(DATA160,5101
+#undef DATADATA171,5516
+#define DATA(DATA172,5528
+#undef DATADATA184,6020
+  std::pair<data_iterator, bool>data_insertdata_insert186,6090
+  void data_erase(data_iterator pos) {data_erase199,6662
+  size_type data_erase(const data_type&data) {data_erase213,7124
+  void clear() {clear225,7435
+  size_type size() const {size229,7497
+  size_type max_size() const {max_size233,7599
+  bool empty() const {empty237,7717
+	 class key_compare, class data_compare>std::ostream&operator <<operator <<244,7899
+
+common/utility/SubstitutionArray.H,1822
+#define SUBSTITUTION_ARRAY_HSUBSTITUTION_ARRAY_H20,762
+#define MAXIMUM_SUBSTITUTION_PROPORTION MAXIMUM_SUBSTITUTION_PROPORTION29,906
+template<class T>class SubstitutionArray : protected Array<T> {SubstitutionArray32,959
+  Lazy<std::map<unsigned, T> >		substitutions;substitutions34,1034
+  unsigned				maximumSubstitutions;maximumSubstitutions35,1081
+  SubstitutionArray() : Array<T>() {}SubstitutionArray38,1126
+  SubstitutionArray(unsigned size) :SubstitutionArray39,1164
+  SubstitutionArray(const T*raw, unsigned size) :SubstitutionArray42,1289
+  SubstitutionArray(const Array<T>&copy) :SubstitutionArray45,1432
+  SubstitutionArray(const SubstitutionArray&copy) :SubstitutionArray48,1573
+  SubstitutionArray&operator =(const Array<T>&copy) {operator =53,1757
+  SubstitutionArray&operator =(const SubstitutionArray<T>&copy) {operator =59,1968
+  unsigned getSize() const {getSize66,2223
+  class Entry {Entry70,2289
+    SubstitutionArray&			owner;owner72,2318
+    unsigned				index;index73,2350
+    Entry(const SubstitutionArray&owner, unsigned index) :Entry75,2383
+    operator T() const {operator T79,2517
+    Entry&operator =(const T&value) {operator =90,2807
+    Entry&operator --() {operator --103,3125
+    Entry&operator ++() {operator ++107,3217
+  const Entry operator[](unsigned index) const {operator []113,3315
+  Entry operator[](unsigned index) {operator []116,3400
+  void fill(const T&filler) {fill120,3474
+  void finalizeSubstitutions() {finalizeSubstitutions130,3736
+  void autoFinalizeSubstitutions(){autoFinalizeSubstitutions150,4315
+template<class T>std::ostream&operator <<operator <<157,4469
+  class SubstitutionArrayComparator {SubstitutionArrayComparator167,4739
+  bool operator()(const Array<T>&left,const Array<T>&right) {operator ()169,4785
+
+minisat/include/Alg.h,204
+#define Alg_hAlg_h21,1304
+static inline void remove(V& ts, const T& t)remove29,1485
+static inline void remove(V& ts, const T& t)remove39,1719
+static inline bool find(V& ts, const T& t)find50,1928
+
+minisat/include/Heap.h,1637
+#define Heap_hHeap_h21,1305
+class Heap {Heap30,1527
+    Comp     lt;lt31,1540
+    vec<int> heap;     // heap of intsheap32,1557
+    vec<int> indices;  // int -> index in heapindices33,1596
+    static inline int left  (int i) { return i*2+1; }left36,1679
+    static inline int right (int i) { return (i+1)*2; }right37,1733
+    static inline int parent(int i) { return (i-1) >> 1; }parent38,1789
+    inline void percolateUp(int i)percolateUp41,1850
+    inline void percolateDown(int i)percolateDown54,2156
+    bool heapProperty (int i) const {heapProperty69,2595
+    Heap(const Comp& c) : lt(c) { }Heap75,2790
+    int  size      ()          const { return heap.size(); }size77,2827
+    bool empty     ()          const { return heap.size() == 0; }empty78,2888
+    bool inHeap    (int n)     const { return n < indices.size() && indices[n] >= 0; }inHeap79,2954
+    int  operator[](int index) const { assert(index < heap.size()); return heap[index]; }operator []80,3041
+    void decrease  (int n) { assert(inHeap(n)); percolateUp(indices[n]); }decrease82,3132
+    void increase_ (int n) { assert(inHeap(n)); percolateDown(indices[n]); }increase_85,3263
+    void insert(int n)insert88,3342
+    int  removeMin()removeMin99,3531
+    void clear(bool dealloc = false) clear111,3789
+    void update (int n)update124,4115
+    void filter(const F& filt) {filter138,4498
+    bool heapProperty() const {heapProperty156,4957
+    void setBounds (int n) { }setBounds161,5058
+    void increase  (int n) { decrease(n); }increase162,5089
+    int  getmin    ()      { return removeMin(); }getmin163,5133
+
+minisat/include/Sort.h,594
+#define Sort_hSort_h21,1305
+struct LessThan_default {LessThan_default30,1496
+    bool operator () (T x, T y) { return x < y; }operator ()31,1522
+void selectionSort(T* array, int size, LessThan lt)selectionSort36,1612
+template <class T> static inline void selectionSort(T* array, int size) {selectionSort50,1964
+void sort(T* array, int size, LessThan lt)sort54,2131
+template <class T> static inline void sort(T* array, int size) {sort78,2680
+template <class T, class LessThan> void sort(vec<T>& v, LessThan lt) {sort86,2912
+template <class T> void sort(vec<T>& v) {sort88,3016
+
+minisat/include/Vec.h,3225
+#define Vec_hVec_h21,1304
+class vec {vec33,1624
+    T*  data;data34,1636
+    int sz;sz35,1650
+    int cap;cap36,1662
+    vec<T>&  operator = (vec<T>& other) { assert(0); return *this; }operator =42,1794
+             vec        (vec<T>& other) { assert(0); }vec43,1863
+    static inline int imin(int x, int y) {imin45,1919
+    static inline int imax(int x, int y) {imax49,2051
+    typedef int Key;Key55,2205
+    typedef T   Datum;Datum56,2226
+    vec(void)                   : data(NULL) , sz(0)   , cap(0)    { }vec59,2271
+    vec(int size)               : data(NULL) , sz(0)   , cap(0)    { growTo(size); }vec60,2342
+    vec(int size, const T& pad) : data(NULL) , sz(0)   , cap(0)    { growTo(size, pad); }vec61,2427
+    vec(T* array, int size)     : data(array), sz(size), cap(size) { }      // (takes ownership of array -- will be deallocated with 'free()')vec62,2517
+   ~vec(void)                                                      { clear(true); }~vec63,2660
+    T*       release  (void)           { T* ret = data; data = NULL; sz = 0; cap = 0; return ret; }release66,2783
+    operator T*       (void)           { return data; }     // (unsafe but convenient)operator T*67,2883
+    operator const T* (void) const     { return data; }operator const T*68,2970
+    int      size   (void) const       { return sz; }size71,3051
+    void     shrink (int nelems)       { assert(nelems <= sz); for (int i = 0; i < nelems; i++) sz--, data[sz].~T(); }shrink72,3105
+    void     shrink_(int nelems)       { assert(nelems <= sz); sz -= nelems; }shrink_73,3224
+    void     pop    (void)             { sz--, data[sz].~T(); }pop74,3303
+    void     capacity (int size) { grow(size); }capacity78,3489
+    void     push  (void)              { if (sz == cap) { cap = imax(2, (cap*3+1)>>1); data = (T*)realloc(data, cap * sizeof(T)); } new (&data[sz]) T(); sz++; }push82,3569
+    void     push  (const T& elem)     { if (sz == cap) { cap = imax(2, (cap*3+1)>>1); data = (T*)realloc(data, cap * sizeof(T)); } data[sz++] = elem; }push84,3897
+    void     push_ (const T& elem)     { assert(sz < cap); data[sz++] = elem; }push_85,4050
+    void     push  (void)              { if (sz == cap) grow(sz+1); new (&data[sz]) T()    ; sz++; }push87,4136
+    void     push  (const T& elem)     { if (sz == cap) grow(sz+1); new (&data[sz]) T(elem); sz++; }push88,4237
+    const T& last  (void) const        { return data[sz-1]; }last91,4346
+    T&       last  (void)              { return data[sz-1]; }last92,4408
+    const T& operator [] (int index) const  { return data[index]; }operator []95,4496
+    T&       operator [] (int index)        { return data[index]; }operator []96,4564
+    void copyTo(vec<T>& copy) const { copy.clear(); copy.growTo(sz); for (int i = 0; i < sz; i++) new (&copy[i]) T(data[i]); }copyTo100,4676
+    void moveTo(vec<T>& dest) { dest.clear(true); dest.data = data; dest.sz = sz; dest.cap = cap; data = NULL; sz = 0; cap = 0; }moveTo101,4803
+void vec<T>::grow(int min_cap) {grow105,4955
+void vec<T>::growTo(int size, const T& pad) {growTo112,5208
+void vec<T>::growTo(int size) {growTo119,5393
+void vec<T>::clear(bool dealloc) {clear126,5561
+
+minisat/solver/Solver.C,1822
+Solver::Solver() :Solver29,1476
+Solver::~Solver()~Solver59,2341
+Var Solver::newVar(bool sign, bool dvar)newVar73,2806
+bool Solver::addClause(vec<Lit>& ps)addClause92,3246
+void Solver::attachClause(Clause& c) {attachClause126,4089
+void Solver::detachClause(Clause& c) {detachClause134,4330
+void Solver::removeClause(Clause& c) {removeClause144,4667
+bool Solver::satisfied(const Clause& c) const {satisfied149,4745
+void Solver::cancelUntil(int level) {cancelUntil158,5007
+Lit Solver::pickBranchLit(int polarity_mode, double random_var_freq)pickBranchLit174,5530
+void Solver::analyze(Clause* confl, vec<Lit>& out_learnt, int& out_btlevel)analyze221,7221
+bool Solver::litRedundant(Lit p, uint32_t abstract_levels)litRedundant313,10188
+void Solver::analyzeFinal(Lit p, vec<Lit>& out_conflict)analyzeFinal351,11679
+void Solver::uncheckedEnqueue(Lit p, Clause* from)uncheckedEnqueue381,12375
+Clause* Solver::propagate()propagate402,13118
+struct reduceDB_lt { bool operator () (Clause* x, Clause* y) { return x->size() > 2 && (y->size() == 2 || x->activity() < y->activity()); } };reduceDB_lt464,15253
+struct reduceDB_lt { bool operator () (Clause* x, Clause* y) { return x->size() > 2 && (y->size() == 2 || x->activity() < y->activity()); } };operator ()464,15253
+void Solver::reduceDB()reduceDB465,15396
+void Solver::removeSatisfied(vec<Clause*>& cs)removeSatisfied487,16039
+bool Solver::simplify()simplify508,16728
+lbool Solver::search(int nof_conflicts, int nof_learnts)search547,18211
+double Solver::progressEstimate() constprogressEstimate638,20922
+bool Solver::solve(const vec<Lit>& assumps,bool cleanup)solve653,21276
+void Solver::clearTrail(){clearTrail703,22995
+void Solver::verifyModel()verifyModel711,23163
+void Solver::checkLiteralCount()checkLiteralCount734,23684
+
+minisat/solver/Solver.H,9853
+#define Solver_hSolver_h21,1307
+class Solver {Solver36,1555
+    vec<lbool> model;             // If problem is satisfiable, this vector contains the model (if any).model75,3438
+    vec<Lit>   conflict;          // If problem is unsatisfiable (possibly under assumptions),conflict76,3543
+    int getTrailSize() const{return trail.size();}getTrailSize80,3778
+    int getTrailVar(int index) const{return var(trail[index]);}getTrailVar81,3829
+    bool getTrailSign(int index) const{return sign(trail[index]);}getTrailSign82,3893
+    double    var_decay;          // Inverse of the variable activity decay factor.                                            (default 1 / 0.95)var_decay86,3994
+    double    clause_decay;       // Inverse of the clause activity decay factor.                                              (1 / 0.999)clause_decay87,4140
+    double    random_var_freq;    // The frequency with which the decision heuristic tries to choose a random variable.        (default 0.02)random_var_freq88,4279
+    int       restart_first;      // The initial restart limit.                                                                (default 100)restart_first89,4421
+    double    restart_inc;        // The factor with which the restart limit is multiplied in each restart.                    (default 1.5)restart_inc90,4562
+    double    learntsize_factor;  // The intitial limit for learnt clauses is a factor of the original clauses.                (default 1 / 3)learntsize_factor91,4703
+    double    learntsize_inc;     // The limit for learnt clauses is multiplied with this factor each restart.                 (default 1.1)learntsize_inc92,4846
+    bool      expensive_ccmin;    // Controls conflict clause minimization.                                                    (default TRUE)expensive_ccmin93,4987
+    int       polarity_mode;      // Controls which polarity the decision heuristic chooses. See enum below for allowed modes. (default polarity_false)polarity_mode94,5129
+    int       verbosity;          // Verbosity level. 0=silent, 1=some progress report                                         (default 0)verbosity95,5281
+    enum { polarity_true = 0, polarity_false = 1, polarity_user = 2, polarity_rnd = 3 };polarity_true97,5421
+    enum { polarity_true = 0, polarity_false = 1, polarity_user = 2, polarity_rnd = 3 };polarity_false97,5421
+    enum { polarity_true = 0, polarity_false = 1, polarity_user = 2, polarity_rnd = 3 };polarity_user97,5421
+    enum { polarity_true = 0, polarity_false = 1, polarity_user = 2, polarity_rnd = 3 };polarity_rnd97,5421
+    uint64_t starts, decisions, rnd_decisions, propagations, conflicts;starts101,5565
+    uint64_t starts, decisions, rnd_decisions, propagations, conflicts;decisions101,5565
+    uint64_t starts, decisions, rnd_decisions, propagations, conflicts;rnd_decisions101,5565
+    uint64_t starts, decisions, rnd_decisions, propagations, conflicts;propagations101,5565
+    uint64_t starts, decisions, rnd_decisions, propagations, conflicts;conflicts101,5565
+    uint64_t clauses_literals, learnts_literals, max_literals, tot_literals;clauses_literals102,5637
+    uint64_t clauses_literals, learnts_literals, max_literals, tot_literals;learnts_literals102,5637
+    uint64_t clauses_literals, learnts_literals, max_literals, tot_literals;max_literals102,5637
+    uint64_t clauses_literals, learnts_literals, max_literals, tot_literals;tot_literals102,5637
+    struct VarOrderLt {VarOrderLt108,5760
+        const vec<double>&  activity;activity109,5784
+        bool operator () (Var x, Var y) const { return activity[x] > activity[y]; }operator ()110,5822
+        VarOrderLt(const vec<double>&  act) : activity(act) { }VarOrderLt111,5906
+    struct VarFilter {VarFilter115,6006
+        const Solver& s;s116,6029
+        VarFilter(const Solver& _s) : s(_s) {}VarFilter117,6054
+        bool operator()(Var v) const { return toLbool(s.assigns[v]) == l_Undef && s.decision_var[v]; }operator ()118,6101
+    bool                ok;               // If FALSE, the constraints are already unsatisfiable. No part of the solver state may be used!ok123,6240
+    vec<Clause*>        clauses;          // List of problem clauses.clauses124,6379
+    vec<Clause*>        learnts;          // List of learnt clauses.learnts125,6449
+    double              cla_inc;          // Amount to bump next clause with.cla_inc126,6518
+    vec<double>         activity;         // A heuristic measurement of the activity of a variable.activity127,6596
+    double              var_inc;          // Amount to bump next variable with.var_inc128,6696
+    vec<vec<Clause*> >  watches;          // 'watches[lit]' is a list of constraints watching 'lit' (will go there if literal becomes true).watches129,6776
+    vec<char>           assigns;          // The current assignments (lbool:s stored as char:s).assigns130,6917
+    vec<char>           polarity;         // The preferred polarity of each variable.polarity131,7014
+    vec<char>           decision_var;     // Declares if a variable is eligible for selection in the decision heuristic.decision_var132,7100
+    vec<Lit>            trail;            // Assignment stack; stores all assigments made in the order they were made.trail133,7221
+    vec<int>            trail_lim;        // Separator indices for different decision levels in 'trail'.trail_lim134,7340
+    vec<Clause*>        reason;           // 'reason[var]' is the clause that implied the variables current value, or 'NULL' if none.reason135,7445
+    vec<int>            level;            // 'level[var]' contains the level at which the assignment was made.level136,7579
+    int                 qhead;            // Head of queue (as index into the trail -- no more explicit propagation queue in MiniSat).qhead137,7690
+    int                 simpDB_assigns;   // Number of top-level assignments since last execution of 'simplify()'.simpDB_assigns138,7825
+    int64_t             simpDB_props;     // Remaining number of propagations that must be made before next execution of 'simplify()'.simpDB_props139,7940
+    vec<Lit>            assumptions;      // Current set of assumptions provided to solve by the user.assumptions140,8075
+    Heap<VarOrderLt>    order_heap;       // A priority queue of variables ordered with respect to the variable activity.order_heap141,8178
+    double              random_seed;      // Used by the random variable selection.random_seed142,8300
+    double              progress_estimate;// Set by 'search()'.progress_estimate143,8384
+    bool                remove_satisfied; // Indicates whether possibly inefficient linear scan for satisfied clauses should be performed in 'simplify'.remove_satisfied144,8448
+    vec<char>           seen;seen149,8774
+    vec<Lit>            analyze_stack;analyze_stack150,8804
+    vec<Lit>            analyze_toclear;analyze_toclear151,8843
+    vec<Lit>            add_tmp;add_tmp152,8884
+    static inline double drand(double& seed) {drand202,12450
+    static inline int irand(double& seed, int size) {irand209,12710
+inline void Solver::insertVarOrder(Var x) {insertVarOrder218,12952
+inline void Solver::varDecayActivity() { var_inc *= var_decay; }varDecayActivity221,13071
+inline void Solver::varBumpActivity(Var v) {varBumpActivity222,13136
+inline void Solver::claDecayActivity() { cla_inc *= clause_decay; }claDecayActivity233,13474
+inline void Solver::claBumpActivity (Clause& c) {claBumpActivity234,13542
+inline bool     Solver::enqueue         (Lit p, Clause* from)   { return value(p) != l_Undef ? value(p) != l_False : (uncheckedEnqueue(p, from), true); }enqueue241,13803
+inline bool     Solver::locked          (const Clause& c) const { return reason[var(c[0])] == &c && value(c[0]) == l_True; }locked242,13957
+inline void     Solver::newDecisionLevel()                      { trail_lim.push(trail.size()); }newDecisionLevel243,14082
+inline int      Solver::decisionLevel ()      const   { return trail_lim.size(); }decisionLevel245,14181
+inline uint32_t Solver::abstractLevel (Var x) const   { return 1 << (level[x] & 31); }abstractLevel246,14264
+inline lbool    Solver::value         (Var x) const   { return toLbool(assigns[x]); }value247,14351
+inline lbool    Solver::value         (Lit p) const   { return toLbool(assigns[var(p)]) ^ sign(p); }value248,14437
+inline lbool    Solver::modelValue    (Lit p) const   { return model[var(p)] ^ sign(p); }modelValue249,14538
+inline int      Solver::nAssigns      ()      const   { return trail.size(); }nAssigns250,14628
+inline int      Solver::nClauses      ()      const   { return clauses.size(); }nClauses251,14707
+inline int      Solver::nLearnts      ()      const   { return learnts.size(); }nLearnts252,14788
+inline int      Solver::nVars         ()      const   { return assigns.size(); }nVars253,14869
+inline void     Solver::setPolarity   (Var v, bool b) { polarity    [v] = (char)b; }setPolarity254,14950
+inline void     Solver::setDecisionVar(Var v, bool b) { decision_var[v] = (char)b; if (b) { insertVarOrder(v); } }setDecisionVar255,15035
+inline bool     Solver::solve         ()              { vec<Lit> tmp; return solve(tmp); }solve256,15150
+inline bool     Solver::okay          ()      const   { return ok; }okay257,15241
+#define reportf(reportf265,15431
+static inline void logLit(FILE* f, Lit l)logLit267,15534
+static inline void logLits(FILE* f, const vec<Lit>& ls)logLits272,15636
+static inline const char* showBool(bool b) { return b ? "true" : "false"; }showBool285,15912
+static inline void check(bool expr) { assert(expr); }check289,16079
+inline void Solver::printLit(Lit l)printLit292,16135
+inline void Solver::printClause(const C& c)printClause299,16311
+
+minisat/solver/SolverTypes.H,3789
+#define SolverTypes_hSolverTypes_h22,1313
+typedef int Var;Var34,1667
+#define var_Undef var_Undef35,1684
+class Lit {Lit38,1709
+    int     x;x39,1721
+    Lit() : x(2*var_Undef)                                              { }   // (lit_Undef)Lit41,1745
+    explicit Lit(Var var, bool sign = false) : x((var+var) + (int)sign) { }Lit42,1838
+    bool operator == (Lit p) const { return x == p.x; }operator ==53,2381
+    bool operator != (Lit p) const { return x != p.x; }operator !=54,2437
+    bool operator <  (Lit p) const { return x < p.x;  } // '<' guarantees that p, ~p are adjacent in the ordering.operator <55,2493
+inline  int  toInt       (Lit p)           { return p.x; }toInt58,2612
+inline  Lit  toLit       (int i)           { Lit p; p.x = i; return p; }toLit59,2671
+inline  Lit  operator   ~(Lit p)           { Lit q; q.x = p.x ^ 1; return q; }operator ~60,2744
+inline  bool sign        (Lit p)           { return p.x & 1; }sign61,2823
+inline  int  var         (Lit p)           { return p.x >> 1; }var62,2886
+inline  Lit  unsign      (Lit p)           { Lit q; q.x = p.x & ~1; return q; }unsign63,2950
+inline  Lit  id          (Lit p, bool sgn) { Lit q; q.x = p.x ^ (int)sgn; return q; }id64,3030
+class lbool {lbool74,3358
+    char     value;value75,3372
+    explicit lbool(int v) : value(v) { }lbool76,3392
+    lbool()       : value(0) { }lbool79,3442
+    lbool(bool x) : value((int)x*2-1) { }lbool80,3475
+    int toInt(void) const { return value; }toInt81,3517
+    bool  operator == (lbool b) const { return value == b.value; }operator ==83,3562
+    bool  operator != (lbool b) const { return value != b.value; }operator !=84,3629
+    lbool operator ^ (bool b) const { return b ? lbool(-value) : lbool(value); }operator ^85,3696
+inline int   toInt  (lbool l) { return l.toInt(); }toInt90,3851
+inline lbool toLbool(int   v) { return lbool(v);  }toLbool91,3903
+const lbool l_True  = toLbool( 1);l_True93,3956
+const lbool l_False = toLbool(-1);l_False94,3991
+const lbool l_Undef = toLbool( 0);l_Undef95,4026
+class Clause {Clause105,4306
+    uint32_t size_etc;size_etc106,4321
+    union { float act; uint32_t abst; } extra;act107,4344
+    union { float act; uint32_t abst; } extra;abst107,4344
+    union { float act; uint32_t abst; } extra;extra107,4344
+    Lit     data[0];data108,4391
+    void calcAbstraction() {calcAbstraction111,4421
+    Clause(const V& ps, bool learnt) {Clause119,4726
+    friend Clause* Clause_new(const V& ps, bool learnt) {Clause_new126,5003
+    int          size        ()      const   { return size_etc >> 3; }size132,5292
+    void         shrink      (int i)         { assert(i <= size()); size_etc = (((size_etc >> 3) - i) << 3) | (size_etc & 7); }shrink133,5363
+    void         pop         ()              { shrink(1); }pop134,5491
+    bool         learnt      ()      const   { return size_etc & 1; }learnt135,5551
+    uint32_t     mark        ()      const   { return (size_etc >> 1) & 3; }mark136,5621
+    void         mark        (uint32_t m)    { size_etc = (size_etc & ~6) | ((m & 3) << 1); }mark137,5698
+    const Lit&   last        ()      const   { return data[size()-1]; }last138,5792
+    Lit&         operator [] (int i)         { return data[i]; }operator []142,6034
+    Lit          operator [] (int i) const   { return data[i]; }operator []143,6099
+    operator const Lit* (void) const         { return data; }operator const Lit*144,6164
+    float&       activity    ()              { return extra.act; }activity146,6227
+    uint32_t     abstraction () const { return extra.abst; }abstraction147,6294
+inline Lit Clause::subsumes(const Clause& other) constsubsumes167,7044
+inline void Clause::strengthen(Lit p)strengthen195,7704
