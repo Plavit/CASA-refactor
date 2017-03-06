@@ -1,4 +1,5 @@
 package search;
 
-public class Search {
+public class Search<STATE extends Comparable<STATE>, COST> {
+    /* TODO */
 }
