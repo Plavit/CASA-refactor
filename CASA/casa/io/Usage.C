@@ -127,12 +127,17 @@ void parseOptions(int argc, char*const*argv) {
   for (unsigned i = 256; i-- > 0;) {
     seen[i] = false;
   }
+
+  cout << "Workaround succesful... - Usage.C:131" << endl;
+
   for (;;) {
     int index = 0;
     int found = getopt_long(argc, argv, shortOptions, longOptions, &index);
     switch (found) {
     case 'o': // output
+      cout << "switch -o (Usage.C:138)" << endl;
       outputFile = optarg;
+      cout << "output file set (Usage.C:140)" << endl;
       break;
     case 'c': // constrain
       constraintFile = optarg;

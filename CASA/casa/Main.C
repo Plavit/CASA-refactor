@@ -34,8 +34,10 @@ using namespace std;
 
 int main(int argc, char**argv) {
   // Absorb the command line arguments into shared variables.
+  cout << "Starting..." << endl;
   parseOptions(argc, argv);
   // Process the random seed.
+  cout << "Processing seed..." << endl;
   if (!seeded) {
     seed = time(NULL);
     cout << "Choosing random seed " << seed << endl;
