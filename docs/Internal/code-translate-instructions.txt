@@ -1,0 +1,505 @@
+Obecne pokyny prepisu C++ na Java:
+
+ * implementace funkci z .C souboru psat normalne do tridy vytvorene z .H souboru
+ * kazdou tridu do vlastniho souboru se stejnym nazvem, jak je v Jave zvykem
+ * pouziti tridy Array<> prepsat na Vector<>
+ * destruktory trid neprepisovat (snad to zvladne garbage collector Javy)
+ * operatory prepsat na funkce s prefixem 'op_', napr.:
+   - operator() -> op_call()
+   - operator--() -> op_inc_post()
+   - operator++(X) -> op_inc_post()
+   - ==(...) -> op_eq
+   typy operatoru radeji proverit: https://en.wikipedia.org/wiki/Operators_in_C_and_C%2B%2B
+   a pro jistotu nechat i prototyp z C++ v komentari
+
+### casa/algorithms
+
+BinarySearch::~BinarySearch()
+BinarySearch::BinarySearch(ExpensiveUnaryPredicate const&, Partitioner&)
+BinarySearch::operator()(unsigned int, unsigned int)
+
+ExpensiveUnaryPredicate::~ExpensiveUnaryPredicate()
+ExpensiveUnaryPredicate::ExpensiveUnaryPredicate()
+
+Partitioner::~Partitioner()
+Partitioner::Partitioner()
+
+### casa/annealing
+
+anneal(SpecificationFile const&, ConstraintFile const&, unsigned int, double, double)
+
+AnnealingFilter<CoveringArray, CoverageCost>::~AnnealingFilter()
+AnnealingFilter<CoveringArray, CoverageCost>::AnnealingFilter(double, double)
+AnnealingFilter<CoveringArray, CoverageCost>::setTemperature(double)
+AnnealingFilter<CoveringArray, CoverageCost>::signal(SearchIteration const&)
+
+AnnealingPartitioner::~AnnealingPartitioner()
+AnnealingPartitioner::AnnealingPartitioner()
+AnnealingPartitioner::operator()(unsigned int, unsigned int)
+AnnealingPartitioner::signal(SearchFinish<CoveringArray, CoverageCost> const&)
+
+AnnealingSuccess::~AnnealingSuccess()
+AnnealingSuccess::AnnealingSuccess(Search<CoveringArray, CoverageCost>&, unsigned int, CoveringArray const&)
+AnnealingSuccess::getSolution() const
+AnnealingSuccess::operator()(unsigned int) const
+AnnealingSuccess::setIterations(unsigned int)
+
+computeLowerBound(unsigned int, Options const&)
+computeUpperBound(unsigned int, Options const&)
+
+### casa/search
+
+Filter<CoveringArray, CoverageCost>::~Filter()
+Filter<CoveringArray, CoverageCost>::Filter()
+
+Goal<CoveringArray>::~Goal()
+Goal<CoveringArray>::Goal()
+
+GreedyFilter<CoveringArray, CoverageCost>::~GreedyFilter()
+GreedyFilter<CoveringArray, CoverageCost>::GreedyFilter()
+
+Guide<CoveringArray, CoverageCost>::~Guide()
+Guide<CoveringArray, CoverageCost>::Guide()
+
+Heuristic<CoveringArray, CoverageCost>::~Heuristic()
+Heuristic<CoveringArray, CoverageCost>::Heuristic()
+
+Node<CoveringArray, CoverageCost>::getEstimate() const
+Node<CoveringArray, CoverageCost>::getState() const
+Node<CoveringArray, CoverageCost>::~Node()
+Node<CoveringArray, CoverageCost>::Node(Node<CoveringArray, CoverageCost>*, CoveringArray const&, CoverageCost, CoverageCost)
+Node<CoveringArray, CoverageCost>::operator<(Node<CoveringArray, CoverageCost> const&) const
+
+SearchConfiguration::SearchConfiguration(bool, bool, unsigned int, unsigned int)
+
+Search<CoveringArray, CoverageCost>::addNew(Node<CoveringArray, CoverageCost>*)
+Search<CoveringArray, CoverageCost>::addStartState(CoveringArray const&)
+Search<CoveringArray, CoverageCost>::clear()
+Search<CoveringArray, CoverageCost>::clearBest()
+Search<CoveringArray, CoverageCost>::getBest() const
+Search<CoveringArray, CoverageCost>::getChildren(Node<CoveringArray, CoverageCost> const&)
+Search<CoveringArray, CoverageCost>::getSpace() const
+Search<CoveringArray, CoverageCost>::popBestOpen()
+Search<CoveringArray, CoverageCost>::replaceInOpen(Node<CoveringArray, CoverageCost>&, Node<CoveringArray, CoverageCost>&, CoverageCost)
+Search<CoveringArray, CoverageCost>::~Search()
+Search<CoveringArray, CoverageCost>::Search(SearchConfiguration, StateSpace<CoveringArray, CoverageCost>*, Heuristic<CoveringArray, CoverageCost>*, Guide<CoveringArray, CoverageCost>*, Goal<CoveringArray>*, Filter<CoveringArray, CoverageCost>*, bool)
+Search<CoveringArray, CoverageCost>::search(unsigned int, bool)
+Search<CoveringArray, CoverageCost>::updateBest(Node<CoveringArray, CoverageCost> const&, CoverageCost)
+
+SearchFinish<CoveringArray, CoverageCost>::~SearchFinish()
+
+StateGuide<CoveringArray, CoverageCost>::rank(Node<CoveringArray, CoverageCost> const&) const
+StateGuide<CoveringArray, CoverageCost>::~StateGuide()
+StateGuide<CoveringArray, CoverageCost>::StateGuide()
+
+StateSpace<CoveringArray, CoverageCost>::~StateSpace()
+StateSpace<CoveringArray, CoverageCost>::StateSpace()
+
+### common/utility
+
+Combinadic::begin(unsigned int) const
+Combinadic::decode(unsigned int, unsigned int)
+Combinadic::encode(Array<unsigned int>)
+Combinadic::getLastMemberAndContribution(unsigned int, unsigned int)
+Combinadic::guessLastMember(unsigned int, unsigned int)
+Combinadic::next(Array<unsigned int>) const
+
+CombinadicIterator::~CombinadicIterator()
+CombinadicIterator::CombinadicIterator(unsigned int, unsigned int, Array<unsigned int>)
+CombinadicIterator::operator++()
+CombinadicIterator::operator bool() const
+CombinadicIterator::operator*() const
+CombinadicIterator::updateCombination()
+CombinadicIterator::updateCombinationFromRelevant()
+
+PascalTriangle::addRows(unsigned int)
+PascalTriangle::nCr(unsigned int, unsigned int)
+PascalTriangle::~PascalTriangle()
+PascalTriangle::PascalTriangle()
+
+SubstitutionArray<unsigned int>::autoFinalizeSubstitutions()
+SubstitutionArray<unsigned int>::Entry::Entry(SubstitutionArray<unsigned int> const&, unsigned int)
+SubstitutionArray<unsigned int>::Entry::operator--()
+SubstitutionArray<unsigned int>::Entry::operator++()
+SubstitutionArray<unsigned int>::Entry::operator=(unsigned int const&)
+SubstitutionArray<unsigned int>::Entry::operator unsigned int() const
+SubstitutionArray<unsigned int>::fill(unsigned int const&)
+SubstitutionArray<unsigned int>::finalizeSubstitutions()
+SubstitutionArray<unsigned int>::getSize() const
+SubstitutionArray<unsigned int>::operator=(Array<unsigned int> const&)
+SubstitutionArray<unsigned int>::operator=(SubstitutionArray<unsigned int> const&)
+SubstitutionArray<unsigned int>::operator[](unsigned int)
+SubstitutionArray<unsigned int>::~SubstitutionArray()
+SubstitutionArray<unsigned int>::SubstitutionArray()
+SubstitutionArray<unsigned int>::SubstitutionArray(SubstitutionArray<unsigned int> const&)
+
+### casa/io
+
+ConstraintFile::~ConstraintFile()
+ConstraintFile::ConstraintFile(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+ConstraintFile::getClauses() const
+
+### casa/covering/cost
+
+CoverageCost::CoverageCost(unsigned int)
+CoverageCost::CoverageCost(unsigned int, unsigned int)
+CoverageCost::getMultipleCoverage() const
+CoverageCost::getNoncoverage() const
+CoverageCost::operator<(CoverageCost const&) const
+CoverageCost::operator==(CoverageCost const&) const
+
+### casa/covering/goal
+
+CoverageGoal::~CoverageGoal()
+CoverageGoal::CoverageGoal(unsigned int)
+CoverageGoal::getTargetCoverage()
+CoverageGoal::isGoal(CoveringArray const&)
+
+### casa/covering/bookkeeping
+
+Coverage<unsigned int>::begin()
+Coverage<unsigned int>::~Coverage()
+Coverage<unsigned int>::Coverage(Coverage<unsigned int> const&)
+Coverage<unsigned int>::Coverage(unsigned int, Options)
+Coverage<unsigned int>::decode(unsigned int) const
+Coverage<unsigned int>::encode(Array<unsigned int>, Array<unsigned int>, Array<unsigned int>, Array<unsigned int>) const
+Coverage<unsigned int>::encode(Array<unsigned int>) const
+Coverage<unsigned int>::encode(unsigned int, Array<unsigned int>, Array<unsigned int>, Array<unsigned int>, Array<unsigned int>) const
+Coverage<unsigned int>::end()
+Coverage<unsigned int>::Entry::Entry(Coverage<unsigned int> const&, unsigned int)
+Coverage<unsigned int>::Entry::operator--()
+Coverage<unsigned int>::Entry::operator++()
+Coverage<unsigned int>::Entry::operator unsigned int() const
+Coverage<unsigned int>::fill(unsigned int const&)
+Coverage<unsigned int>::getOptions() const
+Coverage<unsigned int>::getSize() const
+Coverage<unsigned int>::getStrength() const
+Coverage<unsigned int>::hintGet(Array<unsigned int>, Array<unsigned int>, Array<unsigned int>, Array<unsigned int>)
+Coverage<unsigned int>::hintGet(unsigned int, Array<unsigned int>, Array<unsigned int>, Array<unsigned int>, Array<unsigned int>)
+Coverage<unsigned int>::hintGet(unsigned int, Array<unsigned int>, Array<unsigned int>, Array<unsigned int>, Array<unsigned int>) const
+Coverage<unsigned int>::iterator::getCombination() const
+Coverage<unsigned int>::iterator::iterator(Coverage<unsigned int>&, unsigned int)
+Coverage<unsigned int>::iterator::operator*()
+Coverage<unsigned int>::iterator::operator++()
+Coverage<unsigned int>::iterator::operator!=(Coverage<unsigned int>::iterator const&) const
+Coverage<unsigned int>::operator=(Coverage<unsigned int> const&)
+
+Options::getFirstSymbols() const
+Options::getFirstSymbol(unsigned int) const
+Options::getLastSymbol(unsigned int) const
+Options::getOption(unsigned int) const
+Options::getSize() const
+Options::getSymbolCounts() const
+Options::getSymbolCount(unsigned int) const
+Options::operator=(Options const&)
+Options::~Options()
+Options::Options()
+Options::Options(Array<unsigned int>)
+Options::Options(Options const&)
+
+### casa/covering/filter
+
+CoveringArrayAnnealingFilter::convertToDelta(CoverageCost, CoverageCost) const
+CoveringArrayAnnealingFilter::~CoveringArrayAnnealingFilter()
+CoveringArrayAnnealingFilter::CoveringArrayAnnealingFilter(double, double)
+
+### casa/covering/state
+
+CoveringArray::autoFinalizeSubstitutions()
+CoveringArray::countDistinctCoverage() const
+CoveringArray::~CoveringArray()
+CoveringArray::CoveringArray(CoveringArray const&)
+CoveringArray::CoveringArray(unsigned int, unsigned int, Options, SATSolver&)
+CoveringArray::Entry::Entry(CoveringArray&, unsigned int, unsigned int)
+CoveringArray::Entry::operator unsigned int() const
+CoveringArray::Entry::updateTracking(unsigned int)
+CoveringArray::finalizeSubstitutions()
+CoveringArray::getCoverageCount() const
+CoveringArray::getMultipleCoverageCount() const
+CoveringArray::getNoncoverage() const
+CoveringArray::getOptions() const
+CoveringArray::getRows() const
+CoveringArray::isTrackingNoncoverage() const
+CoveringArray::operator=(CoveringArray const&)
+CoveringArray::operator<(CoveringArray const&) const
+CoveringArray::operator()(unsigned int, Array<unsigned int>)
+CoveringArray::operator()(unsigned int, unsigned int)
+CoveringArray::operator()(unsigned int, unsigned int) const
+CoveringArray::Row::updateTracking(Array<unsigned int>)
+CoveringArray::setBackingArrayEntry(unsigned int, unsigned int, unsigned int)
+CoveringArray::setBackingArrayRow(unsigned int, Array<unsigned int>)
+CoveringArray::setTrackingCoverage(bool)
+CoveringArray::setTrackingNoncoverage(bool)
+CoveringArray::SubRow::operator=(Array<unsigned int>)
+CoveringArray::SubRow::~SubRow()
+CoveringArray::SubRow::SubRow(CoveringArray&, unsigned int, Array<unsigned int>)
+CoveringArray::SubRow::updateTracking(Array<unsigned int>)
+
+### casa/covering/heuristic
+
+CoveringArrayHeuristic::~CoveringArrayHeuristic()
+CoveringArrayHeuristic::CoveringArrayHeuristic()
+CoveringArrayHeuristic::estimate(CoveringArray const&, Goal<CoveringArray> const&) const
+
+### casa/covering/space
+
+CoveringArraySpace::computeTargetCoverage() const
+CoveringArraySpace::~CoveringArraySpace()
+CoveringArraySpace::CoveringArraySpace(unsigned int, Options)
+CoveringArraySpace::getSolver()
+
+GraftSpace::createRandomMatchingRow(InputClause&) const
+GraftSpace::createStartState(unsigned int) const
+GraftSpace::getChildren(CoveringArray const&, unsigned int) const
+GraftSpace::getTraveled(CoveringArray const&) const
+GraftSpace::getTraveled(Node<CoveringArray, CoverageCost> const&, CoveringArray const&) const
+GraftSpace::~GraftSpace()
+GraftSpace::GraftSpace(unsigned int, Options)
+GraftSpace::signal(SearchFinish<CoveringArray, CoverageCost> const&)
+
+SingleChangeSpace::createRandomMatchingRow(InputClause&) const
+
+### casa/covering/events
+
+EventSource<SearchFinish<CoveringArray, CoverageCost> >::addListener(Listener<SearchFinish<CoveringArray, CoverageCost> >&)
+EventSource<SearchFinish<CoveringArray, CoverageCost> >::dispatch(SearchFinish<CoveringArray, CoverageCost> const&)
+EventSource<SearchFinish<CoveringArray, CoverageCost> >::~EventSource()
+EventSource<SearchFinish<CoveringArray, CoverageCost> >::EventSource()
+EventSource<SearchIteration>::addListener(Listener<SearchIteration>&)
+EventSource<SearchIteration>::dispatch(SearchIteration const&)
+EventSource<SearchIteration>::~EventSource()
+EventSource<SearchIteration>::EventSource()
+
+Listener<SearchFinish<CoveringArray, CoverageCost> >::~Listener()
+Listener<SearchFinish<CoveringArray, CoverageCost> >::Listener()
+Listener<SearchIteration>::~Listener()
+Listener<SearchIteration>::Listener()
+
+### casa/covering/report
+
+IterationReport::getTotal() const
+IterationReport::~IterationReport()
+IterationReport::IterationReport()
+IterationReport::signal(SearchFinish<CoveringArray, CoverageCost> const&)
+
+### casa/io
+
+OutputFile::~OutputFile()
+OutputFile::OutputFile(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+OutputFile::setCoveringArray(CoveringArray const&)
+OutputFile::write() const
+
+SpecificationFile::getOptions() const
+SpecificationFile::getStrength() const
+SpecificationFile::~SpecificationFile()
+SpecificationFile::SpecificationFile(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+
+### ZATIM NEDELAT
+
+igreater<unsigned int>::igreater(unsigned int const*)
+igreater<unsigned int>::operator()(unsigned int, unsigned int) const
+lbool::lbool()
+lbool::lbool(bool)
+lbool::lbool(int)
+lbool::operator^(bool) const
+lbool::operator==(lbool) const
+lbool::operator!=(lbool) const
+lbool::toInt() const
+main
+operator new(unsigned long, void*)
+parseOptions(int, char* const*)
+pless<Node<CoveringArray, CoverageCost> >::operator()(Node<CoveringArray, CoverageCost> const*, Node<CoveringArray, CoverageCost> const*) const
+sign(Lit)
+toInt(lbool)
+toInt(Lit)
+toLbool(int)
+var(Lit)
+void selectionSort<Lit, LessThan_default<Lit> >(Lit*, int, LessThan_default<Lit>)
+void sort<Lit, LessThan_default<Lit> >(Lit*, int, LessThan_default<Lit>)
+void sort<Lit, LessThan_default<Lit> >(vec<Lit>&, LessThan_default<Lit>)
+void sort<Lit>(vec<Lit>&)
+
+### casa/sat ZATIM NEDELAT, uvidi se podle SAT knihovny kterou pouzijeme
+
+SATSolver::addClause(InputClause&)
+SATSolver::operator()(InputClause const&)
+SATSolver::reserve(int)
+SATSolver::~SATSolver()
+SATSolver::SATSolver()
+
+### Array NEDELAT, pouziti se prepise na Vector
+
+Array<Array<unsigned int> >::~Array()
+Array<Array<unsigned int> >::Array()
+Array<Array<unsigned int> >::Array(Array<Array<unsigned int> > const&)
+Array<Array<unsigned int> >::Array(unsigned int)
+Array<Array<unsigned int> >::destroy()
+Array<Array<unsigned int> >::getSize() const
+Array<Array<unsigned int> >::operator=(Array<Array<unsigned int> > const&)
+Array<Array<unsigned int> >::operator Array<unsigned int>*()
+Array<Array<unsigned int> >::operator Array<unsigned int> const*() const
+Array<InputClause>::~Array()
+Array<InputClause>::Array()
+Array<InputClause>::destroy()
+Array<InputClause>::getSize() const
+Array<InputTerm>::~Array()
+Array<InputTerm>::Array(Array<InputTerm> const&)
+Array<InputTerm>::Array(unsigned int)
+Array<InputTerm>::destroy()
+Array<InputTerm>::getSize() const
+Array<InputTerm>::operator InputTerm*()
+Array<unsigned int>::~Array()
+Array<unsigned int>::Array()
+Array<unsigned int>::Array(Array<unsigned int> const&)
+Array<unsigned int>::Array(unsigned int)
+Array<unsigned int>::Array(unsigned int const*, unsigned int)
+Array<unsigned int>::destroy()
+Array<unsigned int>::fill(unsigned int const&)
+Array<unsigned int>::getSize() const
+Array<unsigned int>::operator=(Array<unsigned int> const&)
+Array<unsigned int>::operator unsigned int*()
+Array<unsigned int>::operator unsigned int const*() const
+
+### minsat/* ... NEDELAT
+
+Clause::calcAbstraction()
+Clause* Clause_new<vec<Lit> >(vec<Lit> const&, bool)
+Clause::Clause<vec<Lit> >(vec<Lit> const&, bool)
+Clause::learnt() const
+Clause::mark() const
+Clause::operator[](int)
+Clause::operator[](int) const
+Clause::size() const
+
+Heap<Solver::VarOrderLt>::empty() const
+Heap<Solver::VarOrderLt>::~Heap()
+Heap<Solver::VarOrderLt>::heapProperty() const
+Heap<Solver::VarOrderLt>::heapProperty(int) const
+Heap<Solver::VarOrderLt>::Heap(Solver::VarOrderLt const&)
+Heap<Solver::VarOrderLt>::inHeap(int) const
+Heap<Solver::VarOrderLt>::insert(int)
+Heap<Solver::VarOrderLt>::left(int)
+Heap<Solver::VarOrderLt>::operator[](int) const
+Heap<Solver::VarOrderLt>::parent(int)
+Heap<Solver::VarOrderLt>::percolateDown(int)
+Heap<Solver::VarOrderLt>::percolateUp(int)
+Heap<Solver::VarOrderLt>::removeMin()
+Heap<Solver::VarOrderLt>::right(int)
+Heap<Solver::VarOrderLt>::size() const
+void Heap<Solver::VarOrderLt>::filter<Solver::VarFilter>(Solver::VarFilter const&)
+
+InputClause::append(InputTerm)
+InputClause::getMaxVariable() const
+InputClause::~InputClause()
+InputClause::InputClause()
+InputClause::InputClause(Array<InputTerm>)
+InputClause::operator vec<Lit>&()
+InputClause::operator vec<Lit> const&() const
+
+InputTerm::getVariable() const
+InputTerm::InputTerm()
+InputTerm::InputTerm(bool, int)
+InputTerm::isNegated() const
+
+LessThan_default<Lit>::operator()(Lit, Lit)
+
+Lit::Lit()
+Lit::Lit(int, bool)
+Lit::operator<(Lit) const
+Lit::operator==(Lit) const
+Lit::operator!=(Lit) const
+operator~(Lit)
+
+Solver::addClause(vec<Lit>&)
+Solver::attachClause(Clause&)
+Solver::cancelUntil(int)
+Solver::decisionLevel() const
+Solver::drand(double&)
+Solver::insertVarOrder(int)
+Solver::irand(double&, int)
+Solver::modelValue(Lit) const
+Solver::nAssigns() const
+Solver::nClauses() const
+Solver::newDecisionLevel()
+Solver::newVar(bool, bool)
+Solver::nVars() const
+Solver::pickBranchLit(int, double)
+Solver::propagate()
+Solver::removeSatisfied(vec<Clause*>&)
+Solver::satisfied(Clause const&) const
+Solver::search(int, int)
+Solver::simplify()
+Solver::~Solver()
+Solver::Solver()
+Solver::solve(vec<Lit> const&, bool)
+Solver::uncheckedEnqueue(Lit, Clause*)
+Solver::value(int) const
+Solver::value(Lit) const
+Solver::VarFilter::operator()(int) const
+Solver::VarFilter::VarFilter(Solver const&)
+Solver::VarOrderLt::operator()(int, int) const
+Solver::VarOrderLt::VarOrderLt(vec<double> const&)
+Solver::verifyModel()
+
+vec<char>::clear(bool)
+vec<char>::imax(int, int)
+vec<char>::operator[](int)
+vec<char>::operator[](int) const
+vec<char>::push(char const&)
+vec<char>::size() const
+vec<char>::~vec()
+vec<char>::vec()
+vec<Clause*>::clear(bool)
+vec<Clause*>::imax(int, int)
+vec<Clause*>::operator Clause**()
+vec<Clause*>::operator[](int)
+vec<Clause*>::push(Clause* const&)
+vec<Clause*>::shrink(int)
+vec<Clause*>::size() const
+vec<Clause*>::~vec()
+vec<Clause*>::vec()
+vec<double>::clear(bool)
+vec<double>::imax(int, int)
+vec<double>::operator[](int) const
+vec<double>::push(double const&)
+vec<double>::~vec()
+vec<double>::vec()
+vec<int>::clear(bool)
+vec<int>::grow(int)
+vec<int>::growTo(int, int const&)
+vec<int>::imax(int, int)
+vec<int>::last()
+vec<int>::operator[](int)
+vec<int>::operator[](int) const
+vec<int>::pop()
+vec<int>::push(int const&)
+vec<int>::shrink(int)
+vec<int>::size() const
+vec<int>::~vec()
+vec<int>::vec()
+vec<lbool>::clear(bool)
+vec<lbool>::grow(int)
+vec<lbool>::growTo(int)
+vec<lbool>::operator[](int)
+vec<lbool>::operator[](int) const
+vec<lbool>::~vec()
+vec<lbool>::vec()
+vec<Lit>::clear(bool)
+vec<Lit>::copyTo(vec<Lit>&) const
+vec<Lit>::grow(int)
+vec<Lit>::growTo(int)
+vec<Lit>::imax(int, int)
+vec<Lit>::operator[](int)
+vec<Lit>::operator[](int) const
+vec<Lit>::operator Lit*()
+vec<Lit>::push(Lit const&)
+vec<Lit>::shrink(int)
+vec<Lit>::size() const
+vec<Lit>::~vec()
+vec<Lit>::vec()
+vec<vec<Clause*> >::clear(bool)
+vec<vec<Clause*> >::imax(int, int)
+vec<vec<Clause*> >::operator[](int)
+vec<vec<Clause*> >::push()
+vec<vec<Clause*> >::~vec()
+vec<vec<Clause*> >::vec()
