@@ -40,7 +40,7 @@ public class EventSource<MESSAGE extends Comparable<MESSAGE>> {
     public void addListener(Listener<MESSAGE> listener){
         this.listeners.add(listener);
     }
-    
+
     public void removeListener(Listener<MESSAGE> listener) {
         this.listeners.remove(listener);
     }
@@ -54,4 +54,4 @@ public class EventSource<MESSAGE extends Comparable<MESSAGE>> {
             me.signal(message);
         }
     }
-};
+}
