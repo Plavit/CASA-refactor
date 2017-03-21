@@ -97,6 +97,7 @@ StateSpace<CoveringArray, CoverageCost>::StateSpace()
 
 ### common/utility
 
+//hotove
 Combinadic::begin(unsigned int) const
 Combinadic::decode(unsigned int, unsigned int)
 Combinadic::encode(Array<unsigned int>)
@@ -104,6 +105,7 @@ Combinadic::getLastMemberAndContribution(unsigned int, unsigned int)
 Combinadic::guessLastMember(unsigned int, unsigned int)
 Combinadic::next(Array<unsigned int>) const
 
+//hotove, potreba kontrola
 CombinadicIterator::~CombinadicIterator()
 CombinadicIterator::CombinadicIterator(unsigned int, unsigned int, Array<unsigned int>)
 CombinadicIterator::operator++()
@@ -112,11 +114,13 @@ CombinadicIterator::operator*() const
 CombinadicIterator::updateCombination()
 CombinadicIterator::updateCombinationFromRelevant()
 
+//hotove
 PascalTriangle::addRows(unsigned int)
 PascalTriangle::nCr(unsigned int, unsigned int)
 PascalTriangle::~PascalTriangle()
 PascalTriangle::PascalTriangle()
 
+//rozdelane (honza)
 SubstitutionArray<unsigned int>::autoFinalizeSubstitutions()
 SubstitutionArray<unsigned int>::Entry::Entry(SubstitutionArray<unsigned int> const&, unsigned int)
 SubstitutionArray<unsigned int>::Entry::operator--()
@@ -205,6 +209,7 @@ CoveringArrayAnnealingFilter::CoveringArrayAnnealingFilter(double, double)
 
 ### casa/covering/state
 
+//rozdelane (honza)
 CoveringArray::autoFinalizeSubstitutions()
 CoveringArray::countDistinctCoverage() const
 CoveringArray::~CoveringArray()
