@@ -1,7 +1,6 @@
 package covering.cost;
 
-
-public class CoverageCost {
+public class CoverageCost implements Comparable<CoverageCost> {
 
     protected long noncoverage;
     protected long multipleCoverage;
@@ -24,20 +23,11 @@ public class CoverageCost {
         return multipleCoverage;
     }
 
-    public boolean op_thisLessThenArg(CoverageCost coverageCost){
-        if(this.noncoverage < coverageCost.getNoncoverage()) return true;
-        if(this.noncoverage > this.getNoncoverage()) return false;
-        return this.multipleCoverage < coverageCost.getMultipleCoverage();
+    public int compareTo(CoverageCost o) {
+        if (noncoverage < o.getNoncoverage()) return -1;
+        if (noncoverage > o.getNoncoverage()) return 1;
+        if (multipleCoverage < o.getMultipleCoverage()) return -1;
+        if (multipleCoverage > o.getMultipleCoverage()) return 1;
+        return 0;
     }
-
-    public boolean op_thisLessEqualThenArg(CoverageCost coverageCost){
-        if(this.noncoverage < coverageCost.getNoncoverage()) return true;
-        if(this.noncoverage > this.getNoncoverage()) return false;
-        return this.multipleCoverage <= coverageCost.getMultipleCoverage();
-    }
-
-    public boolean op_thisEqualToArg(CoverageCost coverageCost){
-        return this.noncoverage == coverageCost.getNoncoverage() && this.multipleCoverage == coverageCost.getMultipleCoverage();
-    }
-
 }

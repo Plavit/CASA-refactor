@@ -18,11 +18,14 @@ package search;
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import covering.cost.CoverageCost;
+import covering.state.CoveringArray;
+
 /**
  * Rates the quality of a state (never a path).
  */
-public interface Heuristic<STATE extends Comparable<STATE>, COST> {
+public interface Heuristic {
 
-    COST estimate(final STATE state, final Goal<STATE> goal);
+    CoverageCost estimate(final CoveringArray state, final Goal<CoveringArray> goal);
 
 }

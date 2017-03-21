@@ -18,23 +18,26 @@ package search;
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import covering.cost.CoverageCost;
+import covering.state.CoveringArray;
+
 import java.util.Set;
 
-public interface StateSpace<STATE extends Comparable<STATE>, COST> {
+public interface StateSpace {
     // A description of a state space, namely the state interconnections and
     // distances (for pathfinding rather than statefinding).
 
     // Determine the distance incurred by starting at the given state.
-    COST getTraveled(final STATE start);
+    CoverageCost getTraveled(final CoveringArray start);
 
     // Determine the total distance traveled to reach state after taking the best
     // known path reaching parent.
-    COST getTraveled(final Node<STATE, COST> parent, final STATE state);
+    CoverageCost getTraveled(final Node parent, final CoveringArray state);
 
     // Enumerate a fixed fraction of the children of state, rounding up.
-    Set<STATE> getChildren(final STATE state, float proportion);
+    Set<CoveringArray> getChildren(final CoveringArray state, float proportion);
 
     // Enumerate the children of state up to some limit.
     /* TODO: count was unsigned */
-    Set<STATE> getChildren(final STATE state, int count);
+    Set<CoveringArray> getChildren(final CoveringArray state, int count);
 };

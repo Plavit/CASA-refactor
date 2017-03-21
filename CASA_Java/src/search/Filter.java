@@ -28,11 +28,11 @@ import java.util.Set;
  * StateSpace.
  */
 
-public class Filter<STATE extends Comparable<STATE>, COST> {
+public class Filter {
 
-    private Set<STATE> children;
-    private Heuristic<STATE, COST> heuristic;
-    private Goal<STATE> goal;
+    private Set<CoveringArray> children;
+    private Heuristic heuristic;
+    private Goal<CoveringArray> goal;
 
     public Filter() {
     }
@@ -40,7 +40,7 @@ public class Filter<STATE extends Comparable<STATE>, COST> {
     /**
      * Mutates the children set; the heuristic and goal may guide the mutation.
      */
-    public Filter(Set<STATE> children, Heuristic<STATE, COST> heuristic, Goal<STATE> goal) {
+    public Filter(Set<CoveringArray> children, Heuristic heuristic, Goal<CoveringArray> goal) {
         this.children = children;
         this.heuristic = heuristic;
         this.goal = goal;
@@ -52,7 +52,7 @@ public class Filter<STATE extends Comparable<STATE>, COST> {
      * SearchConfiguration is sampling a random subset of the children and the
      * filter would prefer a different pool to choose from.
      */
-    public Filter(Set<STATE> children,STATE parent, Heuristic<STATE, COST> heuristic, Goal<STATE> goal) {
+    public Filter(Set<CoveringArray> children,CoveringArray parent, Heuristic heuristic, Goal<CoveringArray> goal) {
         this.children = children;
         this.children.add(parent);
         this.heuristic = heuristic;
@@ -61,27 +61,27 @@ public class Filter<STATE extends Comparable<STATE>, COST> {
 
     /** ---- GETTERS AND SETTERS ---- **/
 
-    public Set<STATE> getChildren() {
+    public Set<CoveringArray> getChildren() {
         return children;
     }
 
-    public void setChildren(Set<STATE> children) {
+    public void setChildren(Set<CoveringArray> children) {
         this.children = children;
     }
 
-    public Heuristic<STATE, COST> getHeuristic() {
+    public Heuristic getHeuristic() {
         return heuristic;
     }
 
-    public void setHeuristic(Heuristic<STATE, COST> heuristic) {
+    public void setHeuristic(Heuristic heuristic) {
         this.heuristic = heuristic;
     }
 
-    public Goal<STATE> getGoal() {
+    public Goal<CoveringArray> getGoal() {
         return goal;
     }
 
-    public void setGoal(Goal<STATE> goal) {
+    public void setGoal(Goal<CoveringArray> goal) {
         this.goal = goal;
     }
 }

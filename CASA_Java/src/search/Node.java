@@ -18,6 +18,9 @@ package search;
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import covering.cost.CoverageCost;
+import covering.state.CoveringArray;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,26 +28,26 @@ import java.util.Set;
  Represents an explored state, its heuristic estimate, the best known path
  leading to that state, and other nodes whose best paths this state is on.
  */
-public class Node<STATE extends Comparable<STATE>, COST> implements Comparable<Node<STATE, COST>> {
+public class Node implements Comparable<Node> {
 
     /** The node immediately preceding this one on a best path. */
-    protected Node<STATE,COST> parent;
+    protected Node parent;
     /** The state. */
-    protected final STATE state;
+    protected final CoveringArray state;
     /** The distance from the start state along the best path. */
-    protected COST traveled;
+    protected CoverageCost traveled;
     /** The heuristic estimate of the distance to a goal state. */
-    protected COST estimate;
+    protected CoverageCost estimate;
     /** The set of nodes who have this one as their parent. */
-    protected HashSet<Node<STATE,COST>> children;
+    protected HashSet<Node> children;
 
-    public Node(Node<STATE,COST> parent, final STATE state, COST traveled, COST estimate)
+    public Node(Node parent, final CoveringArray state, CoverageCost traveled, CoverageCost estimate)
     {
         this.parent = parent;
         this.state = state;
         this.traveled = traveled;
         this.estimate = estimate;
-        this.children = new HashSet<>();
+        this.children = new HashSet<Node>();
         if (parent != null) {
             parent.getChildren().add(this);
         }
@@ -55,38 +58,38 @@ public class Node<STATE extends Comparable<STATE>, COST> implements Comparable<N
         if (parent != null) {
             parent.removeChild(this);
         }
-        for (Node<STATE,COST> child : children) {
+        for (Node child : children) {
             removeChild(child);
         }
     }
 
-    public STATE getState() {
+    public CoveringArray getState() {
         return state;
     }
 
-    public COST getTraveled() {
+    public CoverageCost getTraveled() {
         return traveled;
     }
-    public void setTraveled(COST traveled) {
+    public void setTraveled(CoverageCost traveled) {
         this.traveled = traveled;
     }
 
-    public COST getEstimate() {
+    public CoverageCost getEstimate() {
         return estimate;
     }
-    public void setEstimate(COST estimate) {
+    public void setEstimate(CoverageCost estimate) {
         this.estimate = estimate;
     }
 
-    public Node<STATE,COST> getParent() {
+    public Node getParent() {
         return parent;
     }
 
-    public Set<Node<STATE,COST>> getChildren() {
+    public Set<Node> getChildren() {
         return children;
     }
 
-    public void addChild(Node<STATE,COST> child) {
+    public void addChild(Node child) {
         assert(child != null);
         if (child.parent != null) {
             if (child.parent == this) {
@@ -98,7 +101,7 @@ public class Node<STATE extends Comparable<STATE>, COST> implements Comparable<N
         children.add(child);
     }
 
-    public void removeChild(Node<STATE,COST> child) {
+    public void removeChild(Node child) {
         assert(child != null);
         if (child.parent != this) {
             return;
@@ -107,8 +110,7 @@ public class Node<STATE extends Comparable<STATE>, COST> implements Comparable<N
         children.remove(child);
     }
 
-    @Override
-    public int compareTo(Node<STATE, COST> other) {
+    public int compareTo(Node other) {
         return state.compareTo(other.state);
     }
 
@@ -122,7 +124,7 @@ public class Node<STATE extends Comparable<STATE>, COST> implements Comparable<N
         if (!Node.class.isAssignableFrom(obj.getClass())) {
             return false;
         }
-        final Node<STATE,COST> other = (Node<STATE, COST>) obj;
+        final Node other = (Node) obj;
         return (this.state == null) ? other.state == null : this.state.equals(other.state);
     }
 

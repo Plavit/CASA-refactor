@@ -20,13 +20,13 @@ package search;
 /**
  * A specialized guide that ranks strictly by the states' heuristic estimates.
  */
-public class StateGuide<STATE extends Comparable<STATE>, COST> implements Guide<STATE, COST>
+public class StateGuide implements Guide
 {
-    public COST rankStart(final Node<STATE, COST> start) {
+    public CoverageCost rankStart(final Node start) {
         return start.getEstimate();
     }
 
-    public COST rank(final Node<STATE, COST> node) {
+    public CoverageCost rank(final Node node) {
         return node.getEstimate();
     }
 }

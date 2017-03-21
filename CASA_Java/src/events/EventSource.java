@@ -19,8 +19,7 @@ package events;
 
 import java.util.Set;
 
-public class EventSource<MESSAGE extends Comparable<MESSAGE>> {
-
+public class EventSource<MESSAGE> {
     private Set<Listener<MESSAGE>> listeners;
 
     public EventSource() {

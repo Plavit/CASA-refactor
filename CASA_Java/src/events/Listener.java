@@ -17,7 +17,7 @@ package events;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
-public interface Listener<MESSAGE extends Comparable<MESSAGE>> {
+public interface Listener<MESSAGE> {
 
     void signal(MESSAGE message);
 

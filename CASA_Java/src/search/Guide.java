@@ -18,13 +18,15 @@ package search;
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import covering.cost.CoverageCost;
+
 /**
  * Decides the order in which states are explored.  Usual policies include
  * visiting the heuristically best states first, visiting states whose distance
  * from the start state added to the heuristic is minimal, visiting states
  * randomly, etc.  There is provision to treat start states specially.
  */
-public interface Guide<STATE extends Comparable<STATE>, COST> {
-    COST rankStart(final Node<STATE, COST> start);
-    COST rank(final Node<STATE, COST> node);
+public interface Guide {
+    CoverageCost rankStart(final Node start);
+    CoverageCost rank(final Node node);
 };

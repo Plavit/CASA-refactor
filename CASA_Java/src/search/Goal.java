@@ -23,6 +23,6 @@ package search;
  *  (such as the heuristic).
  */
 
-public interface Goal<STATE extends Comparable<STATE>> {
-    boolean isGoal(final STATE state);
+public interface Goal<CoveringArray extends Comparable<CoveringArray>> {
+    boolean isGoal(final CoveringArray state);
 }

@@ -23,15 +23,15 @@ import java.util.Set;
 /**
  * A message broadcast when a search finishes (even if it was unsuccessful). 
  */
-public class SearchFinish<STATE extends Comparable<STATE>, COST> {
-    public final Search<STATE, COST> source;
-    public Set<Node<STATE, COST>> results;
+public class SearchFinish {
+    public final Search source;
+    public Set<Node> results;
     public int iterations;
     public int maxIterations;
 
     public SearchFinish(
-            final Search<STATE, COST> source,
-            final Set<Node<STATE, COST>> results,
+            final Search source,
+            final Set<Node> results,
             int iterations,
             int maxIterations) {
         this.source = source;

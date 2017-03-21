@@ -19,6 +19,8 @@ package search;
 
 import java.util.Iterator;
 import java.util.Set;
+import covering.cost.CoverageCost;
+import covering.state.CoveringArray;
 
 /**
  * A specialization of Filter where only the heuristically best child is
@@ -27,26 +29,25 @@ import java.util.Set;
  * is heuristically better than the parent.
  */
 
-public class GreedyFilter<STATE extends Comparable<STATE>, COST extends Comparable<COST>> extends Filter {
+public class GreedyFilter<CoveringArray extends Comparable<CoveringArray>, CoverageCost extends Comparable<CoverageCost>> extends Filter {
 
-    public GreedyFilter(Set<STATE> children, Heuristic<STATE,COST> heuristic, Goal<STATE> goal) {
+    public GreedyFilter(Set<CoveringArray> children, Heuristic heuristic, Goal<CoveringArray> goal) {
 
         // TODO - LAST ELEMENT NEEDED - BETTER SOLUTION AVAILABLE ??
-        STATE best = (STATE) children.toArray()[children.size()-1];
+        CoveringArray best = (CoveringArray) children.toArray()[children.size()-1];
 
-        Integer tmp = 0;
-        COST score = (COST) tmp; // TODO - IM NOT SURE IF IT IS OK OR NOT ??!!
+        CoverageCost score = new CoverageCost();
 
-        for(STATE element : children){
-            COST estimate = heuristic.estimate(element,goal);
+        for(CoveringArray element : children){
+            CoverageCost estimate = heuristic.estimate(element, goal);
             if(best.equals(children.toArray()[children.size()-1]) || estimate.compareTo(score) == -1){
                 best = element;
                 score = estimate;
             }
         }
 
-        for(Iterator<STATE> iter = children.iterator(); iter.hasNext();) {
-            STATE state = iter.next();
+        for(Iterator<CoveringArray> iter = children.iterator(); iter.hasNext();) {
+            CoveringArray state = iter.next();
             if(state != best) children.remove(state);
         }
 
