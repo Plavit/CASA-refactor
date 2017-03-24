@@ -145,6 +145,7 @@ ConstraintFile::getClauses() const
 
 ### casa/covering/cost
 
+// HOTOVO - David
 CoverageCost::CoverageCost(unsigned int)
 CoverageCost::CoverageCost(unsigned int, unsigned int)
 CoverageCost::getMultipleCoverage() const
