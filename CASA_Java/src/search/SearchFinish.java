@@ -18,6 +18,7 @@ package search;
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import java.util.NavigableSet;
 import java.util.Set;
 
 /**
@@ -25,15 +26,15 @@ import java.util.Set;
  */
 public class SearchFinish {
     public final Search source;
-    public Set<Node> results;
-    public int iterations;
-    public int maxIterations;
+    public NavigableSet<Node> results;
+    public long iterations;
+    public long maxIterations;
 
     public SearchFinish(
             final Search source,
-            final Set<Node> results,
-            int iterations,
-            int maxIterations) {
+            final NavigableSet<Node> results,
+            long iterations,
+            long maxIterations) {
         this.source = source;
         this.results = results;
         this.iterations = iterations;

@@ -48,7 +48,8 @@ public class EventSource<MESSAGE> {
         this.listeners.clear();
     }
 
-    protected void dispatch(MESSAGE message) {
+    /* Notice: this was protected, but Java does not support multiple inheritance, needed for Search */
+    public void dispatch(MESSAGE message) {
         for(Listener<MESSAGE> me : this.listeners){
             me.signal(message);
         }

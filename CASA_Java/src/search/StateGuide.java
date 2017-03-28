@@ -17,6 +17,8 @@ package search;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
+import covering.cost.CoverageCost;
+
 /**
  * A specialized guide that ranks strictly by the states' heuristic estimates.
  */

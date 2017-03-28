@@ -29,9 +29,9 @@ import covering.state.CoveringArray;
  * is heuristically better than the parent.
  */
 
-public class GreedyFilter<CoveringArray extends Comparable<CoveringArray>, CoverageCost extends Comparable<CoverageCost>> extends Filter {
+public class GreedyFilter extends Filter /* implements Comparable<CoverageCost> */ {
 
-    public GreedyFilter(Set<CoveringArray> children, Heuristic heuristic, Goal<CoveringArray> goal) {
+    public void filter(Set<CoveringArray> children, Heuristic heuristic, Goal<CoveringArray> goal) {
 
         // TODO - LAST ELEMENT NEEDED - BETTER SOLUTION AVAILABLE ??
         CoveringArray best = (CoveringArray) children.toArray()[children.size()-1];

@@ -22,7 +22,9 @@ import covering.cost.CoverageCost;
 import covering.state.CoveringArray;
 
 import java.util.HashSet;
+import java.util.NavigableSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  Represents an explored state, its heuristic estimate, the best known path
@@ -39,7 +41,7 @@ public class Node implements Comparable<Node> {
     /** The heuristic estimate of the distance to a goal state. */
     protected CoverageCost estimate;
     /** The set of nodes who have this one as their parent. */
-    protected HashSet<Node> children;
+    protected TreeSet<Node> children;
 
     public Node(Node parent, final CoveringArray state, CoverageCost traveled, CoverageCost estimate)
     {
@@ -47,14 +49,14 @@ public class Node implements Comparable<Node> {
         this.state = state;
         this.traveled = traveled;
         this.estimate = estimate;
-        this.children = new HashSet<Node>();
+        this.children = new TreeSet<Node>();
         if (parent != null) {
             parent.getChildren().add(this);
         }
     }
 
     /* TODO: call this where appropriate */
-    public void destructor() {
+    public void destruct() {
         if (parent != null) {
             parent.removeChild(this);
         }
@@ -85,7 +87,7 @@ public class Node implements Comparable<Node> {
         return parent;
     }
 
-    public Set<Node> getChildren() {
+    public NavigableSet<Node> getChildren() {
         return children;
     }
 

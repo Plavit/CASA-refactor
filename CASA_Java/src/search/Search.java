@@ -34,31 +34,32 @@ package search;
 //    // Possibly more calls to search(...) if the search is restartable
 //    clear();
 //  }
-//  <destructor>
+//  <destruct>
 
+import com.google.common.collect.Iterators;
+import com.google.common.collect.PeekingIterator;
 import common.utility.Relation;
 import covering.cost.CoverageCost;
 import covering.state.CoveringArray;
 import events.EventSource;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Search
 {
-    SearchConfiguration	    configuration;
-    StateSpace				space;
-    Heuristic				heuristic;
-    Guide				    guide;
-    Goal<CoveringArray>		goal;
-    Filter				    filter;
-    boolean					oneBest;
-    Relation                open;
-    Relation                closed;
-    Set<Node>               best;
-    CoverageCost            bestRank;
+    private SearchConfiguration	    configuration;
+    private StateSpace				space;
+    private Heuristic				heuristic;
+    private Guide				    guide;
+    private Goal<CoveringArray>		goal;
+    private Filter				    filter;
+    private boolean					oneBest;
+    private Relation                open;
+    private Relation                closed;
+    private Set<Node>               best;
+    private CoverageCost            bestRank;
+    private EventSource<SearchFinish>   searchFinishEventSource;
+    private EventSource<SearchIteration> searchIterationEventSource;
 
     // See the classes SearchConfiguration, StateSpace, Heuristic, Guide, Goal,
     // and Filter for documentation on their role in search.  The parameter
@@ -72,6 +73,12 @@ public class Search
         this.goal = goal;
         this.filter = filter;
         this.oneBest = oneBest;
+        this.open = new Relation();
+        this.closed = new Relation();
+        this.best = new HashSet<>();
+        this.bestRank = new CoverageCost();
+        this.searchFinishEventSource = new EventSource<>();
+        this.searchIterationEventSource = new EventSource<>();
     }
 
     public SearchConfiguration getConfiguration() {
@@ -118,6 +125,14 @@ public class Search
         return best;
     }
 
+    public EventSource<SearchFinish> asSearchFinishEventSource() {
+        return searchFinishEventSource;
+    }
+
+    public EventSource<SearchIteration> asSearchIterationEventSource() {
+        return searchIterationEventSource;
+    }
+
     public void clear() {
         clearBest();
         open.clear();
@@ -135,8 +150,8 @@ public class Search
     private  void clearBest() {
         if (!configuration.useClosed) {
             for (Node n : best) {
-                if (open.key_find(n) == open.by_key.end()) {
-                    delete node;
+                if (!open.key_find(n).hasNext()) {
+                    n.destruct();
                 }
             }
         }
@@ -161,27 +176,15 @@ public class Search
 
     // Add a start state before searching.
     public void addStartState(final CoveringArray start) {
-        Node node = new Node(null, start, space->getTraveled(start), heuristic->estimate(start, goal));
+        Node node = new Node(null, start, space.getTraveled(start), heuristic.estimate(start, goal));
         addNew(node);
-    }
-
-    public EventSource<SearchIteration> asSearchIterationEventSource() {
-        return new EventSource<SearchIteration>() {
-            /* TODO */
-        };
-    }
-
-    public EventSource<SearchFinish> asSearchFinishEventSource() {
-        return new EventSource<SearchFinish>() {
-            /* TODO */
-        };
     }
 
     // Pop the best ranked node from the set of nodes that have been seen but not
     // explored.
     private Node popBestOpen() {
         Iterator<Map.Entry<CoverageCost, Node>> dataEntries = open.getDataEntries().iterator();
-        assert (!dataEntries.hasNext());
+        assert (dataEntries.hasNext());
         Map.Entry<CoverageCost, Node> bestOpen = dataEntries.next();
         Node bestOpenNode = bestOpen.getValue();
         if (configuration.useClosed) {
@@ -205,7 +208,7 @@ public class Search
     // any nodes that we have seen but not explored if they represent the same
     // state but are worse.
     private boolean replaceInOpen(Node parent, Node node, CoverageCost traveled) {
-        Iterator<Map.Entry<Node, CoverageCost>> similar = open.key_find(node).iterator();
+        Iterator<Map.Entry<Node, CoverageCost>> similar = open.key_find(node);
         if (similar.hasNext()) {
             // The node does not have an already seen state.
             return false;
@@ -229,204 +232,171 @@ public class Search
         updateBest(visited, rank);
         return true;
     }
+
+    // Correct any out-of-date distance calculations when we change a path prefix.
+    // The arguments are the newly connected parent and child nodes.
+    private void updateTraveled(Node parent, Node visited) {
+        // Setup to DFS from the visited node.
+        NavigableSet<Node> parentSet = new TreeSet<>();
+        NavigableSet<Node> visitedSet = new TreeSet<>();
+        parentSet.add(parent);
+        visitedSet.add(visited);
+        ArrayDeque<NavigableSet<Node>> extrusion= new ArrayDeque<>();
+        ArrayDeque<PeekingIterator<Node>> path = new ArrayDeque<>();
+        extrusion.addFirst(parentSet);
+        path.addLast(Iterators.peekingIterator(extrusion.peekLast().iterator()));
+        extrusion.addLast(visitedSet);
+        path.addLast(Iterators.peekingIterator(extrusion.peekLast().iterator()));
+        // Run the DFS, updating traveled distances and resorting.
+        for (;;) {
+            if (path.peekLast().peek() == extrusion.peekLast().descendingIterator().next()) {
+                path.removeLast();
+                extrusion.removeLast();
+                if (path.isEmpty()) {
+                    break;
+                }
+                path.peekLast().next();
+            } else {
+                Iterator<PeekingIterator<Node>> back = path.descendingIterator();
+                Node update = back.next().peek();
+                assert(update != null);
+                Node source = back.next().peek();
+                assert(source != null);
+                update.setTraveled(space.getTraveled(source, update.getState()));
+                CoverageCost rank = guide.rank(update);
+                PeekingIterator<Map.Entry<Node, CoverageCost>> moribund = open.key_find(update);
+                if (moribund.hasNext()) {
+                    open.key_erase(moribund.peek());
+                    open.key_insert(update, rank);
+                    updateBest(update, rank);
+                    path.peekLast().next();
+                } else {
+                    moribund = closed.key_find(update);
+                    assert(moribund.hasNext());
+                    closed.key_erase(moribund.peek());
+                    closed.key_insert(update, rank);
+                    updateBest(update, rank);
+                    // Push children.
+                    extrusion.addLast(update.getChildren());
+                    path.addLast(Iterators.peekingIterator(extrusion.peekLast().iterator()));
+                }
+            }
+        }
+    }
+
+    // Return true if a node should be discarded because we have explored a better
+    // node representing the same state.  Also, forget about any nodes that we
+    // have explored if they represent the same state but are worse.
+    private boolean replaceInClosed(Node parent, Node node, CoverageCost traveled) {
+        PeekingIterator<Map.Entry<Node, CoverageCost>> similar = closed.key_find(node);
+        /* TODO: is this OK? how key_end() should be implemented to make this work? */
+        if (!similar.hasNext()) {
+            // The node does not have an already explored state.
+            return false;
+        }
+        Node visited = similar.peek().getKey();
+        assert(visited != null);
+        if (visited.getTraveled().compareTo(traveled) <= 0) {
+            // The node has an already explored state and cannot improve a path;
+            // discard it.
+            return true;
+        }
+        // The node has an already explored state, but will improve some paths; use
+        // it instead.
+        parent.addChild(visited);
+        updateTraveled(parent, visited);
+        return true;
+    }
+
+    // Try to find a goal in the given budget.  If restartable is true the search
+    // can be resumed by a later call to this method.
+    NavigableSet<Node> search(long iterations, boolean restartable) {
+        NavigableSet<Node> result = new TreeSet<>();
+        if (open.isEmpty()) {
+            return result;
+        }
+        for (long i = iterations, j = configuration.prunePeriod;
+             (i-- != 0) && result.isEmpty(); ) {
+            if (false) { // SEARCH_PROGRESS
+                if ((i & 0x3FF) != 0) {
+                    System.out.printf("%d iterations left after this one\n", i);
+                }
+            }
+            Node parent = popBestOpen();
+            // If it is time to prune exploration to the most promising frontier:
+            if (--j != 0) {
+                j = configuration.prunePeriod;
+                HashSet<Node> lineage = new HashSet<>();
+                for (Node k = parent; k != null; k = k.getParent()) {
+                    lineage.add(k);
+                }
+                for (Map.Entry<Node, CoverageCost> k : closed.getKeys()) {
+                    if (!lineage.contains(k.getKey())) {
+                        k.getKey().destruct();
+                        closed.key_erase(k);
+                    }
+                }
+                for (Map.Entry<Node, CoverageCost> k : open.getKeys()) {
+                    k.getKey().destruct();
+                }
+                open.clear();
+            }
+            // Explore.
+            Set<CoveringArray> children = getChildren(parent);
+            if (configuration.retryChildren) {
+                filter.filter(children, parent.getState(), heuristic, goal);
+            } else {
+                filter.filter(children, heuristic, goal);
+            }
+            // The flag to decide if the parent information can be deleted.  It is
+            // true when we aren't looking for paths and the parent isn't part of the
+            // best set.
+            boolean parentMoribund = false;
+            if (!configuration.useClosed) {
+                if (!best.contains(parent)) {
+                    parentMoribund = true;
+                }
+            }
+            // See children.
+            for (CoveringArray child : children) {
+                CoverageCost traveled = space.getTraveled(parent, child);
+                Node node = new Node(
+                        configuration.useClosed ? parent : null,
+                        child, traveled, heuristic.estimate(child, goal));
+                if (replaceInOpen(parent, node, traveled)) {
+                    // The new node was beaten by something in the open set.
+                    node.destruct();
+                } else if (configuration.useClosed && replaceInClosed(parent, node, traveled)) {
+                    // The new node was beaten by something in the closed set.
+                    node.destruct();
+                } else {
+                    // The new node is worth exploring.
+                    addNew(node);
+                    // Track goals.
+                    if (goal.isGoal(child)){
+                        result.add(node);
+                        // If we are just interested in finding a goal, we can return now.
+                        if (!restartable) {
+                            if (parentMoribund) {
+                                parent.destruct();
+                            }
+                            // Complete the search.
+                            SearchFinish finish = new SearchFinish(this, result, iterations - i, iterations);
+                            asSearchFinishEventSource().dispatch(finish);
+                            return result;
+                        }
+                    }
+                }
+            }
+            if (parentMoribund) {
+                parent.destruct();
+            }
+            // Complete the iteration.
+            asSearchIterationEventSource().dispatch(new SearchIteration());
+        }
+        // Complete the search.
+        SearchFinish finish = new SearchFinish(this, result, iterations, iterations);
+        asSearchFinishEventSource().dispatch(finish);
+        return result;
+    }
 }
-/*
-
-public:
-protected:
-
-  // Correct any out-of-date distance calculations when we change a path prefix.
-  // The arguments are the newly connected parent and child nodes.
-  void updateTraveled(Node&parent, Node<CoveringArray, CoverageCost>&visited) {
-    // Setup to DFS from the visited node.
-    std::set<Node*>parentSet;
-    std::set<Node*>visitedSet;
-    parentSet.insert(&parent);
-    visitedSet.insert(&visited);
-    std::vector<const std::set<Node*>*>extrusion;
-    std::vector<typename std::set<Node*>::const_iterator>path;
-    extrusion.push_back(&parentSet);
-    path.push_back(extrusion.back()->begin());
-    extrusion.push_back(&visitedSet);
-    path.push_back(extrusion.back()->begin());
-    // Run the DFS, updating traveled distances and resorting.
-    for (;;) {
-      if (path.back() == extrusion.back()->end()) {
-	path.pop_back();
-	extrusion.pop_back();
-	if (path.empty()) {
-	  break;
-	}
-	++path.back();
-      } else {
-	typename
-	  std::vector<typename std::set<Node*>::const_iterator>::
-	  const_reverse_iterator back = path.rbegin();
-	Node&update = ***back;
-	assert(&update);
-	++back;
-	Node&source = ***back;
-	assert(&source);
-	update.setTraveled(space->getTraveled(source, update.getState()));
-	CoverageCost rank = guide->rank(update);
-	typename Relation<Node*, CoverageCost, true, false, Pless<Node<CoveringArray, CoverageCost>> >::key_iterator moribund = open.key_find(&update);
-	if (moribund != open.key_end()) {
-	  open.key_erase(moribund);
-	  open.key_insert(&update, rank);
-	  updateBest(update, rank);
-	  ++path.back();
-	} else {
-	  moribund = closed.key_find(&update);
-	  assert(moribund != closed.key_end());
-	  closed.key_erase(moribund);
-	  closed.key_insert(&update, rank);
-	  updateBest(update, rank);
-	  // Push children.
-	  extrusion.push_back(&update.getChildren());
-	  path.push_back(extrusion.back()->begin());
-	}
-      }
-    }
-  }
-
-  // Return true if a node should be discarded because we have explored a better
-  // node representing the same state.  Also, forget about any nodes that we
-  // have explored if they represent the same state but are worse.
-  bool replaceInClosed(Node&parent, Node<CoveringArray, CoverageCost>&node, CoverageCost traveled) {
-    typename Relation<Node*, CoverageCost, true, false, Pless<Node<CoveringArray, CoverageCost>> >::key_iterator similar = closed.key_find(&node);
-    if (similar == closed.key_end()) {
-      // The node does not have an already explored state.
-      return false;
-    }
-    Node*visited = similar->first;
-    assert(visited);
-    if (visited->getTraveled() <= traveled) {
-      // The node has an already explored state and cannot improve a path;
-      // discard it.
-      return true;
-    }
-    // The node has an already explored state, but will improve some paths; use
-    // it instead.
-    parent.addChild(visited);
-    updateTraveled(parent, *visited);
-    return true;
-  }
-
-public:
-  // Try to find a goal in the given budget.  If restartable is true the search
-  // can be resumed by a later call to this method.
-  std::set<Node*>search(unsigned iterations, bool restartable) {
-    std::set<Node*>result;
-    if (open.empty()) {
-      return result;
-    }
-    for (unsigned i = iterations, j = configuration.prunePeriod;
-	 i-- && result.empty();) {
-#ifdef SEARCH_PROGRESS
-      if (!(i & 0x3FF)) {
-	std::cout << i << " iterations left after this one" << std::endl;
-      }
-#endif
-      Node&parent = popBestOpen();
-      // If it is time to prune exploration to the most promising frontier:
-      if (!--j) {
-	j = configuration.prunePeriod;
-	std::set<const Node*>lineage;
-	typename std::set<const Node*>::const_iterator
-	  lineageEnd = lineage.end();
-	for (const Node*k = &parent; k; k = k->getParent()) {
-	  lineage.insert(k);
-	}
-	for (typename Relation<Node*, CoverageCost, true, false, Pless<Node<CoveringArray, CoverageCost>> >::key_iterator
-	       k = closed.key_begin(),
-	       kend = closed.key_end();
-	     k != kend;) {
-	  if (lineage.find(k->first) == lineageEnd) {
-	    delete k->first;
-	    closed.key_erase(k++);
-	  } else {
-	    ++k;
-	  }
-	}
-	for (typename Relation<Node*, CoverageCost, true, false, Pless<Node<CoveringArray, CoverageCost>> >::key_iterator
-	       k = open.key_begin(),
-	       kend = open.key_end();
-	     k != kend;++k) {
-	  delete k->first;
-	}
-	open.clear();
-      }
-      // Explore.
-      std::set<CoveringArray>children = getChildren(parent);
-      if (configuration.retryChildren) {
-	(*filter)(children, parent.getState(), *heuristic, *goal);
-      } else {
-	(*filter)(children, *heuristic, *goal);
-      }
-      // The flag to decide if the parent information can be deleted.  It is
-      // true when we aren't looking for paths and the parent isn't part of the
-      // best set.
-      bool parentMoribund = false;
-      if (!configuration.useClosed) {
-	typename std::set<const Node*>::const_iterator
-	  asBest = best.find(&parent),
-	  bestEnd = best.end();
-	if (asBest == bestEnd) {
-	  parentMoribund = true;
-	}
-      }
-      // See children.
-      for (typename std::set<CoveringArray>::const_iterator
-	     iterator = children.begin(),
-	     end = children.end();
-	   iterator != end;
-	   ++iterator) {
-	CoverageCost traveled = space->getTraveled(parent, *iterator);
-	Node*node =
-	  new Node
-	  (configuration.useClosed ? &parent : NULL,
-	   *iterator,
-	   traveled,
-	   heuristic->estimate(*iterator, *goal));
-	if (replaceInOpen(parent, *node, traveled)) {
-	  // The new node was beaten by something in the open set.
-	  delete node;
-	} else if (configuration.useClosed &&
-		   replaceInClosed(parent, *node, traveled)) {
-	  // The new node was beaten by something in the closed set.
-	  delete node;
-	} else {
-	  // The new node is worth exploring.
-	  addNew(node);
-	  // Track goals.
-	  if (goal->isGoal(*iterator)) {
-	    result.insert(node);
-	    // If we are just interested in finding a goal, we can return now.
-	    if (!restartable) {
-	      if (parentMoribund) {
-		delete &parent;
-	      }
-	      // Complete the search.
-	      SearchFinish finish(*this, result, iterations - i, iterations);
-	      EventSource<SearchFinish>::dispatch(finish);
-	      return result;
-	    }
-	  }
-	}
-      }
-      if (parentMoribund) {
-	delete &parent;
-      }
-      // Complete the iteration.
-      SearchIteration iteration;
-      EventSource<SearchIteration>::dispatch(iteration);
-    }
-    // Complete the search.
-    SearchFinish finish(*this, result, iterations, iterations);
-    EventSource<SearchFinish>::dispatch(finish);
-    return result;
-  }
-};
-
-
- */

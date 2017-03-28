@@ -17,6 +17,8 @@ package search;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
+import covering.state.CoveringArray;
+
 import java.util.Set;
 
 /**
@@ -28,23 +30,12 @@ import java.util.Set;
  * StateSpace.
  */
 
-public class Filter {
-
-    private Set<CoveringArray> children;
-    private Heuristic heuristic;
-    private Goal<CoveringArray> goal;
-
-    public Filter() {
-    }
+public abstract class Filter {
 
     /**
      * Mutates the children set; the heuristic and goal may guide the mutation.
      */
-    public Filter(Set<CoveringArray> children, Heuristic heuristic, Goal<CoveringArray> goal) {
-        this.children = children;
-        this.heuristic = heuristic;
-        this.goal = goal;
-    }
+    public abstract void filter(Set<CoveringArray> children, Heuristic heuristic, Goal<CoveringArray> goal);
 
     /**
      * Just as the other operator(), but, at the filter's option, the parent may
@@ -52,36 +43,9 @@ public class Filter {
      * SearchConfiguration is sampling a random subset of the children and the
      * filter would prefer a different pool to choose from.
      */
-    public Filter(Set<CoveringArray> children,CoveringArray parent, Heuristic heuristic, Goal<CoveringArray> goal) {
-        this.children = children;
-        this.children.add(parent);
-        this.heuristic = heuristic;
-        this.goal = goal;
+    public void filter(Set<CoveringArray> children,CoveringArray parent, Heuristic heuristic, Goal<CoveringArray> goal) {
+        children.add(parent);
+        filter(children, heuristic, goal);
     }
 
-    /** ---- GETTERS AND SETTERS ---- **/
-
-    public Set<CoveringArray> getChildren() {
-        return children;
-    }
-
-    public void setChildren(Set<CoveringArray> children) {
-        this.children = children;
-    }
-
-    public Heuristic getHeuristic() {
-        return heuristic;
-    }
-
-    public void setHeuristic(Heuristic heuristic) {
-        this.heuristic = heuristic;
-    }
-
-    public Goal<CoveringArray> getGoal() {
-        return goal;
-    }
-
-    public void setGoal(Goal<CoveringArray> goal) {
-        this.goal = goal;
-    }
 }
