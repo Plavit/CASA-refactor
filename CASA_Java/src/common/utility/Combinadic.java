@@ -90,19 +90,21 @@ public class Combinadic {
         return result;
     }
 
-    public Vector<Integer> begin(Integer size) {
+    //TODO not sure about "static"
+    public static Vector<Integer> begin(Integer size) {
         Vector<Integer> result = new Vector<>(size);
         for (int i = size; i-- > 0;) {
             result.set(i, i);
         }
         return result;
     }
-    
+
     public void previous(Vector<Integer> sortedSubset) {
         throw new UnsupportedOperationException();
     }
 
-    public void next(Vector<Integer> sortedSubset) {
+    //TODO not sure about "static"
+    public static void next(Vector<Integer> sortedSubset) {
         assert (sortedSubset.size() > 0);
         int limit = sortedSubset.size() - 1;
         int ceiling = sortedSubset.get(0);
