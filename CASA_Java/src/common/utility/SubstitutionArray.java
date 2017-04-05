@@ -3,6 +3,7 @@ package common.utility;
 // Copyright 2008, 2009 Brady J. Garvin
 
 import java.util.Map;
+import java.util.Vector;
 
 
 // This file is part of Covering Arrays by Simulated Annealing (CASA).
@@ -22,18 +23,78 @@ import java.util.Map;
 
 
 //TODO SubstitutionArray extends Array (we use Vector instead of Array)...what to do?
-public class SubstitutionArray<T> {
-    
+public class SubstitutionArray<T> extends Vector<T> {
+
     public static final double MAXIMUM_SUBSTITUTION_PROPORTION = 0.1;
 
     protected Lazy<Map<Integer, T>> substitutions;
     protected Integer maximumSubstitutions;
     
     public SubstitutionArray() {
-    
+        super();
     }
     
     public SubstitutionArray(Integer size) {
+        super(size);
+        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * size);
+    }
+
+    public SubstitutionArray(Vector<T> raw, Integer size) {
+        super(size);
+        for (int i = size; i-- > 0;) {
+            this.set(i, raw.get(i));
+        }
+        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * size);
+    }
+
+    public SubstitutionArray(Vector<T> copy) {
+        this.addAll(copy);
+        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.size());
+    }
+
+    public SubstitutionArray(SubstitutionArray<T> copy) {
+        this.addAll(copy);
+        substitutions = copy.substitutions;
+        maximumSubstitutions = copy.maximumSubstitutions;
+    }
+
+    //C_CODE
+//    SubstitutionArray&operator =(const Array<T>&copy) {
+//        Array<T>::operator =(copy);
+//        substitutions = NULL;
+//        maximumSubstitutions = MAXIMUM_SUBSTITUTION_PROPORTION * Array<T>::size;
+//        return *this;
+//    }
+
+    public SubstitutionArray<T> op_copy(Vector<T> copy) {
+        this.removeAllElements();
+        this.addAll(copy);
+        substitutions = null; //TODO ???
+        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.size());
+        return this;
+    }
+
+    //C_CODE
+//    SubstitutionArray&operator =(const SubstitutionArray<T>&copy) {
+//        Array<T>::operator =((const Array<T>&)copy);
+//        substitutions = copy.substitutions;
+//        maximumSubstitutions = MAXIMUM_SUBSTITUTION_PROPORTION * Array<T>::size;
+//        return *this;
+//    }
+
+    public SubstitutionArray<T> op_copy(SubstitutionArray<T> copy) {
+        this.removeAllElements();
+        this.addAll(copy);
+        substitutions = copy.substitutions;
+        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.size());
+        return this;
+    }
+
+    public Integer getSize() {
+        return this.size();
+    }
+
+    class Entry {
         //TODO
     }
 }

@@ -20,9 +20,10 @@ package common.utility;
 import java.util.ArrayList;
 import java.util.Vector;
 
+//TODO not sure about "static"
 public class PascalTriangle {
 
-    protected ArrayList<Vector<Integer>> table;
+    protected static ArrayList<Vector<Integer>> table;
 
     public PascalTriangle() {
         Vector<Integer> root = new Vector<>(1);
@@ -30,7 +31,7 @@ public class PascalTriangle {
         table.add(root);
     }
 
-    public void addRows(Integer targetDepth) {
+    public static void addRows(Integer targetDepth) {
         while (table.size() <= targetDepth) {
             Integer depth = table.size();
             Vector<Integer> line = new Vector<>(depth + 1);
@@ -47,7 +48,7 @@ public class PascalTriangle {
         }
     }
 
-    public Integer nCr(Integer n, Integer r) {
+    public static Integer nCr(Integer n, Integer r) {
         if (n >= table.size()) {
             addRows(n);
         }
