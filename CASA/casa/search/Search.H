@@ -243,12 +243,16 @@ protected:
 	update.setTraveled(space->getTraveled(source, update.getState()));
 	COST rank = guide->rank(update);
 	typename VisitSetT::key_iterator moribund = open.key_find(&update);
+
 	if (moribund != open.key_end()) {
+
 	  open.key_erase(moribund);
 	  open.key_insert(&update, rank);
 	  updateBest(update, rank);
 	  ++path.back();
+
 	} else {
+    
 	  moribund = closed.key_find(&update);
 	  assert(moribund != closed.key_end());
 	  closed.key_erase(moribund);

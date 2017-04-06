@@ -75,7 +75,7 @@ public class CombinadicIterator {
         //sort(combination + 0, combination + combination.getSize());
         combination.sort(null); //TODO not sure
     }
-    
+
     //C_CODE
     //const Array<unsigned>CombinadicIterator::operator *() const {
     //#ifndef NDEBUG
