@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import covering.bookkeeping.Coverage;
+import covering.bookkeeping.Options;
 import javafx.util.Pair;
 
 
@@ -52,7 +54,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
 
         //C_CODE
         //substitutions(new map<pair<unsigned, unsigned>, unsigned>()),
-        //TODO ???
+        //TODO Lazy
         substitutions = new Lazy(new HashMap<Pair<Integer, Integer>, Integer>());
 
         this.solver = solver;
@@ -69,10 +71,9 @@ public class CoveringArray implements Comparable<CoveringArray> {
         //  }
         //  coverage.fill(0);
         //}
-        //TODO ???
+        //TODO Lazy
         this.noncoverage = new Lazy(new Set<Vector<Integer>, ArrayComparator<Integer>>());
-
-        for (int i = rows; i-- > 0; ) {
+        for (int i = rows; i > 0; i--) {
             array.set(i, new Vector<Integer>(options.getSize()));
         }
         coverage.fill(0);
@@ -377,7 +378,14 @@ public class CoveringArray implements Comparable<CoveringArray> {
         }
         this.trackingCoverage = trackingCoverage;
         if (trackingCoverage) {
-            //TODO
+            Integer strength = coverage.getStrength();
+            Integer limit = coverage.getOptions().getSize();
+            Vector<Integer> firsts = coverage.getOptions().getFirstSymbols();
+            Vector<Integer> counts = coverage.getOptions().getSymbolCounts();
+            coverage.fill(0);
+            //TODO class Coverage needed first
+
+
         }
     }
 
@@ -386,10 +394,27 @@ public class CoveringArray implements Comparable<CoveringArray> {
     }
 
     public void setTrackingNoncoverage(boolean trackingNoncoverage) {
-        //TODO
+        if (this.trackingNoncoverage) {
+            this.trackingNoncoverage = trackingNoncoverage;
+            if (!trackingNoncoverage) {
+                noncoverage.clear();
+            }
+            return;
+        }
+        this.trackingNoncoverage = trackingNoncoverage;
+        if (trackingNoncoverage) {
+            assert (trackingCoverage);
+            assert (noncoverage.empty());
+            int impossible = 0;
+            for () {
+                //TODO Coverage iterator needed
+            }
+            assert ((coverageCount + noncoverage.size() + impossible)
+                    == coverage.getSize());
+        }
     }
 
     public Set<Vector<Integer>, ArrayComparator<Integer>> getNoncoverage() {
-        //TODO
+        return noncoverage.getSet();
     }
 }
