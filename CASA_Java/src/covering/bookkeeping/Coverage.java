@@ -18,6 +18,7 @@ package covering.bookkeeping;
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
 import common.utility.PascalTriangle;
+import common.utility.SubstitutionArray;
 
 import java.util.Vector;
 
@@ -31,13 +32,25 @@ public class Coverage<T> {
     public Coverage(Integer strength, Options options) {
         this.strength = strength;
         this.options = options;
-        this.offsets = PascalTriangle.nCr(options.getSize(), strength);
-
-        //TODO
+        this.offsets = new Vector<>(PascalTriangle.nCr(options.getSize(), strength));
+        Integer size = 0;
+        Integer offsetIndex = 0;
+        for () {//TODO iterators
+            Integer blockSize = 1;
+            for (int i = strength; i > 0; i--) {
+                blockSize *= options.getSymbolCount(columns.get(i));
+            }
+            offsets.set(offsetIndex, size);
+            offsetIndex++;
+        }
+        contents = new SubstitutionArray<>(size); //TODO ???
     }
 
     public Coverage(Coverage copy) {
-        //TODO
+        this.strength = copy.getStrength();
+        this.options = copy.getOptions();
+        this.offsets = copy.getOffsets();
+        this.contents = copy.getContents();
     }
 
     protected Integer encode(Integer indexHint,
@@ -45,7 +58,18 @@ public class Coverage<T> {
                              Vector<Integer> firstsHint,
                              Vector<Integer> countsHint,
                              Vector<Integer> sortedCombination) {
-        //TODO
+        assert(sortedCombination.size() == strength);
+        assert(indexHint < offsets.size());
+        Integer offset = offsets.get(indexHint);
+        Integer index = 0;
+        for (int i = strength; i > 0; i--) {
+            int column = columnsHint.get(i);
+            int base = firstsHint.get(column);
+            int count = countsHint.get(column);
+            index *= count;
+            index += sortedCombination.get(i) - base;
+        }
+        return offset + index;
     }
 
     protected Integer encode(Vector<Integer> columnsHint,
@@ -69,6 +93,14 @@ public class Coverage<T> {
 
     public Options getOptions() {
         return options;
+    }
+
+    public Vector<Integer> getOffsets() {
+        return offsets;
+    }
+
+    public SubstitutionArray<T> getContents() {
+        return contents;
     }
 
     class Entry()
