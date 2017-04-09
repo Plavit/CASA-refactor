@@ -1,64 +1,72 @@
 package common.utility;
 
-/*
-template<class key_type, class data_type, bool unique_key, bool unique_data,
-	 class key_compare = std::less<key_type>,
-	 class data_compare = std::less<data_type> >class relation {
- */
-
-/*
- * TODO:
- *  - implement using com.google.common.collect.LinkedListMultimap from https://github.com/google/guava
- *
- *  Only one type is needed:
- *   Relation<Node, CoverageCost, true, false>
- */
-
 import com.google.common.collect.*;
 import covering.cost.CoverageCost;
+import covering.state.CoveringArray;
 import search.Node;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 public class Relation {
 
-    private Multimap<Node, CoverageCost> byKey = ArrayListMultimap.create();
-    private Multimap<CoverageCost, Node> byData = ArrayListMultimap.create();
+    private TreeMap<CoveringArray, NodeCostPair> byKey = new TreeMap<>();
+    private TreeMultimap<CoverageCost, Node> byData = TreeMultimap.create();
 
     public Relation() {
     }
 
     public void key_insert(Node node, CoverageCost rank) {
-        //TODO
-    }
-
-    public PeekingIterator<Map.Entry<Node, CoverageCost>> key_find(Node node) {
-        /* TODO: how to implement this? it seems not possible with Multimaps in Java */
-        return null;
-    }
-
-    public void key_erase(Map.Entry<Node, CoverageCost> k) {
-    }
-
-    /* TODO: called from search, exectutes key_erase() interleaved */
-    public Collection<Map.Entry<Node, CoverageCost>> getKeys() {
-        return byKey.entries();
-    }
-
-    /* TODO: called from search, exectutes remove() */
-    public Collection<Map.Entry<CoverageCost, Node>> getDataEntries() {
-        return byData.entries();
+        if (!byKey.containsKey(node.getState()))
+            return;
+        byKey.put(node.getState(), new NodeCostPair(node, rank));
+        byData.put(rank, node);
     }
 
     public boolean isEmpty() {
-        return true; // TODO
+        assert byKey.isEmpty() == byData.isEmpty();
+        return byKey.isEmpty();
+    }
+
+    public NodeCostPair popBest() {
+        CoverageCost c = byData.keySet().iterator().next();
+        NavigableSet<Node> ns = byData.get(c);
+        Node n = ns.pollFirst();
+        assert n != null;
+        NodeCostPair ncp = byKey.remove(n.getState());
+        assert ncp != null;
+        return ncp;
+    }
+
+    public void prune(Set<Node> nodesToKeep) {
+        for (NodeCostPair ncp : byKey.values()) {
+            Node node = ncp.getNode();
+            if (!nodesToKeep.contains(node)) {
+                node.destruct();
+                byData.remove(ncp.getCoverageCost(), node);
+            }
+        }
     }
 
     public void clear() {
+        for (NodeCostPair ncp : byKey.values()) {
+            ncp.getNode().destruct();
+        }
         byKey.clear();
         byData.clear();
     }
 
-}
+    public Node get_similar_key(Node node) {
+        NodeCostPair ncp = byKey.get(node.getState());
+        if (ncp != null)
+            return ncp.getNode();
+        else
+            return null;
+    }
 
+    public void remove_by_key(Node node) {
+        NodeCostPair ncp = byKey.remove(node.getState());
+        assert ncp != null;
+        assert ncp.getNode() == node;
+        byData.remove(ncp.getCoverageCost(), node);
+    }
+}

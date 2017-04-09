@@ -38,6 +38,7 @@ package search;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
+import common.utility.NodeCostPair;
 import common.utility.Relation;
 import covering.cost.CoverageCost;
 import covering.state.CoveringArray;
@@ -135,7 +136,9 @@ public class Search
 
     public void clear() {
         clearBest();
+        /* Notice: this calls destruct() on removed nodes. */
         open.clear();
+        /* Notice: this calls destruct() on removed nodes. */
         closed.clear();
     }
 
@@ -150,7 +153,7 @@ public class Search
     private  void clearBest() {
         if (!configuration.useClosed) {
             for (Node n : best) {
-                if (!open.key_find(n).hasNext()) {
+                if (open.get_similar_key(n) == null) {
                     n.destruct();
                 }
             }
@@ -183,15 +186,11 @@ public class Search
     // Pop the best ranked node from the set of nodes that have been seen but not
     // explored.
     private Node popBestOpen() {
-        Iterator<Map.Entry<CoverageCost, Node>> dataEntries = open.getDataEntries().iterator();
-        assert (dataEntries.hasNext());
-        Map.Entry<CoverageCost, Node> bestOpen = dataEntries.next();
-        Node bestOpenNode = bestOpen.getValue();
+        NodeCostPair bestOpenNode = open.popBest();
         if (configuration.useClosed) {
-            closed.key_insert(bestOpenNode, bestOpen.getKey());
+            closed.key_insert(bestOpenNode.getNode(), bestOpenNode.getCoverageCost());
         }
-        dataEntries.remove();
-        return bestOpenNode;
+        return bestOpenNode.getNode();
     }
 
     // Get the children (immediately reachable neighbors) according to the
@@ -208,13 +207,11 @@ public class Search
     // any nodes that we have seen but not explored if they represent the same
     // state but are worse.
     private boolean replaceInOpen(Node parent, Node node, CoverageCost traveled) {
-        Iterator<Map.Entry<Node, CoverageCost>> similar = open.key_find(node);
-        if (similar.hasNext()) {
+        Node visited = open.get_similar_key(node);
+        if (visited == null) {
             // The node does not have an already seen state.
             return false;
         }
-        Map.Entry<Node, CoverageCost> similarEntry = similar.next();
-        Node visited = similarEntry.getKey();
         if (visited.getTraveled().compareTo(traveled) <= 0) {
             // The node has an already seen state and cannot improve a path; discard it.
             return true;
@@ -225,8 +222,8 @@ public class Search
             parent.addChild(visited);
         }
         visited.setTraveled(traveled);
-        /* TODO: examine what should be removed here (single node or all nodes) */
-        similar.remove();
+        open.remove_by_key(visited);
+
         CoverageCost rank = guide.rank(visited);
         open.key_insert(visited, rank);
         updateBest(visited, rank);
@@ -264,16 +261,16 @@ public class Search
                 assert(source != null);
                 update.setTraveled(space.getTraveled(source, update.getState()));
                 CoverageCost rank = guide.rank(update);
-                PeekingIterator<Map.Entry<Node, CoverageCost>> moribund = open.key_find(update);
-                if (moribund.hasNext()) {
-                    open.key_erase(moribund.peek());
+                Node moribund = open.get_similar_key(update);
+                if (moribund != null) {
+                    open.remove_by_key(moribund);
                     open.key_insert(update, rank);
                     updateBest(update, rank);
                     path.peekLast().next();
                 } else {
-                    moribund = closed.key_find(update);
-                    assert(moribund.hasNext());
-                    closed.key_erase(moribund.peek());
+                    moribund = closed.get_similar_key(update);
+                    assert(moribund != null);
+                    closed.remove_by_key(moribund);
                     closed.key_insert(update, rank);
                     updateBest(update, rank);
                     // Push children.
@@ -288,14 +285,11 @@ public class Search
     // node representing the same state.  Also, forget about any nodes that we
     // have explored if they represent the same state but are worse.
     private boolean replaceInClosed(Node parent, Node node, CoverageCost traveled) {
-        PeekingIterator<Map.Entry<Node, CoverageCost>> similar = closed.key_find(node);
-        /* TODO: is this OK? how key_end() should be implemented to make this work? */
-        if (!similar.hasNext()) {
+        Node visited = closed.get_similar_key(node);
+        if (visited == null) {
             // The node does not have an already explored state.
             return false;
         }
-        Node visited = similar.peek().getKey();
-        assert(visited != null);
         if (visited.getTraveled().compareTo(traveled) <= 0) {
             // The node has an already explored state and cannot improve a path;
             // discard it.
@@ -330,15 +324,9 @@ public class Search
                 for (Node k = parent; k != null; k = k.getParent()) {
                     lineage.add(k);
                 }
-                for (Map.Entry<Node, CoverageCost> k : closed.getKeys()) {
-                    if (!lineage.contains(k.getKey())) {
-                        k.getKey().destruct();
-                        closed.key_erase(k);
-                    }
-                }
-                for (Map.Entry<Node, CoverageCost> k : open.getKeys()) {
-                    k.getKey().destruct();
-                }
+                /* Notice: this calls destruct() on removed nodes. */
+                closed.prune(lineage);
+                /* Notice: this calls destruct() on removed nodes. */
                 open.clear();
             }
             // Explore.
