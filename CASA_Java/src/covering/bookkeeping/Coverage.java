@@ -17,6 +17,7 @@ package covering.bookkeeping;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
+import common.utility.Combinadic;
 import common.utility.PascalTriangle;
 import common.utility.SubstitutionArray;
 
@@ -43,7 +44,7 @@ public class Coverage<T> {
             offsets.set(offsetIndex, size);
             offsetIndex++;
         }
-        contents = new SubstitutionArray<>(size); //TODO ???
+        contents = new SubstitutionArray<>(size);
     }
 
     public Coverage(Coverage copy) {
@@ -58,8 +59,8 @@ public class Coverage<T> {
                              Vector<Integer> firstsHint,
                              Vector<Integer> countsHint,
                              Vector<Integer> sortedCombination) {
-        assert(sortedCombination.size() == strength);
-        assert(indexHint < offsets.size());
+        assert (sortedCombination.size() == strength);
+        assert (indexHint < offsets.size());
         Integer offset = offsets.get(indexHint);
         Integer index = 0;
         for (int i = strength; i > 0; i--) {
@@ -76,15 +77,51 @@ public class Coverage<T> {
                              Vector<Integer> firstsHint,
                              Vector<Integer> countsHint,
                              Vector<Integer> sortedCombination) {
-        //TODO
+        return encode
+                (Combinadic.encode(columnsHint),
+                        columnsHint,
+                        firstsHint,
+                        countsHint,
+                        sortedCombination);
     }
 
     protected Integer encode(Vector<Integer> sortedCombination) {
-        //TODO
+        assert (sortedCombination.size() == strength);
+        Vector<Integer> columns = new Vector<>(strength);
+        for (int i = strength; i > 0; i--) {
+            columns.set(i, options.getOption(sortedCombination.get(i)));
+        }
+        int offsetIndex = Combinadic.encode(columns);
+        assert (offsetIndex < offsets.size());
+        int offset = offsets.get(offsetIndex);
+        int index = 0;
+        for (int i = strength; i > 0; i--) {
+            int column = columns.get(i);
+            int base = options.getFirstSymbol(column);
+            int count = options.getSymbolCount(column);
+            index *= count;
+            index += sortedCombination.get(i) - base;
+        }
+        return offset + index;
     }
 
     protected Vector<Integer> decode(Integer encoding) {
-        //TODO
+        int offsetIndex = offsets.size();
+        while (offsets.get(--offsetIndex) > encoding) ;
+        int index = encoding - offsets.get(offsetIndex);
+        Vector<Integer> columns = Combinadic.decode(offsetIndex, strength);
+        Vector<Integer> result = new Vector<>(strength);
+        for (int i = 0; i < strength; ++i) {
+            int column = columns.get(i);
+            int base = options.getFirstSymbol(column);
+            int count = options.getSymbolCount(column);
+            int digit = index % count;
+            index -= digit;
+            index /= count;
+            result.set(i, base + digit);
+        }
+        assert (encode(result) == encoding);
+        return result;
     }
 
     public Integer getStrength() {
@@ -103,39 +140,70 @@ public class Coverage<T> {
         return contents;
     }
 
-    class Entry()
+    class Entry {
 
-    {
-        //TODO
+        protected Coverage owner;
+        protected Integer index;
+
+        public Entry(Coverage owner, Integer index) {
+            this.owner = owner;
+            this.index = index;
+        }
+
+        //        operator T() const {
+//            return owner.contents[index];
+//        }
+        public T op_getContent() {
+            //TODO
+        }
+
+        //        Entry&operator =(const T&value) {
+//            owner.contents[index] = value;
+//            return *this;
+//        }
+        public Entry op_setValue(T value) {
+            owner.contents.set(index, value);
+            return this;
+        }
+
+        //        Entry&operator --() {
+//            --owner.contents[index];
+//            return *this;
+//        }
+        public Entry op_decrement() {
+            //TODO
+        }
+
+        //        Entry&operator ++() {
+//            ++owner.contents[index];
+//            return *this;
+//        }
+        public Entry op_increment() {
+            //TODO
+        }
+
     }
 
-    //C_CODE
-//    const Entry operator[](Array<unsigned>sortedCombination) const {
+    //    const Entry operator[](Array<unsigned>sortedCombination) const {
 //        return Entry(*this, encode(sortedCombination));
 //    }
     public Entry op_getEntry(Vector<Integer> sortedCombination) {
-        //TODO
+        return new Entry(this, encode(sortedCombination));
     }
-
-    //C_CODE
-//    Entry operator [](Array<unsigned>sortedCombination) {
-//        return Entry(*this, encode(sortedCombination));
-//    }
-    //TODO ???
 
     public Entry hintGet(Integer indexHint,
                          Vector<Integer> columnsHint,
                          Vector<Integer> firstsHint,
                          Vector<Integer> countsHint,
                          Vector<Integer> sortedCombination) {
-        //TODO
+        return new Entry(this, encode(indexHint, columnsHint, firstsHint, countsHint, sortedCombination));
     }
 
     public Entry hintGet(Vector<Integer> columnsHint,
                          Vector<Integer> firstsHint,
                          Vector<Integer> countsHint,
                          Vector<Integer> sortedCombination) {
-        //TODO
+        return new Entry(this, encode(columnsHint, firstsHint, countsHint, sortedCombination));
     }
 
     //TODO iterators

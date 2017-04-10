@@ -45,14 +45,17 @@ public class Combinadic {
     //      ((1 / e) *
     //        (encoding * sqrt(TWO_PI * cardinality)) ^ (1 / cardinality) + 0.5) *
     //      cardinality
-    protected Integer guessLastMember(Integer encoding, Integer cardinality) {
+
+    //TODO not sure about "static"
+    protected static Integer guessLastMember(Integer encoding, Integer cardinality) {
         double scaledEncoding = encoding * Math.sqrt(TWO_PI * cardinality);
         double rootOfEncoding = Math.pow(scaledEncoding, 1.0 / cardinality);
         Double result = ((INVERSE_E * rootOfEncoding + 0.5) * (double) cardinality);
         return result.intValue();
     }
 
-    protected Pair<Integer, Integer> getLastMemberAndContribution(Integer encoding, Integer cardinality) {
+    //TODO not sure about "static"
+    protected static Pair<Integer, Integer> getLastMemberAndContribution(Integer encoding, Integer cardinality) {
         int member = guessLastMember(encoding, cardinality);
         int contribution = PascalTriangle.nCr(member, cardinality);
         if (contribution > encoding) {
@@ -70,7 +73,8 @@ public class Combinadic {
         return new Pair<Integer, Integer>(member, contribution);
     }
 
-    public Integer encode(Vector<Integer> sortedSubset) {
+    //TODO not sure about "static"
+    public static Integer encode(Vector<Integer> sortedSubset) {
         Integer result = 0;
         for (int i = 0; i < sortedSubset.size(); ++i) {
             result += PascalTriangle.nCr(sortedSubset.get(i), i + 1);
@@ -78,7 +82,8 @@ public class Combinadic {
         return result;
     }
 
-    public Vector<Integer> decode(Integer encoding, Integer cardinality) {
+    //TODO not sure about "static"
+    public static Vector<Integer> decode(Integer encoding, Integer cardinality) {
         Vector<Integer> result = new Vector<>(cardinality);
         for (int i = cardinality; i > 0;) {
             Pair<Integer, Integer> memberAndContribution
