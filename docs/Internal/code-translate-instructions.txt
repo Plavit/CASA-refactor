@@ -48,7 +48,7 @@ computeLowerBound(unsigned int, Options const&)
 computeUpperBound(unsigned int, Options const&)
 
 ### casa/search
-
+// HOTOVO
 Filter<CoveringArray, CoverageCost>::~Filter()
 Filter<CoveringArray, CoverageCost>::Filter()
 
@@ -145,7 +145,7 @@ ConstraintFile::getClauses() const
 
 ### casa/covering/cost
 
-// HOTOVO - David
+// HOTOVO
 CoverageCost::CoverageCost(unsigned int)
 CoverageCost::CoverageCost(unsigned int, unsigned int)
 CoverageCost::getMultipleCoverage() const
@@ -154,7 +154,7 @@ CoverageCost::operator<(CoverageCost const&) const
 CoverageCost::operator==(CoverageCost const&) const
 
 ### casa/covering/goal
-
+// HOTOVO
 CoverageGoal::~CoverageGoal()
 CoverageGoal::CoverageGoal(unsigned int)
 CoverageGoal::getTargetCoverage()
