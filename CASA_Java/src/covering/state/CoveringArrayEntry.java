@@ -1,106 +1,117 @@
-import covering.state.CoveringArray;
+package covering.state;
+
+import common.utility.Combinadic;
+import covering.bookkeeping.Coverage;
+import sat.InputKnown;
+
+import java.util.Vector;
 
 class CoveringArrayEntry {
 
-    protected CoveringArray owner;
-    protected Integer row;
-    protected Integer option;
+    CoveringArray owner;
+    int row;
+    int option;
 
-    public CoveringArrayEntry(CoveringArray owner, Integer row, Integer option) {
+    public CoveringArrayEntry(CoveringArray owner, int row, int option) {
         this.owner = owner;
         this.row = row;
         this.option = option;
     }
 
-    protected void updateTracking(Integer value) {
-        //TODO dokoncit prepis nasledujiciho kodu
-/*
-  if (owner(row,option) == value) {
-    return;
-  }
-  unsigned strength = owner.coverage.getStrength();
-  unsigned limit = owner.coverage.getOptions().getSize();
-  Array<unsigned>firsts = owner.coverage.getOptions().getFirstSymbols();
-  Array<unsigned>counts = owner.coverage.getOptions().getSymbolCounts();
-  unsigned hint = 0;
-  for (Array<unsigned>
-	 columns = combinadic.begin(strength),
-	 symbols(strength);
-       columns[strength - 1] < limit;
-       combinadic.next(columns), ++hint) {
-    for (unsigned i = strength; i--;) {
-      if (columns[i] == option) {
-	for (unsigned j = strength; j--;) {
-	  symbols[j] = owner(row, columns[j]);
-	}
-	InputKnown oldKnown(symbols);
-	if ((*owner.solver)(oldKnown) &&
-	    --owner.coverage.hintGet(hint, columns, firsts, counts, symbols) ==
-	    0) {
-	  --owner.coverageCount;
-	  if (owner.trackingNoncoverage) {
-	    Array<unsigned>separateCopyOfSymbols(symbols.getSize());
-	    for (unsigned j = symbols.getSize(); j--;) {
-	      separateCopyOfSymbols[j] = symbols[j];
-	    }
-	    bool successfulInsertion =
-	      owner.noncoverage->insert(separateCopyOfSymbols).second;
-	    assert(successfulInsertion);
-	    (void)successfulInsertion; // This is unused without assertions.
-	  }
-	} else {
-	  --owner.multipleCoverageCount;
-	}
-	symbols[i] = value;
-	InputKnown newKnown(symbols);
-	if ((*owner.solver)(newKnown) &&
-	    ++owner.coverage.hintGet(hint, columns, firsts, counts, symbols) ==
-	    1) {
-	  ++owner.coverageCount;
-	  if (owner.trackingNoncoverage) {
-	    Array<unsigned>separateCopyOfSymbols(symbols.getSize());
-	    for (unsigned j = symbols.getSize(); j--;) {
-	      separateCopyOfSymbols[j] = symbols[j];
-	    }
-	    bool successfulErasure =
-	      (bool)owner.noncoverage->erase(separateCopyOfSymbols);
-	    assert(successfulErasure);
-	    (void)successfulErasure; // This is unused without assertions.
-	  }
-	} else {
-	  ++owner.multipleCoverageCount;
-	}
-	break;
-      }
-    }
-  }
-  owner.autoFinalizeSubstitutions();
+    private void updateTracking(int value) {
+        if (owner.getEntry(row, option).getValue() == value) {
+            return;
+        }
+        Coverage coverage = owner.getCoverage();
+        int strength = coverage.getStrength();
+        int limit = coverage.getOptions().getSize();
+        Vector<Integer> firsts = coverage.getOptions().getFirstSymbols();
+        Vector<Integer> counts = coverage.getOptions().getSymbolCounts();
+        int hint = 0;
+        int[] columns = Combinadic.begin(strength);
+        int[] symbols = new int[strength];
+        for (;
+             columns[strength - 1] < limit ;
+            Combinadic.next(columns), ++hint){
+            for (int i = strength; i-- != 0; ) {
+                if (columns[i] == option) {
+                    for (int j = strength; j-- != 0; ) {
+                        symbols[j] = owner.getEntry(row, columns[j]).getValue();
+                    }
+                    InputKnown oldKnown (symbols);
+                    if (owner.getSolver().solve(oldKnown) &&
+                            --coverage.hintGet(hint, columns, firsts, counts, symbols) ==
+                                    0){
+                        --owner.coverageCount;
+                        if (owner.trackingNoncoverage) {
+                            Array<int> separateCopyOfSymbols (symbols.getSize());
+                            for (int j = symbols.getSize(); j--; ) {
+                                separateCopyOfSymbols[j] = symbols[j];
+                            }
+                            bool successfulInsertion =
+                                    owner.noncoverage->insert(separateCopyOfSymbols).second;
+                            assert (successfulInsertion);
+                            (void) successfulInsertion; // This is unused without assertions.
+                        }
+                    }else{
+                        --owner.multipleCoverageCount;
+                    }
+                    symbols[i] = value;
+                    InputKnown newKnown (symbols);
+                    if (( * owner.solver) (newKnown) &&
+                            ++coverage.hintGet(hint, columns, firsts, counts, symbols) ==
+                                    1){
+                        ++coverageCount;
+                        if (owner.trackingNoncoverage) {
+                            Array<int> separateCopyOfSymbols (symbols.getSize());
+                            for (int j = symbols.getSize(); j--; ) {
+                                separateCopyOfSymbols[j] = symbols[j];
+                            }
+                            bool successfulErasure =
+                                    (bool) owner.noncoverage->erase(separateCopyOfSymbols);
+                            assert (successfulErasure);
+                            (void) successfulErasure; // This is unused without assertions.
+                        }
+                    }else{
+                        ++owner.multipleCoverageCount;
+                    }
+                    break;
+                }
+            }
+        }
+        owner.autoFinalizeSubstitutions();
+  /*
  */
     }
 
     //C_CODE
-//        CoveringArray::Entry::operator unsigned() const {
-//            map<pair<unsigned, unsigned>, unsigned>::const_iterator
+//        CoveringArray::Entry::operator int() const {
+//            map<pair<int, int>, int>::const_iterator
 //                    substitution =
-//                    owner.substitutions->find(pair<unsigned, unsigned>(row,option)),
+//                    owner.substitutions->find(pair<int, int>(row,option)),
 //            end = owner.substitutions->end();
 //            return (substitution == end) ?
 //                    owner.array[row][option] :
 //                    substitution->second;
 //        }
-    public void op_call() { //TODO
-
+    public int getValue() {
+        //TODO
+        return 0;
     }
 
     //C_CODE
-//        CoveringArray::Entry&CoveringArray::Entry::operator =(unsigned value) {
+//        CoveringArray::Entry&CoveringArray::Entry::operator =(int value) {
 //            if (owner.trackingCoverage) {
 //                updateTracking(value);
 //            }
-//            (*owner.substitutions)[pair<unsigned, unsigned>(row, option)] = value;
+//            (*owner.substitutions)[pair<int, int>(row, option)] = value;
 //            return *this;
 //        }
-    public Entry op_TODO2(Integer value) { //TODO
+    public CoveringArrayEntry setValue(int value) { //TODO
+        if (owner.trackingCoverage) {
+            updateTracking(value);
+        }
+        owner.substitutions.set(new RowOptionPair(row, option))
 
     }
 }

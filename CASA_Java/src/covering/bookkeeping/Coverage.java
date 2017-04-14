@@ -171,7 +171,8 @@ public class Coverage<T> {
 //            return *this;
 //        }
         public Entry op_decrement() {
-            //TODO
+            owner.contents[index]--;
+            return this;
         }
 
         //        Entry&operator ++() {

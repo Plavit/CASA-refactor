@@ -7,9 +7,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import common.utility.Lazy;
 import covering.bookkeeping.Coverage;
 import covering.bookkeeping.Options;
 import javafx.util.Pair;
+import sat.SATSolver;
 
 
 // This file is part of Covering Arrays by Simulated Annealing (CASA).
@@ -27,6 +29,37 @@ import javafx.util.Pair;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
+class RowOptionPair {
+    private final int row;
+    private final int option;
+
+    RowOptionPair(int key, int value) {
+        this.row = key;
+        this.option = value;
+    }
+
+    int getRow() {
+        return row;
+    }
+
+    int getOption() {
+        return option;
+    }
+
+    public int hashCode() {
+        return (row + option) * option + row;
+    }
+
+    public boolean equals(Object other) {
+        if (other instanceof RowOptionPair) {
+            RowOptionPair otherPair = (RowOptionPair) other;
+            return (this.row == otherPair.row) && (this.option == otherPair.option);
+        }
+        return false;
+    }
+}
+
+
 public class CoveringArray implements Comparable<CoveringArray> {
     /* TODO */
     public int compareTo(CoveringArray o) {
@@ -39,13 +72,13 @@ public class CoveringArray implements Comparable<CoveringArray> {
     // The first index is the test configuration (row).
     // The second index is the option (column).
     protected Vector<Vector<Integer>> array;
-    protected Lazy<Map<Pair<Integer, Integer>, Integer>> substitutions;
+    protected Lazy<Map<RowOptionPair, Integer>> substitutions;
     protected SATSolver solver;
     protected boolean trackingCoverage;
     protected boolean trackingNoncoverage;
     protected Integer coverageCount;
     protected Integer multipleCoverageCount;
-    protected Coverage<Integer> coverage;
+    private Coverage<Integer> coverage;
     protected Lazy<Set<Vector<Integer>, ArrayComparator<Integer>>> noncoverage;
 
     public CoveringArray(Integer rows, Integer strength, Options options, SATSolver solver) {
@@ -55,7 +88,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
         //C_CODE
         //substitutions(new map<pair<unsigned, unsigned>, unsigned>()),
         //TODO Lazy
-        substitutions = new Lazy(new HashMap<Pair<Integer, Integer>, Integer>());
+        substitutions = new Lazy(new HashMap<RowOptionPair, Integer>());
 
         this.solver = solver;
         this.trackingCoverage = false;
@@ -118,7 +151,9 @@ public class CoveringArray implements Comparable<CoveringArray> {
     //Entry operator ()(unsigned row, unsigned option) {
     //  return Entry(*this, row, option);
     //}
-    //TODO
+    CoveringArrayEntry getEntry(int row, int option) {
+        return null; // TODO
+    }
 
     //C_CODE
     //const Entry operator ()(unsigned row, unsigned option) const {
@@ -267,5 +302,13 @@ public class CoveringArray implements Comparable<CoveringArray> {
 
     public Set<Vector<Integer>, ArrayComparator<Integer>> getNoncoverage() {
         return noncoverage.getSet();
+    }
+
+    public Coverage getCoverage() {
+        return coverage;
+    }
+
+    public SATSolver getSolver() {
+        return solver;
     }
 }
