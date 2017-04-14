@@ -17,13 +17,27 @@ package common.utility;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
-import java.util.Vector;
-import javafx.util.Pair;
+class Pair {
+    private final int key;
+    private final int value;
+
+    Pair(int key, int value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    int getKey() {
+        return key;
+    }
+
+    int getValue() {
+        return value;
+    }
+}
 
 public class Combinadic {
-
-    public static double TWO_PI = 2 * Math.PI;
-    public static double INVERSE_E = 1 / Math.E;
+    private static double TWO_PI = 2 * Math.PI;
+    private static double INVERSE_E = 1 / Math.E;
 
     // We want result to approximately satisfy
     //  cardinality! * encoding = result * (result-1) * ... * (result-(cardinality-1))
@@ -46,16 +60,14 @@ public class Combinadic {
     //        (encoding * sqrt(TWO_PI * cardinality)) ^ (1 / cardinality) + 0.5) *
     //      cardinality
 
-    //TODO not sure about "static"
-    protected static Integer guessLastMember(Integer encoding, Integer cardinality) {
+    private static int guessLastMember(int encoding, int cardinality) {
         double scaledEncoding = encoding * Math.sqrt(TWO_PI * cardinality);
         double rootOfEncoding = Math.pow(scaledEncoding, 1.0 / cardinality);
         Double result = ((INVERSE_E * rootOfEncoding + 0.5) * (double) cardinality);
         return result.intValue();
     }
 
-    //TODO not sure about "static"
-    protected static Pair<Integer, Integer> getLastMemberAndContribution(Integer encoding, Integer cardinality) {
+    private static Pair getLastMemberAndContribution(int encoding, int cardinality) {
         int member = guessLastMember(encoding, cardinality);
         int contribution = PascalTriangle.nCr(member, cardinality);
         if (contribution > encoding) {
@@ -70,60 +82,50 @@ public class Combinadic {
                 nextContribution = PascalTriangle.nCr(member + 1, cardinality);
             }
         }
-        return new Pair<Integer, Integer>(member, contribution);
+        return new Pair(member, contribution);
     }
 
-    //TODO not sure about "static"
-    public static Integer encode(Vector<Integer> sortedSubset) {
-        Integer result = 0;
-        for (int i = 0; i < sortedSubset.size(); ++i) {
-            result += PascalTriangle.nCr(sortedSubset.get(i), i + 1);
+    public static Integer encode(int[] sortedSubset) {
+        int result = 0;
+        for (int i = 0; i < sortedSubset.length; ++i) {
+            result += PascalTriangle.nCr(sortedSubset[i], i + 1);
         }
         return result;
     }
 
-    //TODO not sure about "static"
-    public static Vector<Integer> decode(Integer encoding, Integer cardinality) {
-        Vector<Integer> result = new Vector<>(cardinality);
+    public static int[] decode(int encoding, int cardinality) {
+        int[] result = new int[cardinality];
         for (int i = cardinality; i > 0;) {
-            Pair<Integer, Integer> memberAndContribution
+            Pair memberAndContribution
                     = getLastMemberAndContribution(encoding, i);
-            result.set(i, memberAndContribution.getKey());
+            result[i] = memberAndContribution.getKey();
             --i;
             encoding -= memberAndContribution.getValue();
         }
         return result;
     }
 
-    //TODO not sure about "static"
-    public static Vector<Integer> begin(Integer size) {
-        Vector<Integer> result = new Vector<>(size);
+    public static int[] begin(int size) {
+        int[] result = new int[size];
         for (int i = size; i-- > 0;) {
-            result.set(i, i);
+            result[i] = i;
         }
         return result;
     }
 
-    public void previous(Vector<Integer> sortedSubset) {
-        throw new UnsupportedOperationException();
-    }
-
-    //TODO not sure about "static"
-    public static void next(Vector<Integer> sortedSubset) {
-        assert (sortedSubset.size() > 0);
-        int limit = sortedSubset.size() - 1;
-        int ceiling = sortedSubset.get(0);
+    public static void next(int[] sortedSubset) {
+        assert (sortedSubset.length > 0);
+        int limit = sortedSubset.length - 1;
+        int ceiling = sortedSubset[0];
         for (int i = 0; i < limit; ++i) {
             int entry = ceiling + 1;
-            ceiling = sortedSubset.get(i + 1);
+            ceiling = sortedSubset[i + 1];
             if (entry < ceiling) {
-                sortedSubset.set(i, entry);
+                sortedSubset[i] = entry;
                 return;
             }
-            sortedSubset.set(i, i);
+            sortedSubset[i] = i;
         }
-        //C_CODE
-        //++sortedSubset[limit];
-        sortedSubset.set(limit, sortedSubset.get(limit) + 1);
+        sortedSubset[limit]++;
     }
 }
