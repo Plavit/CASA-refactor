@@ -20,35 +20,32 @@ package common.utility;
 import java.util.ArrayList;
 import java.util.Vector;
 
-//TODO not sure about "static"
 public class PascalTriangle {
 
-    protected static ArrayList<Vector<Integer>> table;
+    protected static ArrayList<int[]> table;
 
     public PascalTriangle() {
-        Vector<Integer> root = new Vector<>(1);
-        root.set(0, 1);
+        int[] root = new int[1];
+        root[0] = 1;
         table.add(root);
     }
 
-    public static void addRows(Integer targetDepth) {
+    public static void addRows(int targetDepth) {
         while (table.size() <= targetDepth) {
-            Integer depth = table.size();
-            Vector<Integer> line = new Vector<>(depth + 1);
-            Vector<Integer> source = table.get(depth - 1);
+            int depth = table.size();
+            int[] line = new int[depth + 1];
+            int[] source = table.get(depth - 1);
             table.add(line);
-            line.add(0, 1);
-            for (int column = 1, trail = source.get(0); column < depth; ++column) {
-                line.set(column, trail);
-                //C_CODE
-                //line[column] += trail = source[column];
-                trail = source.get(column);
-                line.set(column, line.get(column) + trail);
+            line[0] = 1;
+            for (int column = 1, trail = source[0]; column < depth; ++column) {
+                line[column] = trail;
+                line[column] += trail = source[column];
             }
+            line[depth] = 1;
         }
     }
 
-    public static Integer nCr(Integer n, Integer r) {
+    public static Integer nCr(int n, int r) {
         if (n >= table.size()) {
             addRows(n);
         }
@@ -57,6 +54,6 @@ public class PascalTriangle {
         }
         //C_CODE
         //return table[n][r];
-        return table.get(n).get(r);
+        return table.get(n)[r];
     }
 }

@@ -2,6 +2,7 @@ package common.utility;
 
 // Copyright 2008, 2009 Brady J. Garvin
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -21,39 +22,37 @@ import java.util.Vector;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
-
-//TODO SubstitutionArray extends Array (we use Vector instead of Array)...what to do?
-public class SubstitutionArray<T> extends Vector<T> {
+public class SubstitutionArray<T> extends Array<T> {
 
     public static final double MAXIMUM_SUBSTITUTION_PROPORTION = 0.1;
 
-    protected Lazy<Map<Integer, T>> substitutions;
-    protected Integer maximumSubstitutions;
+    private Lazy<Map<Integer, T>> substitutions;
+    private int maximumSubstitutions;
     
     public SubstitutionArray() {
         super();
     }
     
-    public SubstitutionArray(Integer size) {
+    public SubstitutionArray(int size) {
         super(size);
         maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * size);
     }
 
-    public SubstitutionArray(Vector<T> raw, Integer size) {
+    public SubstitutionArray(Vector<T> raw, int size) {
         super(size);
         for (int i = size; i-- > 0;) {
-            this.set(i, raw.get(i));
+            this.array.set(i, raw.get(i));
         }
         maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * size);
     }
 
-    public SubstitutionArray(Vector<T> copy) {
-        this.addAll(copy);
-        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.size());
+    public SubstitutionArray(Array<T> copy) {
+        this.array.addAll(copy.getArray());
+        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.getSize());
     }
 
     public SubstitutionArray(SubstitutionArray<T> copy) {
-        this.addAll(copy);
+        this.array.addAll(copy.getArray());
         substitutions = copy.substitutions;
         maximumSubstitutions = copy.maximumSubstitutions;
     }
@@ -65,12 +64,10 @@ public class SubstitutionArray<T> extends Vector<T> {
 //        maximumSubstitutions = MAXIMUM_SUBSTITUTION_PROPORTION * Array<T>::size;
 //        return *this;
 //    }
-
-    public SubstitutionArray<T> op_copy(Vector<T> copy) {
-        this.removeAllElements();
-        this.addAll(copy);
-        substitutions = null; //TODO ???
-        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.size());
+    public SubstitutionArray<T> op_copy(Array<T> copy) {
+        op_arrayCopy(copy);
+        this.substitutions = null;
+        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.getSize());
         return this;
     }
 
@@ -81,20 +78,99 @@ public class SubstitutionArray<T> extends Vector<T> {
 //        maximumSubstitutions = MAXIMUM_SUBSTITUTION_PROPORTION * Array<T>::size;
 //        return *this;
 //    }
-
     public SubstitutionArray<T> op_copy(SubstitutionArray<T> copy) {
-        this.removeAllElements();
-        this.addAll(copy);
+        op_arrayCopy(copy);
         substitutions = copy.substitutions;
-        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.size());
+        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.getSize());
         return this;
     }
 
-    public Integer getSize() {
-        return this.size();
+    public int getSize() {
+        return super.getSize();
     }
 
     class Entry {
+
+        protected SubstitutionArray<T> owner;
+        protected int index;
+
+        public Entry(SubstitutionArray<T> owner, int index) {
+            this.owner = owner;
+            this.index = index;
+        }
+
+        //C_CODE
+//        operator T() const {
+//            if (owner.substitutions) {
+//                std::map<unsigned, unsigned>::const_iterator substitution =
+//                        owner.substitutions->find(index);
+//                if (substitution != owner.substitutions->end()) {
+//                    return substitution->second;
+//                }
+//            }
+//            return owner.array[index];
+//        }
+        public T op_value() {
+            if (owner.substitutions != null) {
+                //TODO iterator
+            }
+        }
+
+        //C_CODE
+//        Entry&operator =(const T&value) {
+//            if (*owner.referenceCount > 1) {
+//                if (!owner.substitutions) {
+//                    owner.substitutions = new std::map<unsigned, T>();
+//                }
+//                (*owner.substitutions)[index] = value;
+//                owner.autoFinalizeSubstitutions();
+//            } else {
+//                owner.array[index] = value;
+//            }
+//            return *this;
+//        }
+        //TODO
+        public Entry op_assignment(T value) {
+            if (owner.referenceCount > 1) {
+                if (owner.substitutions != null) {
+                    owner.substitutions = new Lazy<Map<Integer, T>>();
+                }
+                //TODO... i have no idea what i am doing
+            }
+        }
+
+        //C_CODE
+//        Entry&operator --() {
+//            T old = operator T();
+//            return operator =(--old);
+//        }
+        public Entry op_pre_dec() {
+            //TODO
+        }
+
+        //C_CODE
+//        Entry&operator ++() {
+//            T old = operator T();
+//            return operator =(++old);
+//        }
+        public Entry op_pre_inc() {
+            //TODO
+        }
+    }
+
+    public Entry getEntry(int index) {
+        return new Entry(this, index);
+    }
+
+    public void fill(T filler) {
+        //TODO
+    }
+
+    public void finalizeSubstitutions() {
+        //TODO
+    }
+
+    public void autoFinalizeSubstitutions() {
         //TODO
     }
 }

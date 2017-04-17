@@ -113,6 +113,20 @@ public class Combinadic {
         return result;
     }
 
+    public static void previous(int[] sortedSubset) {
+        assert (sortedSubset.length > 0);
+        int limit = sortedSubset.length;
+        for (int i = 0; i < limit; ++i) {
+            int entry = sortedSubset[i];
+            if (entry > i) {
+                do {
+                    sortedSubset[i] = --entry;
+                } while (i-- > 0);
+                return;
+            }
+        }
+    }
+
     public static void next(int[] sortedSubset) {
         assert (sortedSubset.length > 0);
         int limit = sortedSubset.length - 1;

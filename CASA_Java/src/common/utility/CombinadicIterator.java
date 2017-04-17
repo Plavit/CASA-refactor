@@ -20,21 +20,21 @@ package common.utility;
 import java.util.Arrays;
 
 public class CombinadicIterator {
-    
+
     protected Integer populationSize;
     // The iteration will skip sets whose intersection with relevant is empty.
     protected int[] relevant;
     protected int[] notRelevant;
-    
+
     protected int minimumRelevance;
     protected int maximumRelevance;
-    
+
     protected int[] choiceFromRelevant;
     protected int[] choiceFromNotRelevant;
-    
+
     protected int[] relevantCombination;
     protected int[] combination;
-    
+
     public CombinadicIterator(int populationSize, int sampleSize, int[] relevant) {
         this.populationSize = populationSize;
         this.relevant = relevant;
@@ -45,7 +45,7 @@ public class CombinadicIterator {
         this.choiceFromNotRelevant = Combinadic.begin(sampleSize - maximumRelevance);
         this.relevantCombination = new int[sampleSize];
         this.combination = new int[sampleSize];
-        
+
         assert (sampleSize <= populationSize);
         for (int i = 0, j = 0, k = 0; i < notRelevant.length; ++i, ++j) {
             while ((k < relevant.length) && (relevant[k] == j)) {
@@ -57,18 +57,18 @@ public class CombinadicIterator {
         updateCombinationFromRelevant();
         updateCombination();
     }
-    
+
     protected void updateCombinationFromRelevant() {
-        for (int i = maximumRelevance; i-- > 0;) {
+        for (int i = maximumRelevance; i-- > 0; ) {
             relevantCombination[i] = relevant[choiceFromRelevant[i]];
         }
     }
-    
+
     protected void updateCombination() {
-        for (int i = combination.length; i-- > maximumRelevance;) {
+        for (int i = combination.length; i-- > maximumRelevance; ) {
             combination[i] = notRelevant[choiceFromNotRelevant[i - maximumRelevance]];
         }
-        for (int i = maximumRelevance; i-- > 0;) {
+        for (int i = maximumRelevance; i-- > 0; ) {
             combination[i] = relevantCombination[i];
         }
         Arrays.sort(combination);
@@ -77,50 +77,42 @@ public class CombinadicIterator {
     //C_CODE
     //const Array<unsigned>CombinadicIterator::operator *() const {
     //#ifndef NDEBUG
-    //  for (unsigned i = combination.getlength; --i;) {
+    //  for (unsigned i = combination.getSize(); --i;) {
     //      assert(combination[i - 1] < combination[i]);
     //  }
     //#endif
     //  return combination;
     //}
     public int[] op_dereference() {
-        for (int i = combination.length; --i > 0;) {
+        for (int i = combination.length; --i > 0; ) {
             assert (combination[i - 1] < combination[i]);
         }
         return combination;
     }
-    
-    
-    
-    
+
     //C_CODE
     //CombinadicIterator::operator bool() const {
-    //  return combination.getlength;
+    //  return combination.getSize();
     //}
-
-    //TODO not sure about this code
-    public Integer op_bool() {
-        return combination.length;
+    public boolean op_bool() {
+        return combination.length > 0;
     }
-    
-    
-    
-    
+
     //C_CODE
     /*
 CombinadicIterator&CombinadicIterator::operator ++() {
-  if (!combination.getlength) {
+  if (!combination.getSize()) {
     return *this;
   }
-  bool someFromNotRelevant = choiceFromNotRelevant.getlength;
+  bool someFromNotRelevant = choiceFromNotRelevant.getSize();
   if (someFromNotRelevant) {
     combinadic.next(choiceFromNotRelevant);
   }
   if (!someFromNotRelevant ||
-      choiceFromNotRelevant[choiceFromNotRelevant.getlength - 1] >=
-      populationSize - relevant.getlength) {
+      choiceFromNotRelevant[choiceFromNotRelevant.getSize() - 1] >=
+      populationSize - relevant.getSize()) {
     combinadic.next(choiceFromRelevant);
-    if (choiceFromRelevant[maximumRelevance - 1] >= relevant.getlength) {
+    if (choiceFromRelevant[maximumRelevance - 1] >= relevant.getSize()) {
       --maximumRelevance;
       if (maximumRelevance < minimumRelevance) {
 	combination = Array<unsigned>(0);
@@ -130,14 +122,12 @@ CombinadicIterator&CombinadicIterator::operator ++() {
     }
     updateCombinationFromRelevant();
     choiceFromNotRelevant =
-      combinadic.begin(combination.getlength - maximumRelevance);
+      combinadic.begin(combination.getSize() - maximumRelevance);
   }
   updateCombination();
   return *this;
 }
     */
-    
-    //TODO not sure about this code
     public CombinadicIterator op_pre_inc() {
         if (!(combination.length > 0)) {
             return this;
@@ -148,7 +138,7 @@ CombinadicIterator&CombinadicIterator::operator ++() {
         }
         if (!someFromNotRelevant ||
                 (choiceFromNotRelevant[choiceFromNotRelevant.length - 1]) >=
-                (populationSize - relevant.length)) {
+                        (populationSize - relevant.length)) {
             Combinadic.next(choiceFromRelevant);
             if (choiceFromRelevant[maximumRelevance - 1] >= relevant.length) {
                 --maximumRelevance;
