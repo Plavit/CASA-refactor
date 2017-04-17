@@ -21,7 +21,6 @@ import annealing.AnnealingFilter;
 import covering.cost.CoverageCost;
 import covering.state.CoveringArray;
 
-//TODO need AnnealingFilter
 public class CoveringArrayAnnealingFilter extends AnnealingFilter<CoveringArray, CoverageCost> {
 
     public static final double MULTIPLE_COVERAGE_WEIGHT = 0.1;
