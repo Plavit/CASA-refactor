@@ -14,13 +14,16 @@ Obecne pokyny prepisu C++ na Java:
 
 ### casa/algorithms
 
+//hotove, potreba kontrola
 BinarySearch::~BinarySearch()
 BinarySearch::BinarySearch(ExpensiveUnaryPredicate const&, Partitioner&)
 BinarySearch::operator()(unsigned int, unsigned int)
 
+//hotove, potreba kontrola
 ExpensiveUnaryPredicate::~ExpensiveUnaryPredicate()
 ExpensiveUnaryPredicate::ExpensiveUnaryPredicate()
 
+//hotove, potreba kontrola
 Partitioner::~Partitioner()
 Partitioner::Partitioner()
 
@@ -162,6 +165,7 @@ CoverageGoal::isGoal(CoveringArray const&)
 
 ### casa/covering/bookkeeping
 
+//rozdelane
 Coverage<unsigned int>::begin()
 Coverage<unsigned int>::~Coverage()
 Coverage<unsigned int>::Coverage(Coverage<unsigned int> const&)
@@ -189,6 +193,7 @@ Coverage<unsigned int>::iterator::operator++()
 Coverage<unsigned int>::iterator::operator!=(Coverage<unsigned int>::iterator const&) const
 Coverage<unsigned int>::operator=(Coverage<unsigned int> const&)
 
+//hotove, potreba kontrola
 Options::getFirstSymbols() const
 Options::getFirstSymbol(unsigned int) const
 Options::getLastSymbol(unsigned int) const
@@ -204,6 +209,7 @@ Options::Options(Options const&)
 
 ### casa/covering/filter
 
+//hotove, potreba kontrola
 CoveringArrayAnnealingFilter::convertToDelta(CoverageCost, CoverageCost) const
 CoveringArrayAnnealingFilter::~CoveringArrayAnnealingFilter()
 CoveringArrayAnnealingFilter::CoveringArrayAnnealingFilter(double, double)
@@ -243,6 +249,7 @@ CoveringArray::SubRow::updateTracking(Array<unsigned int>)
 
 ### casa/covering/heuristic
 
+//rozdelane
 CoveringArrayHeuristic::~CoveringArrayHeuristic()
 CoveringArrayHeuristic::CoveringArrayHeuristic()
 CoveringArrayHeuristic::estimate(CoveringArray const&, Goal<CoveringArray> const&) const
@@ -283,6 +290,7 @@ Listener<SearchIteration>::Listener()
 
 ### casa/covering/report
 
+//rozdelane
 IterationReport::getTotal() const
 IterationReport::~IterationReport()
 IterationReport::IterationReport()
