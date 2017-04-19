@@ -25,7 +25,16 @@ public class Array<T> {
     protected Vector<T> array;
     protected int referenceCount;
 
-    private void destroy() {
+    //C_CODE
+//    void destroy() {
+//        if (referenceCount && !(--*referenceCount)) {
+//            delete[] array;
+//            delete referenceCount;
+//        }
+//        array = NULL;
+//    }
+    //TODO ???
+    protected void destroy() {
         if (referenceCount > 0) {
             this.size = 0;
             this.array = null;
@@ -61,6 +70,16 @@ public class Array<T> {
         }
     }
 
+    //C_CODE
+//    Array&operator =(const Array&copy) {
+//        destroy();
+//        size = copy.size;
+//        array = copy.array;
+//        referenceCount = copy.referenceCount;
+//        ++*referenceCount;
+//        return *this;
+//    }
+
     public Array op_arrayCopy(Array<T> copy) {
         destroy();
         this.size = copy.getSize();
@@ -88,5 +107,52 @@ public class Array<T> {
         return referenceCount;
     }
 
-    //TODO class ArrayComparator
+    //C_CODE
+//    template<class T,class COMPARE = std::less<T> >class ArrayComparator {
+//        public:
+//        bool operator()(const Array<T>&left, const Array<T>&right) const {
+//            static COMPARE compare;
+//            unsigned leftSize = left.getSize();
+//            unsigned rightSize = right.getSize();
+//            if (leftSize < rightSize) {
+//                return true;
+//            }
+//            if (leftSize > rightSize) {
+//                return false;
+//            }
+//            for (unsigned i = 0; i < leftSize; ++i) {
+//                if (compare(left[i], right[i])) {
+//                    return true;
+//                }
+//                if (compare(right[i], left[i])) {
+//                    return false;
+//                }
+//            }
+//            return false;
+//        }
+//    };
+    class ArrayComparator<T extends Comparable<T>> {
+
+        private Pless<T> comparator = new Pless<>();
+
+        public boolean op_compare(Array<T> left, Array<T> right) {
+            int leftSize = left.getSize();
+            int rightSize = right.getSize();
+            if (leftSize < rightSize) {
+                return true;
+            }
+            if (leftSize > rightSize) {
+                return false;
+            }
+            for (int i = 0; i < leftSize; ++i) {
+                if (comparator.compare(left.getArray().get(i), right.getArray().get(i))) {
+                    return true;
+                }
+                if (comparator.compare(right.getArray().get(i), left.getArray().get(i))) {
+                    return false;
+                }
+            }
+            return false;
+        }
+    }
 }

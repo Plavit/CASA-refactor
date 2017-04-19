@@ -39,20 +39,17 @@ public class SubstitutionArray<T> extends Array<T> {
     }
 
     public SubstitutionArray(Vector<T> raw, int size) {
-        super(size);
-        for (int i = size; i-- > 0;) {
-            this.array.set(i, raw.get(i));
-        }
+        super(raw, size);
         maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * size);
     }
 
     public SubstitutionArray(Array<T> copy) {
-        this.array.addAll(copy.getArray());
+        super(copy);
         maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.getSize());
     }
 
     public SubstitutionArray(SubstitutionArray<T> copy) {
-        this.array.addAll(copy.getArray());
+        super(copy);
         substitutions = copy.substitutions;
         maximumSubstitutions = copy.maximumSubstitutions;
     }
@@ -67,7 +64,7 @@ public class SubstitutionArray<T> extends Array<T> {
     public SubstitutionArray<T> op_copy(Array<T> copy) {
         op_arrayCopy(copy);
         this.substitutions = null;
-        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.getSize());
+        this.maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.getSize());
         return this;
     }
 
@@ -80,8 +77,8 @@ public class SubstitutionArray<T> extends Array<T> {
 //    }
     public SubstitutionArray<T> op_copy(SubstitutionArray<T> copy) {
         op_arrayCopy(copy);
-        substitutions = copy.substitutions;
-        maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.getSize());
+        this.substitutions = copy.substitutions;
+        this.maximumSubstitutions = (int)(MAXIMUM_SUBSTITUTION_PROPORTION * this.getSize());
         return this;
     }
 
@@ -114,6 +111,8 @@ public class SubstitutionArray<T> extends Array<T> {
             if (owner.substitutions != null) {
                 //TODO iterator
             }
+
+            throw new UnsupportedOperationException();
         }
 
         //C_CODE
@@ -137,6 +136,8 @@ public class SubstitutionArray<T> extends Array<T> {
                 }
                 //TODO... i have no idea what i am doing
             }
+
+            throw new UnsupportedOperationException();
         }
 
         //C_CODE
@@ -146,6 +147,8 @@ public class SubstitutionArray<T> extends Array<T> {
 //        }
         public Entry op_pre_dec() {
             //TODO
+            T old = op_value();
+            return op_assignment(--old);
         }
 
         //C_CODE
@@ -155,6 +158,8 @@ public class SubstitutionArray<T> extends Array<T> {
 //        }
         public Entry op_pre_inc() {
             //TODO
+            T old = op_value();
+            return op_assignment(++old);
         }
     }
 
@@ -163,14 +168,42 @@ public class SubstitutionArray<T> extends Array<T> {
     }
 
     public void fill(T filler) {
-        //TODO
+        if (referenceCount > 1) {
+            destroy();
+            array = new Vector<>(getSize());
+            referenceCount = 1;
+            substitutions = null;
+        }
+        fill(filler);
     }
 
     public void finalizeSubstitutions() {
-        //TODO
+        if (substitutions == null) {
+            return;
+        }
+        Vector<T> replacement = new Vector<>(getSize());
+        for (int i = getSize(); i > 0; i--) {
+            replacement.set(i, array.get(i));
+        }
+
+        //TODO iterators
+
+        destroy();
+        array = replacement;
+        referenceCount = 1;
+        //TODO substitutions->clear();
     }
 
     public void autoFinalizeSubstitutions() {
         //TODO
+    }
+
+    class SubstitutionArrayComparator<T extends Comparable<T>> {
+
+        private ArrayComparator<T> arrayComparator = new ArrayComparator<>();
+
+        public boolean op_compare(Array<T> left, Array<T> right) {
+            return arrayComparator.op_compare(left, right);
+        }
     }
 }
