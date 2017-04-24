@@ -8,17 +8,17 @@ import java.util.Vector;
 
 class CoveringArrayEntry {
 
-    CoveringArray owner;
-    int row;
-    int option;
+    private CoveringArray owner;
+    private Integer row;
+    private Integer option;
 
-    public CoveringArrayEntry(CoveringArray owner, int row, int option) {
+    public CoveringArrayEntry(CoveringArray owner, Integer row, Integer option) {
         this.owner = owner;
         this.row = row;
         this.option = option;
     }
 
-    private void updateTracking(int value) {
+    private void updateTracking(Integer value) {
         if (owner.getEntry(row, option).getValue() == value) {
             return;
         }
@@ -94,7 +94,7 @@ class CoveringArrayEntry {
 //                    owner.array[row][option] :
 //                    substitution->second;
 //        }
-    public int getValue() {
+    public Integer getValue() {
         //TODO
         return 0;
     }
@@ -107,7 +107,7 @@ class CoveringArrayEntry {
 //            (*owner.substitutions)[pair<int, int>(row, option)] = value;
 //            return *this;
 //        }
-    public CoveringArrayEntry setValue(int value) { //TODO
+    public CoveringArrayEntry setValue(Integer value) { //TODO
         if (owner.trackingCoverage) {
             updateTracking(value);
         }

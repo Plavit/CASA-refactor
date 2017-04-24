@@ -1,3 +1,4 @@
+import common.utility.Array;
 import covering.state.CoveringArray;
 
 import java.util.Vector;
@@ -5,15 +6,15 @@ import java.util.Vector;
 // Warning: CoveringArray::Row assumes that constraints are always satisfied.
 class CoveringArrayRow {
 
-    protected CoveringArray owner;
-    protected Integer row;
+    private CoveringArray owner;
+    private Integer row;
 
     public CoveringArrayRow(CoveringArray owner, Integer row) {
         this.owner = owner;
         this.row = row;
     }
 
-    protected void updateTracking(Vector<Integer> values) {
+    protected void updateTracking(Array<Integer> values) {
         //TODO dokoncit prepis nasledujiciho kodu
 /*
   unsigned size = values.getSize();
@@ -98,7 +99,7 @@ class CoveringArrayRow {
 //            }
 //            return result;
 //        }
-    public void op_TODO() {
+    public Array<Integer> op_get() {
         //TODO
     }
 
@@ -112,7 +113,7 @@ class CoveringArrayRow {
 //            }
 //            return *this;
 //        }
-    public Row op_TODO3(Vector<Integer> values) {
+    public CoveringArrayRow op_set(Array<Integer> values) {
         //TODO
     }
 }

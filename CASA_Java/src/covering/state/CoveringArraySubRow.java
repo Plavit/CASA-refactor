@@ -1,22 +1,24 @@
 package covering.state;
 
+import common.utility.Array;
+
 import java.util.Vector;
 
 // Warning: CoveringArray::SubRow assumes that constraints are always
 // satisfied.
 class CoveringArraySubRow {
 
-    protected CoveringArray owner;
-    protected Integer row;
-    protected Vector<Integer> columns;
+    private CoveringArray owner;
+    private Integer row;
+    private Array<Integer> columns;
 
-    public CoveringArraySubRow(CoveringArray owner, Integer row, Vector<Integer> columns) {
+    public CoveringArraySubRow(CoveringArray owner, Integer row, Array<Integer> columns) {
         this.owner = owner;
         this.row = row;
         this.columns = columns;
     }
 
-    protected void updateTracking(Vector<Integer> values) {
+    protected void updateTracking(Array<Integer> values) {
         Integer size = values.length;
         assert (size == owner.getOptions());
         Integer strength = owner.coverage.getStrength();
@@ -122,7 +124,7 @@ class CoveringArraySubRow {
 //            }
 //            return result;
 //        }
-    public void op_TODO() {
+    public Array<Integer> op_get() {
         //TODO
     }
 
@@ -140,7 +142,7 @@ class CoveringArraySubRow {
 //            }
 //            return *this;
 //        }
-    public void op_TODO2() {
+    public CoveringArraySubRow op_set(Array<Integer> values) {
         //TODO
     }
 }

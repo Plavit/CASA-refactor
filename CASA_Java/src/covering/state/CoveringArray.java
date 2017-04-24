@@ -7,12 +7,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import common.utility.Array;
 import common.utility.Lazy;
 import covering.bookkeeping.Coverage;
 import covering.bookkeeping.Options;
 import javafx.util.Pair;
 import sat.SATSolver;
-
 
 // This file is part of Covering Arrays by Simulated Annealing (CASA).
 
@@ -59,8 +59,8 @@ class RowOptionPair {
     }
 }
 
-
 public class CoveringArray implements Comparable<CoveringArray> {
+
     /* TODO */
     public int compareTo(CoveringArray o) {
         return 0;
@@ -71,7 +71,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
 
     // The first index is the test configuration (row).
     // The second index is the option (column).
-    protected Vector<Vector<Integer>> array;
+    protected Array<Array<Integer>> array;
     protected Lazy<Map<RowOptionPair, Integer>> substitutions;
     protected SATSolver solver;
     protected boolean trackingCoverage;
@@ -79,17 +79,14 @@ public class CoveringArray implements Comparable<CoveringArray> {
     protected Integer coverageCount;
     protected Integer multipleCoverageCount;
     private Coverage<Integer> coverage;
-    protected Lazy<Set<Vector<Integer>, ArrayComparator<Integer>>> noncoverage;
+
+    //TODO ??? set that consists of two types ???
+    protected Lazy<Set<Array<Integer>, ArrayComparator<Integer>>> noncoverage;
 
     public CoveringArray(Integer rows, Integer strength, Options options, SATSolver solver) {
 
-        array = new Vector<>(rows);
-
-        //C_CODE
-        //substitutions(new map<pair<unsigned, unsigned>, unsigned>()),
-        //TODO Lazy
-        substitutions = new Lazy(new HashMap<RowOptionPair, Integer>());
-
+        this.array = new Array<>(rows);
+        this.substitutions = new Lazy(new HashMap<RowOptionPair, Integer>());
         this.solver = solver;
         this.trackingCoverage = false;
         this.trackingNoncoverage = false;
@@ -97,54 +94,44 @@ public class CoveringArray implements Comparable<CoveringArray> {
         this.multipleCoverageCount = 0;
         this.coverage = new Coverage(strength, options);
 
-        //C_CODE
-        //noncoverage(new set<Array<unsigned>, ArrayComparator<unsigned> >()) {
-        //  for (unsigned i = rows; i--;) {
-        //      array[i] = Array<unsigned>(options.getSize());
-        //  }
-        //  coverage.fill(0);
-        //}
-        //TODO Lazy
-        this.noncoverage = new Lazy(new Set<Vector<Integer>, ArrayComparator<Integer>>());
+        //TODO ??? set that consists of two types ???
+        this.noncoverage = new Lazy(new Set<Array<Integer>, ArrayComparator<Integer>>());
         for (int i = rows; i > 0; i--) {
-            array.set(i, new Vector<Integer>(options.getSize()));
+            array.getArray().set(i, new Array<>(options.getSize()));
         }
         coverage.fill(0);
     }
 
     public CoveringArray(CoveringArray copy) {
 
-        this.array = copy.array;
-        this.substitutions = copy.substitutions;
+        this.array = new Array<>(copy.array);
+        this.substitutions = new Lazy<>(copy.substitutions);
         this.solver = copy.solver;
         this.trackingCoverage = copy.trackingCoverage;
         this.trackingNoncoverage = copy.trackingNoncoverage;
         this.coverageCount = copy.coverageCount;
         this.multipleCoverageCount = copy.multipleCoverageCount;
-        this.coverage = copy.coverage;
-        this.noncoverage = copy.noncoverage;
-        assert (!array.isEmpty()); //TODO ???
+        this.coverage = new Coverage<>(copy.coverage);
+        this.noncoverage = new Lazy<>(copy.noncoverage);
+        assert (!array.getArray().isEmpty());
     }
 
     public Integer getRows() {
-        return array.size();
+        return array.getSize();
     }
 
     public Integer getOptions() {
-        return (array.size() != 0) ? array.get(0).size() : 0;
+        return (array.getSize() != 0) ? array.getArray().get(0).getSize() : 0;
     }
 
     public void setBackingArrayEntry(Integer row, Integer option, Integer value) {
-        assert (!substitutions.getSize());
-
-        Vector tmp = array.get(row);
-        tmp.set(option, value);
-        array.set(row, tmp); //TODO not sure
+        assert (!(substitutions.getImplementation().size() > 0));
+        array.getArray().get(row).getArray().set(option, value);
     }
 
-    public void setBackingArrayRow(Integer row, Vector<Integer> value) {
-        assert (!substitutions.getSize());
-        array.set(row, value);
+    public void setBackingArrayRow(Integer row, Array<Integer> value) {
+        assert (!(substitutions.getImplementation().size() > 0));
+        array.getArray().set(row, value);
     }
 
     //C_CODE
@@ -193,30 +180,34 @@ public class CoveringArray implements Comparable<CoveringArray> {
         return multipleCoverageCount;
     }
 
-    public Vector<Integer> countDistinctCoverage() {
+    public Array<Integer> countDistinctCoverage() {
         assert (trackingCoverage);
-        Vector<Integer> result = new Vector<>(array.size());
-        //C_CODE
-        //result.fill(0);
-        for (int i = 0; i < result.size(); i++) {
-            result.set(i, 0);
-        }
+        Array<Integer> result = new Array<>(array.getSize());
+        result.fill(0);
+
         Integer strength = coverage.getStrength();
         Integer limit = coverage.getOptions().getSize();
 
-        Vector<Integer> first = coverage.getOptions().getFirstSysmbols();
+        //TODO we need to unite usage of Vector and Array
+
+        Vector<Integer> firsts = coverage.getOptions().getFirstSymbols();
         Vector<Integer> counts = coverage.getOptions().getSymbolCounts();
         Integer hint = 0;
 
-        //TODO
+        for () {
+            //TODO iterators
+        }
+        return result;
     }
+
+    //TODO not sure what this operators are comparing
 
     //C_CODE
 //    bool CoveringArray::operator <(const CoveringArray&other) const {
 //        return this < &other;
 //    }
     public boolean op_isLess(CoveringArray other) {
-        return array.size() < other.array.size(); //TODO ???
+        return array.getSize() < other.array.getSize();
     }
 
     //C_CODE
@@ -224,7 +215,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
 //        return this > &other;
 //    }
     public boolean op_isGreater(CoveringArray other) {
-        return array.size() > other.array.size(); //TODO ???
+        return array.getSize() > other.array.getSize();
     }
 
     //C_CODE
@@ -232,7 +223,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
 //        return this == &other;
 //    }
     public boolean op_equals(CoveringArray other) {
-        //TODO
+        return array.getSize() == other.array.getSize();
     }
 
     //C_CODE
@@ -240,15 +231,28 @@ public class CoveringArray implements Comparable<CoveringArray> {
 //        return this != &other;
 //    }
     public boolean op_notEquals(CoveringArray other) {
-        //TODO
+        return array.getSize() != other.array.getSize();
     }
 
     public void finalizeSubstitutions() {
-        //TODO
+        Integer outer = getRows();
+        Integer inner = getOptions();
+        Array<Array<Integer>> replacement = new Array<>(outer);
+        for (int i = outer; i > 0; i--) {
+            replacement.getArray().set(i, new Array<>(inner));
+            for (int j = inner; j > 0; j--) {
+                replacement.getArray().get(i).getArray().set(j, array.getArray().get(i).getArray().get(j));
+            }
+        }
+        for () {
+            //TODO iterators
+        }
+        substitutions.getImplementation().clear();
+        array.op_arrayCopy(replacement);
     }
 
     public void autoFinalizeSubstitutions() {
-        if (substitutions.getSize() > MAXIMUM_COVERING_ARRAY_SUBSTITUTION) {
+        if (substitutions.getImplementation().size() > MAXIMUM_COVERING_ARRAY_SUBSTITUTION) {
             finalizeSubstitutions();
         }
     }
@@ -266,12 +270,27 @@ public class CoveringArray implements Comparable<CoveringArray> {
         if (trackingCoverage) {
             Integer strength = coverage.getStrength();
             Integer limit = coverage.getOptions().getSize();
+
+            //TODO we need to unite usage of Vector and Array
+
             Vector<Integer> firsts = coverage.getOptions().getFirstSymbols();
             Vector<Integer> counts = coverage.getOptions().getSymbolCounts();
             coverage.fill(0);
-            //TODO class Coverage needed first
+            coverageCount = 0;
+            multipleCoverageCount = 0;
 
-
+            if (substitutions.getImplementation().size() > 0) {
+                Integer hint = 0;
+                for () {
+                    //TODO iterator
+                }
+            } else {
+                // A special common case where we can bypass the () operator:
+                Integer hint = 0;
+                for () {
+                    //TODO iterator
+                }
+            }
         }
     }
 
@@ -283,25 +302,26 @@ public class CoveringArray implements Comparable<CoveringArray> {
         if (this.trackingNoncoverage) {
             this.trackingNoncoverage = trackingNoncoverage;
             if (!trackingNoncoverage) {
-                noncoverage.clear();
+                noncoverage.getImplementation().clear();
             }
             return;
         }
         this.trackingNoncoverage = trackingNoncoverage;
         if (trackingNoncoverage) {
             assert (trackingCoverage);
-            assert (noncoverage.empty());
+            assert (noncoverage.getImplementation().isEmpty());
             int impossible = 0;
             for () {
-                //TODO Coverage iterator needed
+                //TODO iterator
             }
-            assert ((coverageCount + noncoverage.size() + impossible)
+            assert ((coverageCount + noncoverage.getImplementation().size() + impossible)
                     == coverage.getSize());
         }
     }
 
-    public Set<Vector<Integer>, ArrayComparator<Integer>> getNoncoverage() {
-        return noncoverage.getSet();
+    //TODO ??? set that consists of two types ???
+    public Set<Array<Integer>, ArrayComparator<Integer>> getNoncoverage() {
+        return noncoverage.getImplementation();
     }
 
     public Coverage getCoverage() {
