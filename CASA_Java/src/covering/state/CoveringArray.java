@@ -30,8 +30,8 @@ import sat.SATSolver;
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
 class RowOptionPair {
-    private final int row;
-    private final int option;
+    private int row;
+    private int option;
 
     RowOptionPair(int key, int value) {
         this.row = key;
@@ -44,6 +44,10 @@ class RowOptionPair {
 
     int getOption() {
         return option;
+    }
+
+    void setOption(int option) {
+        this.option = option;
     }
 
     public int hashCode() {
@@ -134,43 +138,17 @@ public class CoveringArray implements Comparable<CoveringArray> {
         array.getArray().set(row, value);
     }
 
-    //C_CODE
-    //Entry operator ()(unsigned row, unsigned option) {
-    //  return Entry(*this, row, option);
-    //}
-    CoveringArrayEntry getEntry(int row, int option) {
-        return null; // TODO
+    CoveringArrayEntry getEntry(Integer row, Integer option) {
+        return new CoveringArrayEntry(this, row, option);
     }
 
-    //C_CODE
-    //const Entry operator ()(unsigned row, unsigned option) const {
-    //  return Entry(*const_cast<CoveringArray*>(this), row, option);
-    //}
-    //TODO
+    CoveringArrayRow getRow(Integer row) {
+        return new CoveringArrayRow(this, row);
+    }
 
-    //C_CODE
-    //Row operator ()(unsigned row) {
-    //  return Row(*this, row);
-    //}
-    //TODO
-
-    //C_CODE
-    //const Row operator ()(unsigned row) const {
-    //  return Row(*const_cast<CoveringArray*>(this), row);
-    //}
-    //TODO
-
-    //C_CODE
-    //SubRow operator ()(unsigned row, Array<unsigned>columns) {
-    //  return SubRow(*this, row, columns);
-    //}
-    //TODO
-
-    //C_CODE
-    //const SubRow operator ()(unsigned row, Array<unsigned>columns) const {
-    //  return SubRow(*const_cast<CoveringArray*>(this), row, columns);
-    //}
-    //TODO
+    CoveringArraySubRow getSubRow(Integer row, Array<Integer> colums) {
+        return new CoveringArraySubRow(this, row, colums);
+    }
 
     public Integer getCoverageCount() {
         return coverageCount;
@@ -330,5 +308,9 @@ public class CoveringArray implements Comparable<CoveringArray> {
 
     public SATSolver getSolver() {
         return solver;
+    }
+
+    public Integer getArrayValue(Integer row, Integer option) {
+        return array.getArray().get(row).getArray().get(option);
     }
 }
