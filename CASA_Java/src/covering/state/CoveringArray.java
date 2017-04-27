@@ -1,18 +1,15 @@
 package covering.state;
 
-// Copyright 2008, 2009 Brady J. Garvin
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 import common.utility.Array;
+import common.utility.Combinadic;
 import common.utility.Lazy;
 import covering.bookkeeping.Coverage;
 import covering.bookkeeping.Options;
-import javafx.util.Pair;
 import sat.SATSolver;
+
+// Copyright 2008, 2009 Brady J. Garvin
 
 // This file is part of Covering Arrays by Simulated Annealing (CASA).
 
@@ -84,13 +81,14 @@ public class CoveringArray implements Comparable<CoveringArray> {
     protected Integer multipleCoverageCount;
     private Coverage<Integer> coverage;
 
-    //TODO ??? set that consists of two types ???
-    protected Lazy<Set<Array<Integer>, ArrayComparator<Integer>>> noncoverage;
+    //TODO http://en.cppreference.com/w/cpp/container/set   , ArrayComparator is used for sorting
+    //Lazy<std::set<Array<unsigned>, ArrayComparator<unsigned> > > noncoverage;
+    protected Lazy<Set<Array<Integer>>> noncoverage;
 
     public CoveringArray(Integer rows, Integer strength, Options options, SATSolver solver) {
 
         this.array = new Array<>(rows);
-        this.substitutions = new Lazy(new HashMap<RowOptionPair, Integer>());
+        this.substitutions = new Lazy(new TreeMap<RowOptionPair, Integer>());
         this.solver = solver;
         this.trackingCoverage = false;
         this.trackingNoncoverage = false;
@@ -98,8 +96,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
         this.multipleCoverageCount = 0;
         this.coverage = new Coverage(strength, options);
 
-        //TODO ??? set that consists of two types ???
-        this.noncoverage = new Lazy(new Set<Array<Integer>, ArrayComparator<Integer>>());
+        this.noncoverage = new Lazy(new TreeSet<Array<Integer>>());
         for (int i = rows; i > 0; i--) {
             array.getArray().set(i, new Array<>(options.getSize()));
         }
@@ -166,16 +163,36 @@ public class CoveringArray implements Comparable<CoveringArray> {
         Integer strength = coverage.getStrength();
         Integer limit = coverage.getOptions().getSize();
 
-        //TODO we need to unite usage of Vector and Array
-
         Vector<Integer> firsts = coverage.getOptions().getFirstSymbols();
         Vector<Integer> counts = coverage.getOptions().getSymbolCounts();
         Integer hint = 0;
 
-        for () {
-            //TODO iterators
+        //TODO not sure if arrays are updated in for loop,
+        //because parameters are copied when passing to method
+        int[] columns = Combinadic.begin(strength);
+        int[] symbols = new int[strength];
+        for (; columns[strength - 1] < limit; Combinadic.next(columns), ++hint) {
+            for (int i = array.getSize(); i > 0; i--) {
+                for (int j = strength; j > 0; j--) {
+                    symbols[j] = //TODO
+                }
+                //TODO hintGet returns Entry
+                if (coverage.hintGet(hint, arrToVect(columns), firsts, counts, arrToVect(symbols)).op_getContent().equals(1)) {
+                    Integer tmp = result.getArray().get(i);
+                    tmp++;
+                    result.getArray().set(i, tmp);
+                }
+            }
         }
         return result;
+    }
+
+    private Vector<Integer> arrToVect(int[] arr) {
+        Vector<Integer> vect = new Vector<>(arr.length);
+        for (int i = 0; i < arr.length; i++) {
+            vect.set(i, arr[i]);
+        }
+        return vect;
     }
 
     //TODO not sure what this operators are comparing
@@ -249,8 +266,6 @@ public class CoveringArray implements Comparable<CoveringArray> {
             Integer strength = coverage.getStrength();
             Integer limit = coverage.getOptions().getSize();
 
-            //TODO we need to unite usage of Vector and Array
-
             Vector<Integer> firsts = coverage.getOptions().getFirstSymbols();
             Vector<Integer> counts = coverage.getOptions().getSymbolCounts();
             coverage.fill(0);
@@ -297,8 +312,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
         }
     }
 
-    //TODO ??? set that consists of two types ???
-    public Set<Array<Integer>, ArrayComparator<Integer>> getNoncoverage() {
+    public Set<Array<Integer>> getNoncoverage() {
         return noncoverage.getImplementation();
     }
 
