@@ -140,51 +140,6 @@ public class Coverage<T> {
         return contents;
     }
 
-    class Entry {
-
-        protected Coverage owner;
-        protected Integer index;
-
-        public Entry(Coverage owner, Integer index) {
-            this.owner = owner;
-            this.index = index;
-        }
-
-        //        operator T() const {
-//            return owner.contents[index];
-//        }
-        public T op_getContent() {
-            //TODO
-        }
-
-        //        Entry&operator =(const T&value) {
-//            owner.contents[index] = value;
-//            return *this;
-//        }
-        public Entry op_setValue(T value) {
-            owner.contents.set(index, value);
-            return this;
-        }
-
-        //        Entry&operator --() {
-//            --owner.contents[index];
-//            return *this;
-//        }
-        public Entry op_decrement() {
-            owner.contents[index]--;
-            return this;
-        }
-
-        //        Entry&operator ++() {
-//            ++owner.contents[index];
-//            return *this;
-//        }
-        public Entry op_increment() {
-            //TODO
-        }
-
-    }
-
     //    const Entry operator[](Array<unsigned>sortedCombination) const {
 //        return Entry(*this, encode(sortedCombination));
 //    }

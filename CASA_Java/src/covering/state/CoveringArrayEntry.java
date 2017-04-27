@@ -2,77 +2,81 @@ package covering.state;
 
 import common.utility.Combinadic;
 import covering.bookkeeping.Coverage;
+import covering.bookkeeping.Entry;
+import javafx.util.Pair;
 import sat.InputKnown;
 
+import java.util.Map;
 import java.util.Vector;
 
 class CoveringArrayEntry {
 
-    CoveringArray owner;
-    int row;
-    int option;
+    private CoveringArray owner;
+    private Integer row;
+    private Integer option;
 
-    public CoveringArrayEntry(CoveringArray owner, int row, int option) {
+    public CoveringArrayEntry(CoveringArray owner, Integer row, Integer option) {
         this.owner = owner;
         this.row = row;
         this.option = option;
     }
 
-    private void updateTracking(int value) {
-        if (owner.getEntry(row, option).getValue() == value) {
+    @SuppressWarnings("Duplicates")
+    private void updateTracking(Integer value) {
+        if (owner.getEntry(row, option).op_getValue() == value) {
             return;
         }
-        Coverage coverage = owner.getCoverage();
-        int strength = coverage.getStrength();
-        int limit = coverage.getOptions().getSize();
-        Vector<Integer> firsts = coverage.getOptions().getFirstSymbols();
-        Vector<Integer> counts = coverage.getOptions().getSymbolCounts();
+        int strength = owner.getCoverage().getStrength();
+        int limit = owner.getCoverage().getOptions().getSize();
+        Vector<Integer> firsts = owner.getCoverage().getOptions().getFirstSymbols();
+        Vector<Integer> counts = owner.getCoverage().getOptions().getSymbolCounts();
         int hint = 0;
-        int[] columns = Combinadic.begin(strength);
-        int[] symbols = new int[strength];
-        for (;
-             columns[strength - 1] < limit ;
-            Combinadic.next(columns), ++hint){
-            for (int i = strength; i-- != 0; ) {
+        for (int[] columns = Combinadic.begin(strength),
+             symbols = new int[strength];
+             columns[strength - 1] < limit;
+             Combinadic.next(columns), ++hint) {
+            for (int i = strength; i > 0; i--) {
                 if (columns[i] == option) {
-                    for (int j = strength; j-- != 0; ) {
-                        symbols[j] = owner.getEntry(row, columns[j]).getValue();
+                    for (int j = strength; j > 0; j--) {
+                        symbols[j] = owner.getEntry(row, columns[j]).op_getValue();
                     }
-                    InputKnown oldKnown (symbols);
+
+                    // TODO need SAT
+                    InputKnown oldKnown(symbols);
                     if (owner.getSolver().solve(oldKnown) &&
-                            --coverage.hintGet(hint, columns, firsts, counts, symbols) ==
-                                    0){
+                            owner.getCoverage().hintGet(hint, arrToVect(columns),
+                                    firsts, counts, arrToVect(symbols)).op_decrement().equals(false)) {
                         --owner.coverageCount;
                         if (owner.trackingNoncoverage) {
-                            Array<int> separateCopyOfSymbols (symbols.getSize());
-                            for (int j = symbols.getSize(); j--; ) {
+                            int[] separateCopyOfSymbols = new int[symbols.length];
+                            for (int j = symbols.length; j > 0; j--) {
                                 separateCopyOfSymbols[j] = symbols[j];
                             }
-                            bool successfulInsertion =
-                                    owner.noncoverage->insert(separateCopyOfSymbols).second;
+                            boolean successfulInsertion =
+                                    //TODO
+                                    //owner.noncoverage->insert(separateCopyOfSymbols).second;
                             assert (successfulInsertion);
-                            (void) successfulInsertion; // This is unused without assertions.
                         }
-                    }else{
+                    } else {
                         --owner.multipleCoverageCount;
                     }
                     symbols[i] = value;
-                    InputKnown newKnown (symbols);
-                    if (( * owner.solver) (newKnown) &&
-                            ++coverage.hintGet(hint, columns, firsts, counts, symbols) ==
-                                    1){
-                        ++coverageCount;
+                    InputKnown newKnown(symbols);
+                    if (owner.getSolver().solve(newKnown) &&
+                            owner.getCoverage().hintGet(hint, arrToVect(columns),
+                                    firsts, counts, arrToVect(symbols)).op_increment().equals(true)){
+                        ++owner.coverageCount;
                         if (owner.trackingNoncoverage) {
-                            Array<int> separateCopyOfSymbols (symbols.getSize());
-                            for (int j = symbols.getSize(); j--; ) {
+                            int[] separateCopyOfSymbols = new int[symbols.length];
+                            for (int j = symbols.length; j > 0; j--) {
                                 separateCopyOfSymbols[j] = symbols[j];
                             }
-                            bool successfulErasure =
-                                    (bool) owner.noncoverage->erase(separateCopyOfSymbols);
+                            boolean successfulErasure =
+                                    //TODO
+                                    //(bool) owner.noncoverage->erase(separateCopyOfSymbols);
                             assert (successfulErasure);
-                            (void) successfulErasure; // This is unused without assertions.
                         }
-                    }else{
+                    } else {
                         ++owner.multipleCoverageCount;
                     }
                     break;
@@ -80,8 +84,14 @@ class CoveringArrayEntry {
             }
         }
         owner.autoFinalizeSubstitutions();
-  /*
- */
+    }
+
+    private Vector<Integer> arrToVect(int[] arr) {
+        Vector<Integer> vect = new Vector<>(arr.length);
+        for (int i = 0; i < arr.length; i++) {
+            vect.set(i, arr[i]);
+        }
+        return vect;
     }
 
     //C_CODE
@@ -94,9 +104,11 @@ class CoveringArrayEntry {
 //                    owner.array[row][option] :
 //                    substitution->second;
 //        }
-    public int getValue() {
+    public Integer op_getValue() {
         //TODO
-        return 0;
+        Map<RowOptionPair, Integer> substitution = //TODO
+        Map<RowOptionPair, Integer> end = //TODO
+        return (substitution.equals(end)) ? owner.getArrayValue(row, option) : substitution.TODO;
     }
 
     //C_CODE
@@ -107,12 +119,13 @@ class CoveringArrayEntry {
 //            (*owner.substitutions)[pair<int, int>(row, option)] = value;
 //            return *this;
 //        }
-    public CoveringArrayEntry setValue(int value) { //TODO
+    public CoveringArrayEntry op_setValue(Integer value) {
+        //TODO
         if (owner.trackingCoverage) {
             updateTracking(value);
         }
         owner.substitutions.set(new RowOptionPair(row, option))
-
+        return this;
     }
 }
 

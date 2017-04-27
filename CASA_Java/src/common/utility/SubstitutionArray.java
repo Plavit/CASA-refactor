@@ -174,7 +174,7 @@ public class SubstitutionArray<T> extends Array<T> {
             referenceCount = 1;
             substitutions = null;
         }
-        fill(filler);
+        super.fill(filler);
     }
 
     public void finalizeSubstitutions() {
