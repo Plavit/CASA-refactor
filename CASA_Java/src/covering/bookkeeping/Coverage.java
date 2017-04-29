@@ -21,105 +21,108 @@ import common.utility.Combinadic;
 import common.utility.PascalTriangle;
 import common.utility.SubstitutionArray;
 
-import java.util.Vector;
+import java.util.Arrays;
 
 public class Coverage<T> {
 
-    protected Integer strength;
-    protected Options options;
-    protected Vector<Integer> offsets;
-    protected SubstitutionArray<T> contents;
+    private Integer strength;
+    private Options options;
+    private int[] offsets;
+    private SubstitutionArray<T> contents;
 
     public Coverage(Integer strength, Options options) {
         this.strength = strength;
         this.options = options;
-        this.offsets = new Vector<>(PascalTriangle.nCr(options.getSize(), strength));
-        Integer size = 0;
-        Integer offsetIndex = 0;
-        for () {//TODO iterators
-            Integer blockSize = 1;
+        this.offsets = new int[PascalTriangle.nCr(options.getSize(), strength)];
+        int size = 0;
+        int offsetIndex = 0;
+        for (int[] columns = Combinadic.begin(strength);
+                columns[strength - 1] < options.getSize();
+                Combinadic.next(columns)) {
+            int blockSize = 1;
             for (int i = strength; i > 0; i--) {
-                blockSize *= options.getSymbolCount(columns.get(i));
+                blockSize *= options.getSymbolCount(columns[i]);
             }
-            offsets.set(offsetIndex, size);
+            offsets[offsetIndex] = size;
             offsetIndex++;
+            size += blockSize;
         }
         contents = new SubstitutionArray<>(size);
     }
 
-    public Coverage(Coverage copy) {
+    public Coverage(Coverage<T> copy) {
         this.strength = copy.getStrength();
         this.options = copy.getOptions();
-        this.offsets = copy.getOffsets();
-        this.contents = copy.getContents();
+        this.offsets = copy.offsets;
+        this.contents = copy.contents;
     }
 
-    protected Integer encode(Integer indexHint,
-                             Vector<Integer> columnsHint,
-                             Vector<Integer> firstsHint,
-                             Vector<Integer> countsHint,
-                             Vector<Integer> sortedCombination) {
-        assert (sortedCombination.size() == strength);
-        assert (indexHint < offsets.size());
-        Integer offset = offsets.get(indexHint);
-        Integer index = 0;
+    private int encode(int indexHint,
+                         int[] columnsHint,
+                         int[] firstsHint,
+                         int[] countsHint,
+                         int[] sortedCombination) {
+        assert (sortedCombination.length == strength);
+        assert (indexHint < offsets.length);
+        int offset = offsets[indexHint];
+        int index = 0;
         for (int i = strength; i > 0; i--) {
-            int column = columnsHint.get(i);
-            int base = firstsHint.get(column);
-            int count = countsHint.get(column);
+            int column = columnsHint[i];
+            int base = firstsHint[column];
+            int count = countsHint[column];
             index *= count;
-            index += sortedCombination.get(i) - base;
+            index += sortedCombination[i] - base;
         }
         return offset + index;
     }
 
-    protected Integer encode(Vector<Integer> columnsHint,
-                             Vector<Integer> firstsHint,
-                             Vector<Integer> countsHint,
-                             Vector<Integer> sortedCombination) {
-        return encode
-                (Combinadic.encode(columnsHint),
+    private int encode(int[] columnsHint,
+                             int[] firstsHint,
+                             int[] countsHint,
+                             int[] sortedCombination) {
+        return encode(Combinadic.encode(columnsHint),
                         columnsHint,
                         firstsHint,
                         countsHint,
                         sortedCombination);
     }
 
-    protected Integer encode(Vector<Integer> sortedCombination) {
-        assert (sortedCombination.size() == strength);
-        Vector<Integer> columns = new Vector<>(strength);
+    private int encode(int[] sortedCombination) {
+        assert (sortedCombination.length == strength);
+        int[] columns = new int[strength];
         for (int i = strength; i > 0; i--) {
-            columns.set(i, options.getOption(sortedCombination.get(i)));
+            columns[i] = options.getOption(sortedCombination[i]);
         }
         int offsetIndex = Combinadic.encode(columns);
-        assert (offsetIndex < offsets.size());
-        int offset = offsets.get(offsetIndex);
+        assert (offsetIndex < offsets.length);
+        int offset = offsets[offsetIndex];
         int index = 0;
         for (int i = strength; i > 0; i--) {
-            int column = columns.get(i);
+            int column = columns[i];
             int base = options.getFirstSymbol(column);
             int count = options.getSymbolCount(column);
             index *= count;
-            index += sortedCombination.get(i) - base;
+            index += sortedCombination[i] - base;
         }
         return offset + index;
     }
 
-    protected Vector<Integer> decode(Integer encoding) {
-        int offsetIndex = offsets.size();
-        while (offsets.get(--offsetIndex) > encoding) ;
-        int index = encoding - offsets.get(offsetIndex);
-        Vector<Integer> columns = Combinadic.decode(offsetIndex, strength);
-        Vector<Integer> result = new Vector<>(strength);
+    private int[] decode(int encoding) {
+        int offsetIndex = offsets.length;
+        while (offsets[--offsetIndex] > encoding) ;
+        int index = encoding - offsets[offsetIndex];
+        int[] columns = Combinadic.decode(offsetIndex, strength);
+        int[] result = new int[strength];
         for (int i = 0; i < strength; ++i) {
-            int column = columns.get(i);
+            int column = columns[i];
             int base = options.getFirstSymbol(column);
             int count = options.getSymbolCount(column);
             int digit = index % count;
             index -= digit;
             index /= count;
-            result.set(i, base + digit);
+            result[i] = base + digit;
         }
+        /* TODO: tohle muze zbytecne spomalovat */
         assert (encode(result) == encoding);
         return result;
     }
@@ -132,37 +135,29 @@ public class Coverage<T> {
         return options;
     }
 
-    public Vector<Integer> getOffsets() {
-        return offsets;
-    }
-
-    public SubstitutionArray<T> getContents() {
-        return contents;
-    }
-
     //    const Entry operator[](Array<unsigned>sortedCombination) const {
 //        return Entry(*this, encode(sortedCombination));
 //    }
-    public Entry op_getEntry(Vector<Integer> sortedCombination) {
+    public Entry op_getEntry(int[] sortedCombination) {
         return new Entry(this, encode(sortedCombination));
     }
 
     public Entry hintGet(Integer indexHint,
-                         Vector<Integer> columnsHint,
-                         Vector<Integer> firstsHint,
-                         Vector<Integer> countsHint,
-                         Vector<Integer> sortedCombination) {
+                         int[] columnsHint,
+                         int[] firstsHint,
+                         int[] countsHint,
+                         int[] sortedCombination) {
         return new Entry(this, encode(indexHint, columnsHint, firstsHint, countsHint, sortedCombination));
     }
 
-    public Entry hintGet(Vector<Integer> columnsHint,
-                         Vector<Integer> firstsHint,
-                         Vector<Integer> countsHint,
-                         Vector<Integer> sortedCombination) {
+    public Entry hintGet(int[] columnsHint,
+                         int[] firstsHint,
+                         int[] countsHint,
+                         int[] sortedCombination) {
         return new Entry(this, encode(columnsHint, firstsHint, countsHint, sortedCombination));
     }
 
-    //TODO iterators
+    //TODO iterators begin() & end() or implement then better way
 
     public Integer getSize() {
         return contents.getSize();

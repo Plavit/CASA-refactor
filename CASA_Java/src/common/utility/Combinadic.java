@@ -85,7 +85,7 @@ public class Combinadic {
         return new Pair(member, contribution);
     }
 
-    public static Integer encode(int[] sortedSubset) {
+    public static int encode(int[] sortedSubset) {
         int result = 0;
         for (int i = 0; i < sortedSubset.length; ++i) {
             result += PascalTriangle.nCr(sortedSubset[i], i + 1);
