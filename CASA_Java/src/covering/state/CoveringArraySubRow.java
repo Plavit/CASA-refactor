@@ -52,7 +52,7 @@ class CoveringArraySubRow {
         Vector<Integer> counts = options.getSymbolCounts();
         CombinadicIterator combo = new CombinadicIterator(
                 limit, strength, vectToArr(changedColumns.getArray()));
-        //TODO
+        //TODO ???
         for (TODO;
         combo.op_bool();
         combo.op_pre_inc()) {
@@ -67,6 +67,7 @@ class CoveringArraySubRow {
             Entry<Integer> lost =
                     owner.getCoverage().hintGet(updateColumns, firsts, counts, arrToVect(oldSymbols));
             //TODO ???
+            //assert(lost);
             assert(lost.op_getContent() > 0); // Assert that what we lost is something we had to lose.
             //TODO
             lost.op_decrement();
@@ -77,9 +78,9 @@ class CoveringArraySubRow {
                     for (int j = oldSymbols.length; j > 0; j--) {
                         separateCopyOfSymbols[j] = oldSymbols[j];
                     }
+                    //TODO
+                    //bool successfulInsertion = owner.noncoverage->insert(separateCopyOfSymbols).second;
                     boolean successfulInsertion =
-                            //TODO
-                            //owner.noncoverage->insert(separateCopyOfSymbols).second;
                     assert(successfulInsertion);
                 }
             } else {
@@ -96,9 +97,9 @@ class CoveringArraySubRow {
                     for (int j = newSymbols.length; j > 0; j--) {
                         separateCopyOfSymbols[j] = newSymbols[j];
                     }
+                    //TODO
+                    //bool successfulErasure = (bool)owner.noncoverage->erase(separateCopyOfSymbols);
                     boolean successfulErasure =
-                            //TODO
-                            //(bool)owner.noncoverage->erase(separateCopyOfSymbols);
                     assert(successfulErasure);
                 }
             } else {

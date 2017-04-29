@@ -61,9 +61,9 @@ class CoveringArrayRow {
                     for (int j = oldSymbols.length; j > 0; j--) {
                         separateCopyOfSymbols[j] = oldSymbols[j];
                     }
-                    boolean successfulInsertion =
                     //TODO
-                    //owner.noncoverage->insert(separateCopyOfSymbols).second;
+                    //bool successfulInsertion = owner.noncoverage->insert(separateCopyOfSymbols).second;
+                    boolean successfulInsertion =
                     assert (successfulInsertion);
                 }
             } else {
@@ -77,9 +77,9 @@ class CoveringArrayRow {
                     for (int j = newSymbols.length; j > 0; j--) {
                         separateCopyOfSymbols[j] = newSymbols[j];
                     }
-                    boolean successfulErasure =
                     //TODO
-                    //(bool)owner.noncoverage->erase(separateCopyOfSymbols);
+                    //bool successfulErasure = (bool)owner.noncoverage->erase(separateCopyOfSymbols);
+                    boolean successfulErasure =
                     assert (successfulErasure);
                 }
             } else {

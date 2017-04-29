@@ -52,9 +52,10 @@ class CoveringArrayEntry {
                             for (int j = symbols.length; j > 0; j--) {
                                 separateCopyOfSymbols[j] = symbols[j];
                             }
+
+                            //TODO
+                            //bool successfulInsertion = owner.noncoverage->insert(separateCopyOfSymbols).second;
                             boolean successfulInsertion =
-                                    //TODO
-                                    //owner.noncoverage->insert(separateCopyOfSymbols).second;
                             assert (successfulInsertion);
                         }
                     } else {
@@ -71,9 +72,9 @@ class CoveringArrayEntry {
                             for (int j = symbols.length; j > 0; j--) {
                                 separateCopyOfSymbols[j] = symbols[j];
                             }
+                            //TODO
+                            //bool successfulErasure = (bool)owner.noncoverage->erase(separateCopyOfSymbols);
                             boolean successfulErasure =
-                                    //TODO
-                                    //(bool) owner.noncoverage->erase(separateCopyOfSymbols);
                             assert (successfulErasure);
                         }
                     } else {
@@ -106,8 +107,9 @@ class CoveringArrayEntry {
 //        }
     public Integer op_getValue() {
         //TODO
-        Map<RowOptionPair, Integer> substitution = //TODO
-        Map<RowOptionPair, Integer> end = //TODO
+        //http://www.cplusplus.com/reference/map/map/find/   ...find returns iterator
+        Map<RowOptionPair, Integer> substitution = owner.substitutions.getImplementation().TODO
+        Map<RowOptionPair, Integer> end = owner.substitutions.getImplementation().TODO
         return (substitution.equals(end)) ? owner.getArrayValue(row, option) : substitution.TODO;
     }
 

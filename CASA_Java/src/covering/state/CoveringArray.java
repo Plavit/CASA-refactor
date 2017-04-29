@@ -174,7 +174,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
         for (; columns[strength - 1] < limit; Combinadic.next(columns), ++hint) {
             for (int i = array.getSize(); i > 0; i--) {
                 for (int j = strength; j > 0; j--) {
-                    symbols[j] = //TODO
+                    symbols[j] = //TODO don't know what is being dereferenced here
                 }
                 //TODO hintGet returns Entry
                 if (coverage.hintGet(hint, arrToVect(columns), firsts, counts, arrToVect(symbols)).op_getContent().equals(1)) {
@@ -256,6 +256,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
         return trackingCoverage;
     }
 
+    @SuppressWarnings("Duplicates")
     public void setTrackingCoverage(boolean trackingCoverage) {
         if (this.trackingCoverage) {
             this.trackingCoverage = trackingCoverage;
@@ -274,14 +275,45 @@ public class CoveringArray implements Comparable<CoveringArray> {
 
             if (substitutions.getImplementation().size() > 0) {
                 Integer hint = 0;
-                for () {
-                    //TODO iterator
+                int [] columns = Combinadic.begin(strength);
+                int [] symbols = new int[strength];
+                //TODO not sure if arrays are updated in for loop
+                for (; columns[strength - 1] < limit; Combinadic.next(columns), ++hint) {
+                    for (int i = array.getSize(); i > 0; i--) {
+                        for (int j = strength; j > 0; j--) {
+                            symbols[j] = //TODO don't know what is being dereferenced here
+                        }
+                        //TODO object casted to int
+                        int tmp = (int) coverage.hintGet(hint, arrToVect(columns), firsts, counts, arrToVect(symbols)).op_getContent();
+                        int newCoverage = ++tmp;
+                        if (newCoverage == 1) {
+                            ++coverageCount;
+                        }
+                        if (newCoverage > 1) {
+                            ++multipleCoverageCount;
+                        }
+                    }
                 }
             } else {
                 // A special common case where we can bypass the () operator:
                 Integer hint = 0;
-                for () {
-                    //TODO iterator
+                int[] columns = Combinadic.begin(strength);
+                int[] symbols = new int[strength];
+                for (; columns[strength - 1] < limit; Combinadic.next(columns), ++hint) {
+                    for (int i = array.getSize(); i > 0; i--) {
+                        for (int j = strength; j > 0; j--) {
+                            symbols[j] = //TODO don't know what is being dereferenced here
+                        }
+                        //TODO object casted to int
+                        int tmp = (int) coverage.hintGet(hint, arrToVect(columns), firsts, counts, arrToVect(symbols)).op_getContent();
+                        int newCoverage = ++tmp;
+                        if (newCoverage == 1) {
+                            ++coverageCount;
+                        }
+                        if (newCoverage > 1) {
+                            ++multipleCoverageCount;
+                        }
+                    }
                 }
             }
         }
