@@ -107,6 +107,10 @@ public class Array<T> {
         return referenceCount;
     }
 
+    public void setValueOnIntex(T value, Integer index){
+        this.array.set(index,value);
+    }
+
     //C_CODE
 //    template<class T,class COMPARE = std::less<T> >class ArrayComparator {
 //        public:

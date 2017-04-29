@@ -21,8 +21,6 @@ import common.utility.Combinadic;
 import common.utility.PascalTriangle;
 import common.utility.SubstitutionArray;
 
-import java.util.Arrays;
-
 public class Coverage<T> {
 
     private Integer strength;
@@ -57,7 +55,7 @@ public class Coverage<T> {
         this.contents = copy.contents;
     }
 
-    private int encode(int indexHint,
+    public int encode(int indexHint,
                          int[] columnsHint,
                          int[] firstsHint,
                          int[] countsHint,
@@ -76,7 +74,7 @@ public class Coverage<T> {
         return offset + index;
     }
 
-    private int encode(int[] columnsHint,
+    public int encode(int[] columnsHint,
                              int[] firstsHint,
                              int[] countsHint,
                              int[] sortedCombination) {
@@ -87,7 +85,7 @@ public class Coverage<T> {
                         sortedCombination);
     }
 
-    private int encode(int[] sortedCombination) {
+    public int encode(int[] sortedCombination) {
         assert (sortedCombination.length == strength);
         int[] columns = new int[strength];
         for (int i = strength; i > 0; i--) {
@@ -107,7 +105,7 @@ public class Coverage<T> {
         return offset + index;
     }
 
-    private int[] decode(int encoding) {
+    public int[] decode(int encoding) {
         int offsetIndex = offsets.length;
         while (offsets[--offsetIndex] > encoding) ;
         int index = encoding - offsets[offsetIndex];
@@ -165,5 +163,33 @@ public class Coverage<T> {
 
     public void fill(T filler) {
         contents.fill(filler);
+    }
+
+    public void setStrength(Integer strength) {
+        this.strength = strength;
+    }
+
+    public void setOptions(Options options) {
+        this.options = options;
+    }
+
+    public int[] getOffsets() {
+        return offsets;
+    }
+
+    public void setOffsets(int[] offsets) {
+        this.offsets = offsets;
+    }
+
+    public SubstitutionArray<T> getContents() {
+        return contents;
+    }
+
+    public void setContents(SubstitutionArray<T> contents) {
+        this.contents = contents;
+    }
+
+    public void setValueInContents(T value, Integer index){
+        this.contents.setValueOnIntex(value,index);
     }
 }
