@@ -17,142 +17,108 @@ package common.utility;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.RandomAccess;
 
-public class Array<T> {
+class SharedArray<T extends Comparable> implements RandomAccess {
+    private ArrayList<T> array;
+    private int references;
 
-    protected int size;
-    protected Vector<T> array;
-    protected int referenceCount;
-
-    //C_CODE
-//    void destroy() {
-//        if (referenceCount && !(--*referenceCount)) {
-//            delete[] array;
-//            delete referenceCount;
-//        }
-//        array = NULL;
-//    }
-    //TODO ???
-    protected void destroy() {
-        if (referenceCount > 0) {
-            this.size = 0;
-            this.array = null;
-            this.referenceCount = 0;
-        }
+    public SharedArray(int count) {
+        array = new ArrayList<>(count);
+        references = 1;
     }
 
-    public Array() {
-        this.size = 0;
-        this.array = null;
-        this.referenceCount = 0;
-    }
-
-    public Array(int size) {
-        this.size = size;
-        this.array = new Vector<>(size);
-        this.referenceCount = 1;
-    }
-
-    public Array(Vector<T> raw, int size) {
-        this.size = size;
-        this.array = new Vector<>(size);
-        this.referenceCount = 1;
-        this.array.addAll(raw);
-    }
-
-    public Array(Array<T> copy) {
-        this.size = copy.getSize();
-        this.array = copy.getArray();
-        this.referenceCount = copy.getReferenceCount();
-        if (referenceCount > 0) {
-            ++referenceCount;
-        }
-    }
-
-    //C_CODE
-//    Array&operator =(const Array&copy) {
-//        destroy();
-//        size = copy.size;
-//        array = copy.array;
-//        referenceCount = copy.referenceCount;
-//        ++*referenceCount;
-//        return *this;
-//    }
-
-    public Array op_arrayCopy(Array<T> copy) {
-        destroy();
-        this.size = copy.getSize();
-        this.array = copy.getArray();
-        this.referenceCount = copy.getReferenceCount();
-        ++referenceCount;
-        return this;
-    }
-
-    public void fill(T filler) {
-        for (int i = size; i > 0; i--) {
-            this.array.set(i, filler);
-        }
+    private SharedArray(ArrayList<T> array) {
+        this.array = new ArrayList<>(array);
+        references = 1;
     }
 
     public int getSize() {
-        return size;
+        return array.size();
     }
 
-    public Vector<T> getArray() {
-        return array;
+    public T get(int index) {
+        assert references > 0;
+        return array.get(index);
     }
 
-    public int getReferenceCount() {
-        return referenceCount;
+    public void set(int index, T value) {
+        assert references > 0;
+        array.set(index, value);
     }
 
-    //C_CODE
-//    template<class T,class COMPARE = std::less<T> >class ArrayComparator {
-//        public:
-//        bool operator()(const Array<T>&left, const Array<T>&right) const {
-//            static COMPARE compare;
-//            unsigned leftSize = left.getSize();
-//            unsigned rightSize = right.getSize();
-//            if (leftSize < rightSize) {
-//                return true;
-//            }
-//            if (leftSize > rightSize) {
-//                return false;
-//            }
-//            for (unsigned i = 0; i < leftSize; ++i) {
-//                if (compare(left[i], right[i])) {
-//                    return true;
-//                }
-//                if (compare(right[i], left[i])) {
-//                    return false;
-//                }
-//            }
-//            return false;
-//        }
-//    };
-    class ArrayComparator<T extends Comparable<T>> {
-
-        private Pless<T> comparator = new Pless<>();
-
-        public boolean op_compare(Array<T> left, Array<T> right) {
-            int leftSize = left.getSize();
-            int rightSize = right.getSize();
-            if (leftSize < rightSize) {
-                return true;
-            }
-            if (leftSize > rightSize) {
-                return false;
-            }
-            for (int i = 0; i < leftSize; ++i) {
-                if (comparator.compare(left.getArray().get(i), right.getArray().get(i))) {
-                    return true;
-                }
-                if (comparator.compare(right.getArray().get(i), left.getArray().get(i))) {
-                    return false;
-                }
-            }
-            return false;
+    void fill(final T filler) {
+        assert references > 0;
+        final int size = array.size();
+        for (int i=0; i < size; i++) {
+            array.set(i, filler);
         }
     }
+
+    synchronized void ref() {
+        assert references > 0;
+        references++;
+    }
+
+    synchronized void unref() {
+        assert references > 0;
+        references--;
+        if (references == 0)
+            array = null;
+    }
+
+    synchronized SharedArray<T> cloneIfMultiref() {
+        assert references > 0;
+        if (references > 1) {
+            references--;
+            return new SharedArray<T>(array);
+        }
+        return this;
+    }
+}
+
+public class Array<T extends Comparable<T>> implements Comparable<Array<T>> {
+    protected SharedArray<T> sharedArray;
+
+    public Array(int size) {
+        sharedArray = new SharedArray<>(size);
+    }
+
+    public int getSize() {
+        return sharedArray.getSize();
+    }
+
+    public T get(int index) {
+        return sharedArray.get(index);
+    }
+
+    public void set(int index, T value) {
+        sharedArray.set(index, value);
+    }
+
+    public void fill(T filler) {
+        sharedArray.fill(filler);
+    }
+
+    @Override
+    public int compareTo(Array<T> otherArray) {
+        SharedArray<T> other = otherArray.sharedArray;
+        int size = sharedArray.getSize();
+        if (size < other.getSize()) {
+            return -1;
+        }
+        if (size > other.getSize()) {
+            return 1;
+        }
+        int res = 0;
+        for (int i = 0; i < size; ++i) {
+            res = sharedArray.get(i).compareTo(other.get(i));
+            if (res != 0)
+                break;
+        }
+        return res;
+    }
+
+
 }

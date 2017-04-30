@@ -3,7 +3,6 @@ package covering.state;
 import common.utility.Combinadic;
 import covering.bookkeeping.Coverage;
 import covering.bookkeeping.Entry;
-import javafx.util.Pair;
 import sat.InputKnown;
 
 import java.util.Map;

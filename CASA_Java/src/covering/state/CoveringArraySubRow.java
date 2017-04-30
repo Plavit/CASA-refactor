@@ -36,22 +36,22 @@ class CoveringArraySubRow {
             oldRow[i] = owner.getEntry(row, i).op_getValue();
         }
         for (int i = limit, j = values.getSize(); i > 0; i--) {
-            if ((j > 0) && (columns.getArray().get(j - 1) == i)) {
-                newRow[i] = values.getArray().get(--j);
+            if ((j > 0) && (columns.get(j - 1) == i)) {
+                newRow[i] = values.get(--j);
             } else {
                 newRow[i] = oldRow[i];
             }
         }
         for (int i = 0; i < limit; ++i) {
             if (newRow[i] != oldRow[i]) {
-                changedColumns.getArray().set(changes++, i);
+                changedColumns.set(changes++, i);
             }
         }
-        changedColumns = new Array<>(changedColumns.getArray(), changes);
+        changedColumns = new Array<>(changedColumns, changes);
         Vector<Integer> firsts = options.getFirstSymbols();
         Vector<Integer> counts = options.getSymbolCounts();
         CombinadicIterator combo = new CombinadicIterator(
-                limit, strength, vectToArr(changedColumns.getArray()));
+                limit, strength, vectToArr(changedColumns));
         //TODO ???
         for (TODO;
         combo.op_bool();
@@ -149,11 +149,11 @@ class CoveringArraySubRow {
         Array<Integer> result = new Array<>(size);
         RowOptionPair key = new RowOptionPair(row, 0);
         for (int i = size; i > 0; i--) {
-            key.setOption(columns.getArray().get(i));
+            key.setOption(columns.get(i));
             Map<RowOptionPair, Integer> substitution = owner.TODO;
             //TODO ???
-            result.getArray().set(i, (substitution.equals(end)) ?
-                    owner.array.getArray().get(row).getArray().get(key.getOption()) :
+            result.set(i, (substitution.equals(end)) ?
+                    owner.array.get(row).get(key.getOption()) :
             substitution.TODO);
         }
         return result;
@@ -180,9 +180,9 @@ class CoveringArraySubRow {
         }
         RowOptionPair key = new RowOptionPair(row, 0);
         for (int i = columns.getSize(); i > 0; i--) {
-            key.setOption(columns.getArray().get(i));
+            key.setOption(columns.get(i));
             //TODO ???
-            owner.substitutions.getImplementation().get(key) = values.getArray().get(i);
+            owner.substitutions.getImplementation().get(key) = values.get(i);
             }
         return this;
     }

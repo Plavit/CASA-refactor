@@ -88,17 +88,17 @@ public class CoveringArray implements Comparable<CoveringArray> {
     public CoveringArray(Integer rows, Integer strength, Options options, SATSolver solver) {
 
         this.array = new Array<>(rows);
-        this.substitutions = new Lazy(new TreeMap<RowOptionPair, Integer>());
+        this.substitutions = new Lazy<>(new TreeMap<>());
         this.solver = solver;
         this.trackingCoverage = false;
         this.trackingNoncoverage = false;
         this.coverageCount = 0;
         this.multipleCoverageCount = 0;
-        this.coverage = new Coverage(strength, options);
+        this.coverage = new Coverage<>(strength, options);
 
-        this.noncoverage = new Lazy(new TreeSet<Array<Integer>>());
+        this.noncoverage = new Lazy<>(new TreeSet<>());
         for (int i = rows; i > 0; i--) {
-            array.getArray().set(i, new Array<>(options.getSize()));
+            array.set(i, new Array<>(options.getSize()));
         }
         coverage.fill(0);
     }
@@ -114,7 +114,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
         this.multipleCoverageCount = copy.multipleCoverageCount;
         this.coverage = new Coverage<>(copy.coverage);
         this.noncoverage = new Lazy<>(copy.noncoverage);
-        assert (!array.getArray().isEmpty());
+        assert (!array.isEmpty());
     }
 
     public Integer getRows() {
@@ -122,17 +122,17 @@ public class CoveringArray implements Comparable<CoveringArray> {
     }
 
     public Integer getOptions() {
-        return (array.getSize() != 0) ? array.getArray().get(0).getSize() : 0;
+        return (array.getSize() != 0) ? array.get(0).getSize() : 0;
     }
 
     public void setBackingArrayEntry(Integer row, Integer option, Integer value) {
         assert (!(substitutions.getImplementation().size() > 0));
-        array.getArray().get(row).getArray().set(option, value);
+        array.get(row).set(option, value);
     }
 
     public void setBackingArrayRow(Integer row, Array<Integer> value) {
         assert (!(substitutions.getImplementation().size() > 0));
-        array.getArray().set(row, value);
+        array.set(row, value);
     }
 
     CoveringArrayEntry getEntry(Integer row, Integer option) {
@@ -177,10 +177,11 @@ public class CoveringArray implements Comparable<CoveringArray> {
                     symbols[j] = //TODO don't know what is being dereferenced here
                 }
                 //TODO hintGet returns Entry
+                Array<int[]> x = new Array<>();
                 if (coverage.hintGet(hint, arrToVect(columns), firsts, counts, arrToVect(symbols)).op_getContent().equals(1)) {
-                    Integer tmp = result.getArray().get(i);
+                    Integer tmp = result.get(i);
                     tmp++;
-                    result.getArray().set(i, tmp);
+                    result.set(i, tmp);
                 }
             }
         }
@@ -234,9 +235,9 @@ public class CoveringArray implements Comparable<CoveringArray> {
         Integer inner = getOptions();
         Array<Array<Integer>> replacement = new Array<>(outer);
         for (int i = outer; i > 0; i--) {
-            replacement.getArray().set(i, new Array<>(inner));
+            replacement.set(i, new Array<>(inner));
             for (int j = inner; j > 0; j--) {
-                replacement.getArray().get(i).getArray().set(j, array.getArray().get(i).getArray().get(j));
+                replacement.get(i).set(j, array.get(i).get(j));
             }
         }
         for () {
@@ -357,6 +358,6 @@ public class CoveringArray implements Comparable<CoveringArray> {
     }
 
     public Integer getArrayValue(Integer row, Integer option) {
-        return array.getArray().get(row).getArray().get(option);
+        return array.get(row).get(option);
     }
 }
