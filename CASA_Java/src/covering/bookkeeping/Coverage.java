@@ -190,6 +190,6 @@ public class Coverage<T> {
     }
 
     public void setValueInContents(T value, Integer index){
-        this.contents.setValueOnIntex(value,index);
+        this.contents.set(index, value);
     }
 }
