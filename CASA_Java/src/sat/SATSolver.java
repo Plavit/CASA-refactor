@@ -8,4 +8,8 @@ public class SATSolver {
         // TODO
         return false;
     }
+
+    public void addClause(InputClause atLeast) {
+
+    }
 }
