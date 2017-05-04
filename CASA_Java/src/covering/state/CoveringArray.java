@@ -135,15 +135,15 @@ public class CoveringArray implements Comparable<CoveringArray> {
         array.set(row, value);
     }
 
-    public CoveringArrayEntry getEntry(Integer row, Integer option) {
+    CoveringArrayEntry getEntry(Integer row, Integer option) {
         return new CoveringArrayEntry(this, row, option);
     }
 
-    public CoveringArrayRow getRow(Integer row) {
+    CoveringArrayRow getRow(Integer row) {
         return new CoveringArrayRow(this, row);
     }
 
-    public CoveringArraySubRow getSubRow(Integer row, Array<Integer> colums) {
+    CoveringArraySubRow getSubRow(Integer row, Array<Integer> colums) {
         return new CoveringArraySubRow(this, row, colums);
     }
 
