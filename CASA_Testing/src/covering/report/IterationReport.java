@@ -1,4 +1,4 @@
-package search;
+package covering.report;
 
 // Copyright 2008, 2009 Brady J. Garvin
 
@@ -17,12 +17,26 @@ package search;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- *  Decides when a search should terminate because it has found a solution.  In
- *  some applications the goal's RTTI is also used to inform other search objects
- *  (such as the heuristic).
- */
+import covering.cost.CoverageCost;
+import covering.state.CoveringArray;
+import events.Listener;
+import search.SearchFinish;
 
-public interface Goal<STATE> {
-    boolean isGoal(final STATE state);
+
+public class IterationReport extends Listener<SearchFinish<CoveringArray, CoverageCost>> {
+
+    protected int total;
+
+    public IterationReport() {
+        this.total = 0;
+    }
+
+    @Override
+    public void signal(SearchFinish<CoveringArray, CoverageCost> finish) {
+        //TODO those iterators ...
+    }
+
+    public int getTotal() {
+        return total;
+    }
 }

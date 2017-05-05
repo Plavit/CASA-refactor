@@ -17,12 +17,27 @@ package search;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- *  Decides when a search should terminate because it has found a solution.  In
- *  some applications the goal's RTTI is also used to inform other search objects
- *  (such as the heuristic).
- */
 
-public interface Goal<STATE> {
-    boolean isGoal(final STATE state);
+import java.util.NavigableSet;
+import java.util.Set;
+
+/**
+ * A message broadcast when a search finishes (even if it was unsuccessful). 
+ */
+public class SearchFinish {
+    public final Search source;
+    public NavigableSet<Node> results;
+    public long iterations;
+    public long maxIterations;
+
+    public SearchFinish(
+            final Search source,
+            final NavigableSet<Node> results,
+            long iterations,
+            long maxIterations) {
+        this.source = source;
+        this.results = results;
+        this.iterations = iterations;
+        this.maxIterations = maxIterations;
+    }
 }

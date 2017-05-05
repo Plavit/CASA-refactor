@@ -1,4 +1,4 @@
-package search;
+package algorithms;
 
 // Copyright 2008, 2009 Brady J. Garvin
 
@@ -17,12 +17,8 @@ package search;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- *  Decides when a search should terminate because it has found a solution.  In
- *  some applications the goal's RTTI is also used to inform other search objects
- *  (such as the heuristic).
- */
+public abstract class Partitioner {
 
-public interface Goal<STATE> {
-    boolean isGoal(final STATE state);
+    //virtual unsigned operator ()(unsigned offset, unsigned size) = 0;
+    public abstract int op_call(int offset, int size);
 }

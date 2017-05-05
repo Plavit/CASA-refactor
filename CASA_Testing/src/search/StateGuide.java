@@ -17,12 +17,18 @@ package search;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- *  Decides when a search should terminate because it has found a solution.  In
- *  some applications the goal's RTTI is also used to inform other search objects
- *  (such as the heuristic).
- */
+import covering.cost.CoverageCost;
 
-public interface Goal<STATE> {
-    boolean isGoal(final STATE state);
+/**
+ * A specialized guide that ranks strictly by the states' heuristic estimates.
+ */
+public class StateGuide implements Guide
+{
+    public CoverageCost rankStart(final Node start) {
+        return start.getEstimate();
+    }
+
+    public CoverageCost rank(final Node node) {
+        return node.getEstimate();
+    }
 }

@@ -17,12 +17,16 @@ package search;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- *  Decides when a search should terminate because it has found a solution.  In
- *  some applications the goal's RTTI is also used to inform other search objects
- *  (such as the heuristic).
- */
 
-public interface Goal<STATE> {
-    boolean isGoal(final STATE state);
-}
+import covering.cost.CoverageCost;
+
+/**
+ * Decides the order in which states are explored.  Usual policies include
+ * visiting the heuristically best states first, visiting states whose distance
+ * from the start state added to the heuristic is minimal, visiting states
+ * randomly, etc.  There is provision to treat start states specially.
+ */
+public interface Guide {
+    CoverageCost rankStart(final Node start);
+    CoverageCost rank(final Node node);
+};

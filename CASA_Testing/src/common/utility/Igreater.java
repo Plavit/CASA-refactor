@@ -1,4 +1,4 @@
-package search;
+package common.utility;
 
 // Copyright 2008, 2009 Brady J. Garvin
 
@@ -18,11 +18,18 @@ package search;
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *  Decides when a search should terminate because it has found a solution.  In
- *  some applications the goal's RTTI is also used to inform other search objects
- *  (such as the heuristic).
+ * Compares two indices by the elements in an array at those locations.  Returns
+ * true if the left indexth element is greater than the right indexth element.
  */
+public class Igreater<T> {
 
-public interface Goal<STATE> {
-    boolean isGoal(final STATE state);
+    private Array array;
+
+    public Igreater(Array array) {
+        this.array = array;
+    }
+
+    public boolean op_compare(int left, int right) {
+        return array.get(right).compareTo(array.get(left)) < 0;
+    }
 }
