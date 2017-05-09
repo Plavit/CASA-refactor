@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="CASA"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="CASA">
+				<Option output="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/CASA.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/5.4.0/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/5.4.0/../../../../lib/../include/w32api"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/5.4.0/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/5.4.0/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/5.4.0/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 CASA"/>
+					<CompileFile command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="CASA/fast">
+				<Option output="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/CASA.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/5.4.0/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/5.4.0/../../../../lib/../include/w32api"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/5.4.0/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/5.4.0/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/5.4.0/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 CASA/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/Main.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/algorithms/BinarySearch.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/algorithms/BinarySearch.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/algorithms/BinarySearch.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/Anneal.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/Anneal.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/Anneal.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/AnnealingFilter.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/AnnealingPartitioner.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/AnnealingPartitioner.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/AnnealingPartitioner.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/AnnealingSuccess.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/AnnealingSuccess.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/AnnealingSuccess.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/Bounds.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/Bounds.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/annealing/Bounds.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/bookkeeping/Coverage.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/bookkeeping/Options.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/bookkeeping/Options.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/bookkeeping/Options.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/cost/CoverageCost.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/filter/CoveringArrayAnnealingFilter.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/goal/CoverageGoal.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/heuristic/CoveringArrayHeuristic.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/report/IterationReport.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/space/CoveringArraySpace.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/space/CoveringArraySpace.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/space/CoveringArraySpace.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/space/GraftSpace.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/space/GraftSpace.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/space/GraftSpace.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/space/SingleChangeSpace.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/space/SingleChangeSpace.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/space/SingleChangeSpace.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/state/CoveringArray.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/state/CoveringArray.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/state/CoveringArray.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/state/CoveringArrayEntry.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/state/CoveringArrayRow.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/covering/state/CoveringArraySubRow.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/events/EventSource.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/events/Listener.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/ConstraintFile.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/ConstraintFile.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/ConstraintFile.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/OutputFile.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/OutputFile.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/OutputFile.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/SpecificationFile.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/SpecificationFile.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/SpecificationFile.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/Usage.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/Usage.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/io/Usage.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/sat/SAT.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/sat/SAT.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/sat/SAT.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/Filter.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/Goal.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/GreedyFilter.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/Guide.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/Heuristic.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/Node.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/Search.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/SearchConfiguration.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/SearchFinish.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/SearchIteration.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/StateGuide.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/casa/search/StateSpace.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/posix/getopt.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/Array.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/Combinadic.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/Combinadic.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/Combinadic.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/CombinadicIterator.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/CombinadicIterator.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/CombinadicIterator.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/Lazy.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/PascalTriangle.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/PascalTriangle.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/PascalTriangle.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/SubstitutionArray.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/igreater.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/iless.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/pgreater.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/pless.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/common/utility/relation.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/include/Alg.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/include/BasicHeap.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/include/BoxedVec.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/include/Heap.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/include/Map.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/include/Queue.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/include/Sort.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/include/Vec.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/solver/Solver.C">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/solver/Solver.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/solver/Solver.h">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/minisat/solver/SolverTypes.H">
+			<Option target="CASA"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
