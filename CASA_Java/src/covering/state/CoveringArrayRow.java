@@ -53,8 +53,8 @@ class CoveringArrayRow {
             //TODO need SAT
             InputKnown oldKnown (oldSymbols);
             InputKnown newKnown (newSymbols);
-            if (owner.getCoverage().hintGet(hint, arrToVect(columns),
-                    firsts, counts, arrToVect(oldSymbols)).op_decrement().equals(false)) {
+            if (owner.getCoverage().hintGet(hint, columns,
+                    vectToArr(firsts), vectToArr(counts), oldSymbols).op_decrement().equals(false)) {
                 --owner.coverageCount;
                 if (owner.trackingNoncoverage) {
                     int[] separateCopyOfSymbols = new int[oldSymbols.length];
@@ -69,8 +69,8 @@ class CoveringArrayRow {
             } else {
                 --owner.multipleCoverageCount;
             }
-            if (owner.getCoverage().hintGet(hint, arrToVect(columns),
-                    firsts, counts, arrToVect(newSymbols)).op_increment().equals(true)) {
+            if (owner.getCoverage().hintGet(hint, columns,
+                    vectToArr(firsts), vectToArr(counts), newSymbols).op_increment().equals(true)) {
                 ++owner.coverageCount;
                 if (owner.trackingNoncoverage) {
                     int[] separateCopyOfSymbols = new int[newSymbols.length];
@@ -95,6 +95,14 @@ class CoveringArrayRow {
             vect.set(i, arr[i]);
         }
         return vect;
+    }
+
+    private int[] vectToArr(Vector<Integer> vect) {
+        int[] result = new int[vect.size()];
+        for (int i = vect.size(); i > 0; i--) {
+            result[i] = vect.get(i);
+        }
+        return result;
     }
 
     //C_CODE

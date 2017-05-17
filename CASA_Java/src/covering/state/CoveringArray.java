@@ -177,8 +177,8 @@ public class CoveringArray implements Comparable<CoveringArray> {
                     symbols[j] = //TODO don't know what is being dereferenced here
                 }
                 //TODO hintGet returns Entry
-                Array<int[]> x = new Array<>();
-                if (coverage.hintGet(hint, arrToVect(columns), firsts, counts, arrToVect(symbols)).op_getContent().equals(1)) {
+                //Array<int[]> x = new Array<>();
+                if (coverage.hintGet(hint, columns, vectToArr(firsts), vectToArr(counts), symbols).op_getContent().equals(1)) {
                     Integer tmp = result.get(i);
                     tmp++;
                     result.set(i, tmp);
@@ -194,6 +194,14 @@ public class CoveringArray implements Comparable<CoveringArray> {
             vect.set(i, arr[i]);
         }
         return vect;
+    }
+
+    private int[] vectToArr(Vector<Integer> vect) {
+        int[] result = new int[vect.size()];
+        for (int i = vect.size(); i > 0; i--) {
+            result[i] = vect.get(i);
+        }
+        return result;
     }
 
     //TODO not sure what this operators are comparing
@@ -285,7 +293,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
                             symbols[j] = //TODO don't know what is being dereferenced here
                         }
                         //TODO object casted to int
-                        int tmp = (int) coverage.hintGet(hint, arrToVect(columns), firsts, counts, arrToVect(symbols)).op_getContent();
+                        int tmp = (int) coverage.hintGet(hint, columns, vectToArr(firsts), vectToArr(counts), symbols).op_getContent();
                         int newCoverage = ++tmp;
                         if (newCoverage == 1) {
                             ++coverageCount;
@@ -306,7 +314,7 @@ public class CoveringArray implements Comparable<CoveringArray> {
                             symbols[j] = //TODO don't know what is being dereferenced here
                         }
                         //TODO object casted to int
-                        int tmp = (int) coverage.hintGet(hint, arrToVect(columns), firsts, counts, arrToVect(symbols)).op_getContent();
+                        int tmp = (int) coverage.hintGet(hint, columns, vectToArr(firsts), vectToArr(counts), symbols).op_getContent();
                         int newCoverage = ++tmp;
                         if (newCoverage == 1) {
                             ++coverageCount;

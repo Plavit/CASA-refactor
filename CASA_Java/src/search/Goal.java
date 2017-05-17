@@ -17,6 +17,8 @@ package search;
 // You should have received a copy of the GNU General Public License
 // along with CASA.  If not, see <http://www.gnu.org/licenses/>.
 
+import covering.state.CoveringArray;
+
 /**
  *  Decides when a search should terminate because it has found a solution.  In
  *  some applications the goal's RTTI is also used to inform other search objects
@@ -24,5 +26,6 @@ package search;
  */
 
 public interface Goal<STATE> {
-    boolean isGoal(final STATE state);
+    //boolean isGoal(final STATE state);
+    boolean isGoal(final CoveringArray state);
 }
