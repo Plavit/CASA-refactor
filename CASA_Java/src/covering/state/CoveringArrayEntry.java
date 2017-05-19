@@ -43,8 +43,8 @@ class CoveringArrayEntry {
                     // TODO need SAT
                     InputKnown oldKnown(symbols);
                     if (owner.getSolver().solve(oldKnown) &&
-                            owner.getCoverage().hintGet(hint, arrToVect(columns),
-                                    firsts, counts, arrToVect(symbols)).op_decrement().equals(false)) {
+                            owner.getCoverage().hintGet(hint, columns,
+                                    vectToArr(firsts), vectToArr(counts), symbols).op_decrement().equals(false)) {
                         --owner.coverageCount;
                         if (owner.trackingNoncoverage) {
                             int[] separateCopyOfSymbols = new int[symbols.length];
@@ -63,8 +63,8 @@ class CoveringArrayEntry {
                     symbols[i] = value;
                     InputKnown newKnown(symbols);
                     if (owner.getSolver().solve(newKnown) &&
-                            owner.getCoverage().hintGet(hint, arrToVect(columns),
-                                    firsts, counts, arrToVect(symbols)).op_increment().equals(true)){
+                            owner.getCoverage().hintGet(hint, columns,
+                                    vectToArr(firsts), vectToArr(counts), symbols).op_increment().equals(true)){
                         ++owner.coverageCount;
                         if (owner.trackingNoncoverage) {
                             int[] separateCopyOfSymbols = new int[symbols.length];
@@ -92,6 +92,14 @@ class CoveringArrayEntry {
             vect.set(i, arr[i]);
         }
         return vect;
+    }
+
+    private int[] vectToArr(Vector<Integer> vect) {
+        int[] result = new int[vect.size()];
+        for (int i = vect.size(); i > 0; i--) {
+            result[i] = vect.get(i);
+        }
+        return result;
     }
 
     //C_CODE

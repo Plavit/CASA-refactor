@@ -3,7 +3,7 @@ package covering.goal;
 import covering.state.CoveringArray;
 import search.Goal;
 
-public class CoverageGoal implements Goal{
+public class CoverageGoal implements Goal {
 
     long targetCoverage;
 

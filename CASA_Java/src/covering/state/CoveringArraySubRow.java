@@ -87,7 +87,7 @@ class CoveringArraySubRow {
                 --owner.multipleCoverageCount;
             }
             Entry<Integer> gained =
-                    owner.getCoverage().hintGet(updateColumns, firsts, counts, arrToVect(newSymbols));
+                    owner.getCoverage().hintGet(vectToArr(updateColumns), vectToArr(firsts), vectToArr(counts), newSymbols);
             //TODO
             gained.op_increment();
             if (gained.op_getContent() == 1) {

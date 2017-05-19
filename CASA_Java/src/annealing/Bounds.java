@@ -20,6 +20,7 @@ package annealing;
 import common.utility.Array;
 import covering.bookkeeping.Options;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Vector;
@@ -45,15 +46,15 @@ public class Bounds implements IBounds{
         Integer result = 1;
         Array<Integer> symbolCounts = new Array<>(options.getSize());
         for (int i = symbolCounts.getSize()-1; i >= 0; i--) {
-            symbolCounts.setValueOnIntex(options.getSymbolCount(i),i);
+            symbolCounts.set(i, options.getSymbolCount(i));
         }
 
-        Arrays.sort(getBasicFromVector(symbolCounts.getArray()),strength,
+        Arrays.sort(getBasicFromArrayList(symbolCounts.getArray()),strength,
                 symbolCounts.getSize()-1,Bounds.BackwardsComparator);
 
-        Vector<Integer> vector = symbolCounts.getArray();
+        ArrayList<Integer> list = symbolCounts.getArray();
         for (int i = strength; i >= 0; i--) {
-            result *= vector.get(i);
+            result *= list.get(i);
         }
 
         return result;
@@ -76,6 +77,14 @@ public class Bounds implements IBounds{
     }
 
     private Integer[] getBasicFromVector(Vector<Integer> arr){
+        Integer basic[] = new Integer[arr.size()];
+        for(int i = 0; i < basic.length; i++){
+            basic[i] = arr.get(i);
+        }
+        return basic;
+    }
+
+    private Integer[] getBasicFromArrayList(ArrayList<Integer> arr){
         Integer basic[] = new Integer[arr.size()];
         for(int i = 0; i < basic.length; i++){
             basic[i] = arr.get(i);

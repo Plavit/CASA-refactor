@@ -23,7 +23,7 @@ import events.Listener;
 import search.SearchFinish;
 
 
-public class IterationReport extends Listener<SearchFinish<CoveringArray, CoverageCost>> {
+public class IterationReport implements Listener<SearchFinish> {
 
     protected int total;
 
@@ -32,11 +32,28 @@ public class IterationReport extends Listener<SearchFinish<CoveringArray, Covera
     }
 
     @Override
-    public void signal(SearchFinish<CoveringArray, CoverageCost> finish) {
+    public void signal(SearchFinish finish) {
         //TODO those iterators ...
+
+//        std::set<const Node<CoveringArray, CoverageCost>*>best =
+//                finish.source.getBest();
+//        if (best.size()) {
+//      const CoveringArray&state = (*best.begin())->getState();
+//            assert(state.isTrackingNoncoverage());
+//            std::cout << "Search stopped after " << finish.iterations << '/' <<
+//                    finish.maxIterations << " iteration(s) with " <<
+//                    state.getNoncoverage().size() << " uncovered t-sets and " <<
+//                    state.getMultipleCoverageCount() << " multicovered t-sets" << std::endl;
+//        } else {
+//            std::cout << "Search stopped after " << finish.iterations << '/' <<
+//                    finish.maxIterations << " iteration(s) with no results" << std::endl;
+//        }
+//        total += finish.iterations;
+//        std::cout << "Used " << total << " total iterations thus far" << std::endl;
     }
 
     public int getTotal() {
         return total;
     }
+
 }

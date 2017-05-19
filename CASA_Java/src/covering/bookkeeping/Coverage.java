@@ -21,7 +21,7 @@ import common.utility.Combinadic;
 import common.utility.PascalTriangle;
 import common.utility.SubstitutionArray;
 
-public class Coverage<T> {
+public class Coverage<T extends Comparable<T>> {
 
     private Integer strength;
     private Options options;

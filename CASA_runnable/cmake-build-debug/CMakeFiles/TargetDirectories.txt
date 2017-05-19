@@ -1,0 +1,3 @@
+/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/CMakeFiles/edit_cache.dir
+/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/cygdrive/c/Users/Yevgeniya/Documents/RSP/CASA/cmake-build-debug/CMakeFiles/CASA.dir

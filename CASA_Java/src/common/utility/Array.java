@@ -19,6 +19,7 @@ package common.utility;
 
 import java.util.ArrayList;
 import java.util.RandomAccess;
+import java.util.Vector;
 
 class SharedArray<T extends Comparable> implements RandomAccess {
     private ArrayList<T> array;
@@ -76,6 +77,10 @@ class SharedArray<T extends Comparable> implements RandomAccess {
         }
         return this;
     }
+
+    public ArrayList<T> getArray() {
+        return array;
+    }
 }
 
 public class Array<T extends Comparable<T>> implements Comparable<Array<T>> {
@@ -120,5 +125,12 @@ public class Array<T extends Comparable<T>> implements Comparable<Array<T>> {
         return res;
     }
 
+    public ArrayList<T> getArray() {
+        return sharedArray.getArray();
+    }
+
+    public boolean isEmpty() {
+        return sharedArray.getSize() == 0;
+    }
 
 }

@@ -2,9 +2,10 @@ package covering.bookkeeping;
 
 import common.utility.Array;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
-public class Entry<T> {
+public class Entry<T extends Comparable<T>> {
 
     // TODO THEORETICLY WE DONT NEED ITERATORS FOR ENTRY
 
@@ -51,7 +52,7 @@ public class Entry<T> {
 
 
     public Entry op_brackets(Array<Integer> sortedCombination){
-        return new Entry(this.owner,this.owner.encode(getBasicFromVector(sortedCombination.getArray())));
+        return new Entry(this.owner,this.owner.encode(getBasicFromArrayList(sortedCombination.getArray())));
     }
 
     public Entry hintGet(Integer indexHint,
@@ -59,10 +60,10 @@ public class Entry<T> {
                          Array<Integer>firstsHint,
                          Array<Integer>countsHint,
                          Array<Integer>sortedCombination){
-        int columnHint2[] = getBasicFromVector(columnsHint.getArray());
-        int firstsHint2[] = getBasicFromVector(firstsHint.getArray());
-        int countsHint2[] = getBasicFromVector(countsHint.getArray());
-        int sortedCombination2[] = getBasicFromVector(sortedCombination.getArray());
+        int columnHint2[] = getBasicFromArrayList(columnsHint.getArray());
+        int firstsHint2[] = getBasicFromArrayList(firstsHint.getArray());
+        int countsHint2[] = getBasicFromArrayList(countsHint.getArray());
+        int sortedCombination2[] = getBasicFromArrayList(sortedCombination.getArray());
         return new Entry(this.owner,this.owner.encode(indexHint,columnHint2,firstsHint2,countsHint2,sortedCombination2));
     }
 
@@ -70,10 +71,10 @@ public class Entry<T> {
                          Array<Integer>firstsHint,
                          Array<Integer>countsHint,
                          Array<Integer>sortedCombination){
-        int columnHint2[] = getBasicFromVector(columnsHint.getArray());
-        int firstsHint2[] = getBasicFromVector(firstsHint.getArray());
-        int countsHint2[] = getBasicFromVector(countsHint.getArray());
-        int sortedCombination2[] = getBasicFromVector(sortedCombination.getArray());
+        int columnHint2[] = getBasicFromArrayList(columnsHint.getArray());
+        int firstsHint2[] = getBasicFromArrayList(firstsHint.getArray());
+        int countsHint2[] = getBasicFromArrayList(countsHint.getArray());
+        int sortedCombination2[] = getBasicFromArrayList(sortedCombination.getArray());
         return new Entry(this.owner,this.owner.encode(columnHint2,firstsHint2,countsHint2,sortedCombination2));
     }
 
@@ -120,6 +121,14 @@ public class Entry<T> {
     }
 
     private int[] getBasicFromVector(Vector<Integer> arr){
+        int basic[] = new int[arr.size()];
+        for(int i = 0; i < basic.length; i++){
+            basic[i] = arr.get(i);
+        }
+        return basic;
+    }
+
+    private int[] getBasicFromArrayList(ArrayList<Integer> arr){
         int basic[] = new int[arr.size()];
         for(int i = 0; i < basic.length; i++){
             basic[i] = arr.get(i);
