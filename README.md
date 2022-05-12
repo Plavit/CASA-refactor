@@ -1,5 +1,5 @@
 # Java refactor of CASA
-Final repo update: 26. 5. 2017
+Final repo contents update: 26. 5. 2017
 
 ## **Project assignment:**
 The project to reverse-engineer the popular open-source C++ tool and library called CASA and rewrite it in Java. This four month long project was done in a team of seven experienced software engineers, with the roles as described below. The output was submitted to the Software Testing IntelLigence Lab (STILL) at Czech Technical University, awarded an excellent result and further published research in the following years was based on the resulting code and documentation.
